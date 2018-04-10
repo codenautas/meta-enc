@@ -1,0 +1,4 @@
+operativo|unidad_analisis|nombre|pk|padre|orden|principal
+EJEMPLO|hogares|||vivienda|20|
+EJEMPLO|personas|||hogares|30|
+EJEMPLO|vivienda||||10|TRUE
