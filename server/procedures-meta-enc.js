@@ -65,7 +65,7 @@ var ProcedureNuevaEncuesta={
                     object[question.id_casillero] = question.unidad_analisis?[]:null;
                 });
                 return context.client.query(
-                    `insert into formularios_json values ($1,(select (max(id_caso::integer) + 1)::text from formularios_json where operativo = $1),$2) returning *`,
+                    `insert into formularios_json values ($1,(select (coalesce(max(id_caso::integer),0) + 1)::text from formularios_json where operativo = $1),$2) returning *`,
                     [row.operativo, object]
                 ).fetchUniqueRow().then(function(result){
                     return be.procedure['cargar/enc'].coreFunction(context, result.row);
