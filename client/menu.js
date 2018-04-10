@@ -40,7 +40,8 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
     devolverButton.onclick=devolver;
     div.appendChild(html.div({class:'prueba-despliegue'},[
         html.link({href: 'css/formularios.css', rel: "stylesheet"}),
-        html.link({href: 'css/estados.css'    , rel: "stylesheet"})
+        html.link({href: 'css/estados.css'    , rel: "stylesheet"}),
+        html.p({id:'genericMsg'},[''])
     ]
     .concat([guardarButton, devolverButton])
     .concat(my.displayForm(surveyStructure, surveyData, formId, []))
