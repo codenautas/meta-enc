@@ -28,7 +28,7 @@ myOwn.wScreens.proc.result.goToEnc=function(result, div){
         div.innerText='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
         div.style.backgroundColor='#5F5';
         setTimeout(function(){
-            gotoInnerUrl('menu?i=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
+            gotoInnerUrl('menu?w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
         },1500);
     });
 }

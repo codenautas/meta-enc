@@ -23,7 +23,6 @@ class AppMetaEnc extends relenc.AppRelEnc{
         return {menu:[
             {menuType:'proc'      , name:'cargar_enc', proc:'cargar/enc', label:'Cargar Encuesta'   },
             {menuType:'proc'      , name:'nueva_enc', proc:'nueva/enc', label:'Nueva Encuesta'   },
-            {menuType:'formulario', name:'formulario', visible: false },
             {menuType:'menu', name:'menu', label:'menú', menuContent:[
                 {menuType:'menu', name:'casilleros', menuContent:[
                     {menuType:'table', name:'operativos'},
