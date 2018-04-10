@@ -28,6 +28,8 @@ module.exports = function(context){
             {name:"orden_total"           , typeName:'ARRAY:text' ,inTable:false , editable:false },
             {name:"ultimo_ancestro"       , typeName:'text'       ,inTable:false , editable:false },
             {name:"formulario_principal"  , typeName:'boolean'                   , editable:admin },
+            {name:"var_name"              , typeName:'text'                      , editable:false },
+            {name:"var_name_especial"     , typeName:'text'                      , editable:admin },
         ],
         hiddenColumns:['id_casillero', 'irrepetible'],
         sortColumns:[{column:'orden_total'}],
@@ -43,6 +45,7 @@ module.exports = function(context){
         ],
         constraints:[
             {constraintType:'unique', fields:['operativo','casillero','irrepetible']},
+            {constraintType:'unique', fields:['operativo','var_name']},
             {constraintType:'check' , expr:'irrepetible is not false'   },
             {constraintType:'check' , name:"para poner 'no' en optativo dejar en blanco", expr:'optativo'   },
         ],

@@ -13,6 +13,7 @@ module.exports = function(context){
             {name:"irrepetible"       , typeName:'boolean'                },
             {name:"desp_casillero"    , typeName:'text'                   },
             {name:"desp_hijos"        , typeName:'text'                   },
+            {name:"puede_ser_var"     , typeName:'boolean'                },
         ],
         primaryKey:['tipoc'],
         detailTables:[
