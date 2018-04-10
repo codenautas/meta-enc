@@ -1,0 +1,504 @@
+/* ASCII7 */
+.div_aplicacion{
+    vertical-align:top;
+    margin:0px;
+}
+
+#logo_encuesta{
+    /* position:absolute; left:0; top:36px; */
+    width:768px;
+}
+
+.app_menu_principal{
+    /* position:fixed; left:0; top:0; z-index:1;*/
+    width:762px;
+}
+
+.recuadrar_tipo_ipad{
+    font-size:24px;
+    /*
+    position:absolute;
+    top:175px;
+    left:10px;
+    */
+    margin:8px;
+    width:750px;
+    border:2px solid gray;
+    border-radius:5px;
+}
+
+#consola_encabezado{
+    font-weight:bold;
+    font-size:24px;
+}
+
+#lista_expresiones{
+
+}
+
+.salida_prefabricada{
+    font-size:75%;
+    padding-top:15px;
+}
+
+.encu_celda_bloque{
+    border-bottom:1px solid #777;
+    border-top:1px solid #BBB;
+    font-family:Comic;
+    font-size:80%;
+    font-weight:bold;
+    background-color:#DDD;
+    padding:10px;
+    border-collapse:separate; 
+}
+
+.encu_bloque_id{
+    padding-left:15px;
+    padding-right:15px;
+    vertical-align:top;
+}
+
+.encu_celda_pregunta{
+    border-bottom:1px solid #777;
+    border-top:1px solid #BBB;
+    font-family:Arial;
+    padding:10px;
+    border-collapse:separate; 
+}
+
+.encu_pregunta{
+    border-bottom:1px solid #CCC;
+    font:110%;
+    padding:5px;
+    width:728px;
+}
+
+.encu_pregunta_id{
+    font-weight:bold;
+    width:50px;
+    text-align:left;
+    vertical-align:top;
+    font-size:80%;
+}
+
+.encu_pregunta_texto{
+}
+
+.encu_pregunta_pretexto{
+    font-size:85%;
+}
+
+.encu_sub_grado4 .encu_opcion_texto{
+    font-size:60%;
+}
+
+.encu_sub_grado4 .label_nsnr{
+    font-size:60%;
+}
+
+.encu_sub_grado4 .encu_multiple_texto{
+    min-width:260px; 
+    font-size:80%;
+}
+
+.encu_sub_grado4 input[type="radio"]:checked+label{ 
+    font-weight: bold; 
+    border:1px dashed green;
+    font-size:55%;
+    border-radius:5px;
+} 
+
+.encu_sub_grado3 .encu_opcion_texto{
+    font-size:70%;
+}
+
+.encu_sub_grado3 .label_nsnr{
+    font-size:70%;
+}
+
+.encu_sub_grado3 .encu_multiple_texto{
+    min-width:260px; 
+    font-size:90%;
+}
+
+.encu_sub_grado3u .encu_multiple_texto{
+    min-width:210px; 
+    font-size:90%;
+}
+
+.encu_sub_grado3 input[type="radio"]:checked+label{ 
+    font-weight: bold; 
+    border:1px dashed green;
+    font-size:65%;
+    border-radius:5px;
+} 
+
+
+.encu_pregunta_modalidad{
+    font-size:80%;
+    font-style:italic;
+    padding-left:10px;
+    color:gray;
+}
+.encu_pregunta_posttexto{
+    font-size:80%;
+    font-style:italic;
+    padding-left:50px;
+    color:gray;
+}
+
+.encu_respuesta{
+    padding:5px;
+    padding-bottom:15px;
+    padding-top:15px;
+    width:738px;
+}
+
+.encu_opcion{
+    padding:5px;
+    margin-left:200px;
+}
+
+.encu_opcion_id{
+    padding-left:0px; 
+    padding-right:0px;
+    font-size:65%;
+    width:120px;
+    text-align:right;
+    vertical-align:center;
+    color:#444;
+}
+.encu_ultima_linea_pregunta{
+    min-width:710px;
+}
+
+.encu_opcion_texto{
+    padding-left:8px; 
+    padding-right:8px;
+}
+
+.encu_input_numerico{
+    margin-left:300px;
+    font-size:120%;
+    border:1px solid gray;
+    width:40px;
+}
+.encu_input_hora{
+    margin-left:300px;
+    font-size:120%;
+    border:1px solid gray;
+    width:80px;
+}
+.encu_input_texto{
+    text-align:center;
+    margin-left:300px;
+    font-size:120%;
+    background-color:lightgreen;
+    width:200px;
+}
+
+.encu_multiple_opcion{
+    white-space:nowrap;
+    width:75px;
+    vertical-align:bottom;
+    border-bottom:1px dashed #AAA;
+    padding:0px;
+}
+
+td.controles_anotacion{
+    white-space:nowrap;
+    vertical-align:bottom;
+}
+
+.encu_multiple_texto{
+    padding-left:0px;
+    min-width:370px; 
+    border-bottom:1px dashed #AAA;
+}
+
+.encu_multiple_id_opcion{
+    width:20px;
+    text-align:left;
+    vertical-align:top;
+    font-size:66%;
+    padding-left:50px;
+    padding-right:0px;
+    padding-top:6px;
+    color:#444;
+}
+.encu_multiple_id_opcion:after{
+    content:')';
+}
+
+input[type="radio"]:checked+label{ 
+    font-weight: bold; 
+    border:1px dashed green;
+    font-size:93%;
+    border-radius:5px;
+} 
+
+.encu_opcion_seleccionada{
+    border:1px dashed green;
+    border-radius:5px;
+}
+
+.encu_salto_opcion:before{
+    content:'pase a '
+}
+.encu_salto_opcion{
+    color:gray;
+    font-size:80%;
+}
+
+.encu_salto_pregunta:before{
+    content:'pase a ';
+}
+.encu_salto_pregunta{
+    color:gray;
+    font-size:80%;
+    text-align:right;
+}
+
+.encu_estado_fuera_de_rango input[type="number"]{
+    color:red; 
+}
+
+.encu_estado_fuera_de_rango input[type="tel"]{
+    color:red; 
+}
+
+.encu_estado_invalida{
+    color:red;
+}
+
+.encu_estado_valida{
+    color:#666;
+}
+
+
+.encu_estado_optativa_sd{
+    color:#666;
+}
+
+.encu_estado_omitida{
+    background-color:#FDC;
+}
+
+.encu_estado_fuera_de_flujo_por_omitida input:checked+label{
+    background-color:#ECB;
+    color:red;
+    border:1px dashed red;
+}
+
+.encu_estado_todavia_no{
+    /* OPCION 1 
+    background-color:#CCC;
+    */
+    color:#777;
+}
+
+
+/* 
+#celda_s2{
+    background-color:#FDC;
+}
+#celda_s5{
+    background-color:#EEE;
+    color:#555;
+}
+#var_s5_opc_4{ 
+    font-weight: bold; 
+    border:1px dashed green;
+    color:red;
+    font-size:93%;
+    border-radius:5px;
+} 
+#var_s5_opc_4_texto{ 
+    font-weight: bold; 
+    border:1px dashed red;
+    color:red;
+    font-size:93%;
+    border-radius:5px;
+} 
+
+#celda_v1{
+    background-color:#EEE;
+    color:#555;
+}
+#celda_v4{
+    background-color:#EEE;
+    color:#555;
+}
+ */
+input[type="number"]{
+    background-color:transparent;
+}
+input[type="text"]{
+    background-color:transparent;
+}
+input[type="tel"]{
+    background-color:transparent;
+}
+
+.botones_pregunta{
+    text-align:right;
+}
+
+.botones_pregunta input{
+    font-size:80%;
+    margin-left:20px;
+}
+
+.boton_borrar{
+    color:red;
+    font-size:70%;
+}
+
+#portada{
+    width:766px;
+}
+
+@media only screen and (max-width: 1024px), only screen and (max-device-width: 1024px) {
+    body{
+        -webkit-user-select: none;
+    }
+}
+
+div.manual_{
+    width:768px;
+}
+
+p.manual_texto{
+    color:black;
+    font-size:100%;
+    font-family:"arial";
+    text-align:justify;
+}
+p.manual_subtitulo{
+    /*color:black;*/
+    font-size:110%;
+    text-align:center;
+    text-decoration: underline;
+    font-family:"arial";
+}
+div.manual_recuadro{
+    border-style:solid;
+    width: 74%;
+    margin-left: 12%;
+    /*border:10px dashed black;*/
+    border-width:3px;
+    text-align:center;
+    font-family:"arial";
+}
+p.manual_copete{
+    text-align:center;
+    font-style:bold;
+    font-size:110%;
+    font-family:"arial";
+}
+sub.manual_capital{
+    font-style:bold;
+    font-size:150%;
+    font-family:"arial";
+}
+p.manual_subrayado{
+    text-align:center;
+    text-decoration: underline;
+    font-family:"arial";
+}
+ol.manual_vinneta{
+    padding-left:75px;
+    font-family:"arial";
+}
+ul.manual_vinneta{
+    padding-left:75px;
+    font-family:"arial";
+}
+p.manual_saltolinea{
+    
+}
+
+
+
+@media print{
+    .botones_pregunta{
+        display:none;
+    }
+    #portada{
+        display:none;
+    }
+    .encu_celda_pregunta{
+        page-break-inside:avoid;
+    }
+    .app_menu_principal{
+        display:none;
+    }
+    .encu_estado_todavia_no{
+        color:black;
+    }
+    #logo_encuesta{
+        margin-left:100px;
+        margin-right:50px;
+    }
+    .recuadrar_tipo_ipad{
+        font-size:16px;
+        margin-left:100px;
+        margin-right:50px;
+    }
+    input[type="number"]{
+        -webkit-appearance:textfield
+    }
+}
+
+.encu_celda_desplegable{
+    font-size:80%;
+    color:#040;
+}
+
+.encu_celda_desplegable[class~="encu_estado_todavia_no"]{
+    display:none
+}
+.encu_celda_desplegable[class~="encu_estado_salteada"]{
+    display:none
+}
+.encu_celda_desplegable[class~="encu_estado_optativa_sd"]{
+    display:none
+}
+
+#celda_s3 .encu_salto_opcion{
+    display:none
+}
+
+@-webkit-keyframes transparentate {
+  from { opacity:1; }
+  to {    opacity:0; }
+}
+
+.transparentando{
+    -webkit-animation-name: transparentate; 
+    -webkit-animation-duration: 1s; 
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+}
+
+.encu_textarea{
+    width:700px;
+    height:80px;
+    font-size:100%;
+}
+
+#botonLaura{
+    margin-left:20px;
+}
+
+.debug_variable{
+    color:#BBB;
+    font-size:70%
+}
+
+.recepcion_ok{
+    min-width:30px;
+    background-color:#DDD;
+    padding-left:6px;
+    padding-right:6px;
+}

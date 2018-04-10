@@ -1,0 +1,386 @@
+body *
+  box-sizing border-box
+
+.tipoc_F
+  border 1px solid black
+  width 1024px
+  border-collapse collapse
+  font-size 26px
+  * 
+    vertical-align top
+  input
+    font-size 100%
+
+.tipoc_F > .propios
+  .casillero
+    background-color #000000
+    display inline-block
+    padding 3px
+    font-family arial
+    font-size 24px
+    font-weight bold
+    width 100px
+    color #F4F4F4
+    text-align center
+  .nombre
+    display inline-block
+    font-family arial
+    font-size 24px
+    font-weight bold
+    min-width 824px
+    max-width 924px
+    text-align center
+    
+.tipoc_B > .propios
+  border 1px solid black
+  background-color #d1d1d1
+  > .casillero
+    color #fff
+    font-family arial
+    font-size 18px
+    font-weight bold
+    background-color #333
+    padding 4px
+    vertical-align middle
+    margin-top 3px
+    margin 4px
+  > .nombre
+    display inline-block
+    font-size 24px
+    font-weight bold
+    padding 3px
+    min-width 800px
+    text-align center
+
+.tipoc_TEXTO > .propios
+  border 1px solid black
+  background-color #d1d1d1
+  > .casillero
+    color #fff
+    font-family arial
+    font-size 18px
+    font-weight bold
+    background-color #333
+    padding 4px
+    vertical-align middle
+    margin-top 3px
+    margin 4px
+  > .nombre
+    display inline-block
+    font-size 24px
+    font-weight bold
+    padding 3px
+    min-width 800px
+    text-align center
+    
+.tipoc_PMATRIZ
+  padding 5px
+  > .propios
+  .casillero
+    padding-top 4px
+    &:after
+      content "."
+  input
+    font-size 100%
+  > table
+    margin-left 10%
+  .pmatriz_titulo_columna[casillero-id="C4/1/cant13"]
+    position relative
+    left -16px
+    letter-spacing 0px
+    font-family Arial Narrow, Arial
+  .pmatriz_titulo_columna
+    font-size 80%
+    text-align center
+    width 100px
+    max-width 100px
+    white-space nowrap
+    overflow visible
+  .pmatriz_variable
+    text-align center
+
+.tipoc_PMATRIZ > .propios
+    margin-left 5px
+    vertical-align top
+    .casillero
+      display inline-block
+      min-width 40px
+      vertical-align top
+      font-weight bold    
+    .nombre
+      display inline-block
+      vertical-align top
+      margin-left 5px
+      font-weight bold 
+
+.tipoc_P
+  border 1px solid black
+  padding 5px
+  > .propios
+    margin-left 5px
+    vertical-align top
+    .casillero
+      display inline-block
+      min-width 40px
+      vertical-align top
+      font-weight bold    
+    .nombre
+      vertical-align top
+      margin-left 5px
+      font-weight bold 
+  > .hijos
+    vertical-align top
+  > table
+    margin-left 10%
+
+.tipoc_OM
+  > .casillero
+    font-size 75%
+    padding-top 4px
+    &:after
+      content "."
+  > .tipovar
+    padding-top 7px
+    input[type="radio"]
+      margin 0px
+
+.tipoc_O
+  > .casillero
+    font-size 75%
+    padding-top 4px
+    &:after
+      content "."
+  > .tipovar
+    padding-top 7px
+    input[type="radio"]
+      margin 0px
+  .tipoc_P > .casillero
+    display none
+    
+.tipoc_CP > .propios
+  width 1024px
+  background-color #BABABA
+  border 1px solid black
+  padding 5px
+  .nombre
+    font-size 18px
+    font-weight bold
+  .casillero
+    display none
+
+.tipoc_CP > .hijos
+  .tipoc_P
+    display inline-block
+    border 0
+    width 500px
+    
+.tipoe
+.aclaracion
+  font-size 90%
+  font-style italic
+  margin 3px
+  &:before
+    content "("
+  &:after
+    content ")"
+
+.tipoe > .propios
+.aclaracion
+  display inline-block
+
+.salto
+  margin 4px
+  &:before
+    content " \2192 "
+    
+.tipoc_TEXTO
+  margin-top 10px
+
+[casillero-tipovar="si_no"] > .propios
+  .tipovar
+    display none 
+  .casillero
+    height 20px
+    line-height 20px
+    vertical-align middle
+    text-align center
+    font-size 70%
+    padding 0 2px
+    color #474747
+    background-color #d8d8d8
+    position relative
+    display inline-block
+    margin-right 10px
+    &:after
+      position absolute
+      right -10px
+      content" "
+      width 0px
+      height 0px
+      border-style solid
+      border-width 10px 0 10px 10px
+      border-color transparent transparent transparent #d8d8d8
+
+.tipoc_PMATRIZ > .propios
+.tipoc_P > .propios
+  .tipovar
+    display none 
+  .casillero
+    height 20px
+    line-height 20px
+    vertical-align middle
+    text-align center
+    font-size 70%
+    padding 0 2px
+    color #474747
+    background-color #d8d8d8
+    position relative
+    display inline-block
+    margin-right 10px
+    &:after
+      position absolute
+      right -10px
+      content" "
+      width 0px
+      height 0px
+      border-style solid
+      border-width 10px 0 10px 10px
+      border-color transparent transparent transparent #d8d8d8
+
+[casillero-tipovar="opciones"] > .propios /*borrar*/
+  .tipovar
+    display none 
+  .casillero
+    height 20px
+    line-height 20px
+    vertical-align middle
+    text-align center
+    font-size 70%
+    padding 0 2px
+    color #474747
+    background-color #d8d8d8
+    position relative
+    display inline-block
+    margin-right 10px
+    &:after
+      position absolute
+      right -10px
+      content" "
+      width 0px
+      height 0px
+      border-style solid
+      border-width 10px 0 10px 10px
+      border-color transparent transparent transparent #d8d8d8
+
+[casillero-tipovar="numero"] > .propios
+  .nombre
+    visibility visible 
+  .casillero
+    display none
+    
+[casillero-tipovar="texto"] > .propios
+  width 500px
+  .nombre
+    visibility visible
+    max-width 500px
+  .casillero
+    display none
+    
+@media print {
+   body { -webkit-print-color-adjust: exact; }
+}
+  
+input
+  &[longitud-var="1"]
+    width 45px
+  &[longitud-var="2"]
+    width 60px
+  &[longitud-var="3"]
+    width 75px
+  &[longitud-var="5"]
+    width 100px
+  &[longitud-var="medio"]
+    width 300px
+  &[longitud-var="pagina"]
+    width 780px
+  &[tipo-var="opciones"]
+    display none
+  &[tipo-var="si_no"]
+    display none
+  &[tipo-var="unknown"]
+    border 3px solid red
+    background-color red
+    color red
+
+.nombre > [state-label-option="checked"]
+  font-weight bold
+  border 1px dashed green
+  font-size 93%
+  border-radius 5px
+  background-color #EFE
+
+#tomarGPS
+  p
+    font-size 60%
+    font-weight bold
+
+#app-version
+  font-size 50%
+  padding-left 20px
+
+.typed-control-input-for-options
+  width 45px
+  
+.tipoc_BF > .propios
+  .tipovar
+    display none 
+  .casillero
+    height 20px
+    line-height 20px
+    vertical-align middle
+    text-align center
+    font-size 70%
+    padding 0 2px
+    color #474747
+    background-color #d8d8d8
+    position relative
+    display inline-block
+    margin-right 10px
+    &:after
+      position absolute
+      right -10px
+      content" "
+      width 0px
+      height 0px
+      border-style solid
+      border-width 10px 0 10px 10px
+      border-color transparent transparent transparent #d8d8d8
+
+.tipoc_BF
+  border 1px solid black
+  padding 5px
+  > .propios
+    margin-left 5px
+    vertical-align top
+    .casillero
+      display inline-block
+      min-width 40px
+      vertical-align top
+      font-weight bold    
+    .nombre
+      vertical-align top
+      margin-left 5px
+      font-weight bold 
+  > .hijos
+    vertical-align top
+  > table
+    margin-left 10%
+
+table.resumen
+  margin-left 0px
+  font-size 15px
+  border-collapse collapse;
+
+table.resumen th, table.resumen td
+  padding 5px;
+  border 1px solid black;
