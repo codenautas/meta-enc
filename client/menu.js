@@ -15,20 +15,6 @@ function onclickUrl(event){
     }
 }
 
-var controlarToken = function (){
-    var tokenMsg = null;
-    var link = html.a({href:'menu?i=menu,obtener_token'}, 'Obtener token' ).create();
-    link.onclick=onclickUrl;
-    var surveySetup = JSON.parse(localStorage.getItem('surveySetup'));
-    if (!surveySetup.token || !surveySetup.recorrido || (surveySetup.token == '0') || (surveySetup.recorrido == '0')){
-        tokenMsg = html.div({class:'validationMessage'}, [
-            html.p({id:'falta-token'},['Falta el token. ', link]),
-            html.p({id:'genericMsg'},['']),
-        ]);
-    }
-    return tokenMsg;
-}
-
 myOwn.wScreens.proc.result.goToEnc=function(result, div){
     my.ajax.cargar.preguntas_operativo({operativo:result.operativo}).then(function(preguntas){
         var idEnc_js=result.id_caso;
@@ -47,15 +33,6 @@ myOwn.wScreens.proc.result.goToEnc=function(result, div){
     });
 }
 
-myOwn.wScreens.proc.result.setToken=function(result, div){
-    localStorage.setItem('surveySetup', JSON.stringify(result));
-    div.innerText='El token para el relevador ' + result.codigo_relevador + ' es '+result.token + '. Redirigiendo a la principal...';
-    div.style.backgroundColor = '#5F5';
-    setTimeout(function(){
-        gotoInnerUrl('menu?i=principal');
-    },1500);
-};
-
 myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, surveyData, formId){
     var guardarButton = html.button({id:'guardar', class:'rel_button'}, "Grabar").create();
     guardarButton.onclick=guardar;
@@ -63,8 +40,7 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
     devolverButton.onclick=devolver;
     div.appendChild(html.div({class:'prueba-despliegue'},[
         html.link({href: 'css/formularios.css', rel: "stylesheet"}),
-        html.link({href: 'css/estados.css'    , rel: "stylesheet"}),
-        controlarToken()
+        html.link({href: 'css/estados.css'    , rel: "stylesheet"})
     ]
     .concat([guardarButton, devolverButton])
     .concat(my.displayForm(surveyStructure, surveyData, formId, []))
@@ -170,18 +146,3 @@ myOwn.getSurveyData = function getSurveyData(){
     var surveyContent = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId)||my.surveyDataEmpty(surveyId));
     return {idCaso:surveyId, /*innerPk:innerPk,*/ surveyContent:surveyContent};
 }
-
-myOwn.autoSetupFunctions.push(function(){
-    controlOffLine();
-    var surveySetup=localStorage.getItem('surveySetup');
-    if(!surveySetup){
-        surveySetup = {
-            recorrido:0,
-            tipo_recorrido:0,
-            token: 0,
-            codigo_relevador:0,
-            nombre_relevador:''
-        };
-        localStorage.setItem('surveySetup',JSON.stringify(surveySetup));
-    }
-});
