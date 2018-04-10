@@ -33,7 +33,6 @@ class AppMetaEnc extends relenc.AppRelEnc{
                     {menuType:'table', name:'tipoc', label:'tipos de celdas', selectedByDefault:true},
                     {menuType:'table', name:'tipoc_tipoc', label:'inclusiones de celdas'},
                 ]},
-                {menuType:'proc', name:'despliegue', proc:'casilleros/desplegar'},
                 {menuType:'menu', name:'configuración', menuContent:[
                     {menuType:'table', name:'usuarios', selectedByDefault:true},
                 ]},
