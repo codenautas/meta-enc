@@ -78,7 +78,7 @@ var ProcedureNuevaEncuesta={
 var ProcedureCargarEncuesta={
     action: 'cargar/enc',
     parameters: [
-        {name:'operativo'     ,typeName:'text'},
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'id_caso'       ,typeName:'text'},
     ],
     resultOk: 'goToEnc',
@@ -103,8 +103,8 @@ var ProcedureCargarEncuesta={
 var ProcedureCargarPreguntasUnidadAnalisis={
     action: 'cargar/preguntas_ua',
     parameters: [
-            {name:'operativo'       ,typeName:'text' },
-            {name:'unidad_analisis' ,typeName:'text' },
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
+        {name:'unidad_analisis' ,typeName:'text' },
     ],
     coreFunction: function(context, parameters){
         return context.client.query(
@@ -134,7 +134,7 @@ var ProcedureCargarPreguntasUnidadAnalisis={
 var ProcedureCargarPreguntasOperativo={
     action: 'cargar/preguntas_operativo',
     parameters: [
-            {name:'operativo'       ,typeName:'text' },
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
     coreFunction: function(context, parameters){
         return context.client.query(
