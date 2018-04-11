@@ -12,7 +12,7 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.1.4"
+    "rel-enc": "~0.1.5"
   },
   "devDependencies": {},
   "engines": {
