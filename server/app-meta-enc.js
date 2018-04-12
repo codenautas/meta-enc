@@ -41,13 +41,13 @@ class AppMetaEnc extends relenc.AppRelEnc{
     }
     getTables(){
         return super.getTables().concat([
-            'tipoc',
-            'tipoc_tipoc',
-            'operativos',
-            'unidad_analisis',
-            'casilleros',
-            'casilleros-principales',
-            'formularios_json'
+            {path:__dirname, name:'tipoc'                 },
+            {path:__dirname, name:'tipoc_tipoc'           },
+            {path:__dirname, name:'operativos'            },
+            {path:__dirname, name:'unidad_analisis'       },
+            {path:__dirname, name:'casilleros'            },
+            {path:__dirname, name:'casilleros-principales'},
+            {path:__dirname, name:'formularios_json'      },
         ]);
     }
     clientIncludes(req, hideBEPlusInclusions) {
