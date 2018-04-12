@@ -57,6 +57,8 @@ class AppMetaEnc extends relenc.AppRelEnc{
         )
     }
 }
-module.exports = AppMetaEnc;
+var metaEnc = {}
+metaEnc.AppMetaEnc = AppMetaEnc;
+module.exports = metaEnc;
 
 new AppMetaEnc().start();
