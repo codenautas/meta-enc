@@ -1,10 +1,11 @@
 {
   "name": "meta-enc",
   "description": "Metadatos de encuestas",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "main": "server/app-meta-enc.js",
+  "types": "server/app-meta-enc.d.ts",
   "files": [
     "client",
     "install",
@@ -14,7 +15,9 @@
   "dependencies": {
     "rel-enc": "~0.1.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "types.d.ts": "~0.1.13"
+  },
   "engines": {
     "node": ">= 8.0.0"
   },
