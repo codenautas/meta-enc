@@ -1,5 +1,5 @@
 "use strict";
 
-var  AppMetaEnc = require('./app-meta-enc');
+var  metaEnc = require('./app-meta-enc');
 
-new AppMetaEnc().start();
+new metaEnc.AppMetaEnc().start();
