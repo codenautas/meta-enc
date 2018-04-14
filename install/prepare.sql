@@ -24,9 +24,11 @@ declare
   v_puede_ser_var boolean;
 begin
   if tg_op = 'INSERT' 
+     or new.id_casillero is distinct from old.id_casillero 
      or new.casillero is distinct from old.casillero 
      or new.padre     is distinct from old.padre 
      or new.tipoc     is distinct from old.tipoc 
+     or new.tipovar   is distinct from old.tipovar
      or new.var_name_especial is distinct from old.var_name_especial
   then
     if new.casillero ~ (E'\\'||v_separador_id) then
