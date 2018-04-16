@@ -29,7 +29,7 @@ myOwn.wScreens.proc.result.goToEnc=function(result, div){
         div.style.backgroundColor='#5F5';
         setTimeout(function(){
             gotoInnerUrl('menu?w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
-        },1500);
+        },250);
     });
 }
 
