@@ -39,6 +39,31 @@ var ProcedureFormularioEstructura={
     }        
 };
 
+var ProcedureDatosGuardar = {
+    action:'datos/guardar',
+    parameters:[
+        {name:'operativo'   , typeName:'text', references:'operativos'},
+        {name:'id_caso'     , typeName:'text'      },
+        {name:'datos_caso'  , typeName:'jsonb'     },
+    ],
+    coreFunction:function(context, parameters){
+        var client=context.client;
+        var be=context.be;
+        return Promise.resolve().then(function(){
+            return client.query('update formularios_json set datos_caso = $3 where operativo = $1 and id_caso=$2 returning *', [parameters.operativo, parameters.id_caso, parameters.datos_caso]).fetchOneRowIfExists().then(function(result){
+                if (result.rowCount===0){
+                    return client.query("insert into formularios_json(operativo, id_caso, datos_caso) values ($1, $2, $3) returning *",
+                    [parameters.operativo, parameters.id_caso, parameters.datos_caso]).fetchUniqueRow();
+                }else {
+                    return result;
+                }
+            });
+        }).then(function(result){
+            return result.row;
+        });
+    }
+};
+
 var ProcedureNuevaEncuesta={
     action: 'nueva/enc',
     parameters: [
@@ -175,37 +200,35 @@ var ProcedureCargarPreguntasOperativo={
     }
 };
 
+var ProcedureGenerateTableDef={
+    action: 'generate/tableDef',
+    parameters: [
+        {name:'operativo'     ,references:'operativos',  typeName:'text'}
+    ],
+    coreFunction: async function(context, parameters){
+        try{
+            var result = await context.client.query(`select * from unidad_analisis where operativo = $1`,[parameters.operativo]).fetchAll();
+            var UAs = result.rows;
+            var vars = await Promise.all(UAs.map(async function(ua){
+                return context.be.procedure['cargar/preguntas_ua'].coreFunction(context, ua);
+            }));
+            return vars
+        }catch(err){
+            console.log('ERROR',err.message);
+            throw err;
+        };
+    }
+};
+
 ProceduresMetaEnc = [
     ProcedureCasillerosDesplegar,
     ProcedureFormularioEstructura,
-    {
-        action:'datos/guardar',
-        parameters:[
-            {name:'operativo'   , typeName:'text', references:'operativos'},
-            {name:'id_caso'     , typeName:'text'      },
-            {name:'datos_caso'  , typeName:'jsonb'     },
-        ],
-        coreFunction:function(context, parameters){
-            var client=context.client;
-            var be=context.be;
-            return Promise.resolve().then(function(){
-                return client.query('update formularios_json set datos_caso = $3 where operativo = $1 and id_caso=$2 returning *', [parameters.operativo, parameters.id_caso, parameters.datos_caso]).fetchOneRowIfExists().then(function(result){
-                    if (result.rowCount===0){
-                        return client.query("insert into formularios_json(operativo, id_caso, datos_caso) values ($1, $2, $3) returning *",
-                        [parameters.operativo, parameters.id_caso, parameters.datos_caso]).fetchUniqueRow();
-                    }else {
-                        return result;
-                    }
-                });
-            }).then(function(result){
-                return result.row;
-            });
-        }
-    },
+    ProcedureDatosGuardar,
     ProcedureCargarEncuesta,
     ProcedureNuevaEncuesta,
     ProcedureCargarPreguntasUnidadAnalisis,
-    ProcedureCargarPreguntasOperativo
+    ProcedureCargarPreguntasOperativo,
+    ProcedureGenerateTableDef
 ];
 
 module.exports = ProceduresMetaEnc;
