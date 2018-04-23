@@ -5,7 +5,7 @@ var bestGlobals = require('best-globals');
 var datetime = bestGlobals.datetime;
 var fs = require('fs-extra');
 var likeAr = require('like-ar');
-var formTypes = require('rel-enc/lib/client/form-types');
+var formTypes = require('rel-enc/lib/client/form-types').formTypes;
 
 var ProceduresMetaEnc = {};
 
@@ -136,14 +136,14 @@ var ProcedureCargarPreguntasUnidadAnalisis={
     ],
     coreFunction: function(context, parameters){
         return context.client.query(
-            `(select lower(c1.var_name) as var_name, false as unidad_analisis, orden:: integer
+            `(select lower(c1.var_name) as var_name, false as unidad_analisis, tipovar, orden:: integer
               from casilleros c1, lateral casilleros_recursivo(operativo, id_casillero),
               (select operativo, id_casillero from casilleros where operativo =$1 and unidad_analisis=$2 and tipoc='F') c0
               where c1.operativo =c0.operativo and ultimo_ancestro = c0.id_casillero and c1.tipovar is not null
             )
             union
             (
-            select unidad_analisis as var_name, true as unidad_analisis, orden::integer
+            select unidad_analisis as var_name, true as unidad_analisis, null as tipovar, orden::integer
               from unidad_analisis
               where operativo = $1 and padre = $2
             )
@@ -210,26 +210,43 @@ var ProcedureGenerateTableDef={
     ],
     coreFunction: async function(context, parameters){
         try{
-            var result = await context.client.query(`select * from unidad_analisis where operativo = $1`,[parameters.operativo]).fetchAll();
+            var result = await context.client.query(`
+                select *, (select pk from unidad_analisis p where p.unidad_analisis=ua.padre) as pk_padre,
+                       (select jsonb_agg(to_jsonb(h.*)) from unidad_analisis h where ua.unidad_analisis=h.padre ) as details
+                  from unidad_analisis ua
+                  where operativo = $1
+                `,[parameters.operativo]
+            ).fetchAll();
             var UAs = result.rows;
-            var varsDef = [];
             var varsByUA = await Promise.all(UAs.map(async function(ua){
-                varsDef[ua.unidad_analisis] = await context.be.procedure['cargar/preguntas_ua'].coreFunction(context, ua);
+                var varsDef = await context.be.procedure['cargar/preguntas_ua'].coreFunction(context, ua);
                 var tableDef={
                     name:ua.unidad_analisis,
-                    fields:varsDef[ua.unidad_analisis].map(function(varDef){
+                    fields:varsDef.filter(function(varDef){
+                        return !varDef.unidad_analisis
+                    }).map(function(varDef){
                         return {
                             name:varDef.var_name,
-                            typeName:'text'
+                            typeName:formTypes[varDef.tipovar].typeName
                         }
                     }),    
-                    primaryKey:Object.keys(ua.pk).map(function(key){
-                        return key.toLowerCase();
+                    primaryKey:ua.pk,
+                    detailTables:(ua.details||[]).map(function(detailDef){
+                        return {table: detailDef.unidad_analisis, fields:ua.pk, abr:detailDef.unidad_analisis.substr(0,1)}
                     }),
-                    detailTables:'dt',
-                    foreignKeys:'fk'
                 }
-                await fs.writeFile('./server/table-'+ua.unidad_analisis+'.js',JSON.stringify(tableDef),{encoding:'utf8'});
+                if(ua.padre){
+                    tableDef.foreignKeys=[
+                        {references: ua.padre, fields:ua.pk_padre}
+                    ];
+                }
+                var textFile=`"use strict";
+
+module.exports = function(context){
+    var admin=context.user.rol==='admin';
+    return context.be.tableDefAdapt(${JSON.stringify(tableDef, null, 4)},context);
+}`;
+                await fs.writeFile('./server/table-'+ua.unidad_analisis+'.js',textFile,{encoding:'utf8'});
             }));
             return 'OK';
         }catch(err){
