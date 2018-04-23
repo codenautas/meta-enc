@@ -10,7 +10,7 @@ module.exports = function(context){
             {name:"operativo"        , typeName:'text'                },
             {name:"unidad_analisis"  , typeName:'text'                },
             {name:"nombre"           , typeName:'text'                },
-            {name:"pk"               , typeName:'jsonb'               },
+            {name:"pk_agregada"      , typeName:'text'                },
             {name:"padre"            , typeName:'text'                },
             {name:"orden"            , typeName:'text'                },
             {name:"principal"        , typeName:'boolean'             },
