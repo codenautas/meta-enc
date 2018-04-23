@@ -3,6 +3,9 @@
 var changing = require('best-globals').changing;
 var bestGlobals = require('best-globals');
 var datetime = bestGlobals.datetime;
+var fs = require('fs-extra');
+var likeAr = require('like-ar');
+var formTypes = require('rel-enc/lib/client/form-types');
 
 var ProceduresMetaEnc = {};
 
@@ -209,10 +212,26 @@ var ProcedureGenerateTableDef={
         try{
             var result = await context.client.query(`select * from unidad_analisis where operativo = $1`,[parameters.operativo]).fetchAll();
             var UAs = result.rows;
-            var vars = await Promise.all(UAs.map(async function(ua){
-                return context.be.procedure['cargar/preguntas_ua'].coreFunction(context, ua);
+            var varsDef = [];
+            var varsByUA = await Promise.all(UAs.map(async function(ua){
+                varsDef[ua.unidad_analisis] = await context.be.procedure['cargar/preguntas_ua'].coreFunction(context, ua);
+                var tableDef={
+                    name:ua.unidad_analisis,
+                    fields:varsDef[ua.unidad_analisis].map(function(varDef){
+                        return {
+                            name:varDef.var_name,
+                            typeName:'text'
+                        }
+                    }),    
+                    primaryKey:Object.keys(ua.pk).map(function(key){
+                        return key.toLowerCase();
+                    }),
+                    detailTables:'dt',
+                    foreignKeys:'fk'
+                }
+                await fs.writeFile('./server/table-'+ua.unidad_analisis+'.js',JSON.stringify(tableDef),{encoding:'utf8'});
             }));
-            return vars
+            return 'OK';
         }catch(err){
             console.log('ERROR',err.message);
             throw err;
