@@ -159,6 +159,34 @@ var ProcedureTraerPreguntasUnidadAnalisis={
     }
 };
 
+var ProcedureObtenerVariablesUnidadAnalisis={
+    action: 'variables_ua/obtener',
+    parameters: [
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
+        {name:'unidad_analisis' ,typeName:'text' },
+    ],
+    coreFunction: async function(context, parameters){
+        var sqlParams=[parameters.operativo, parameters.unidad_analisis];
+        var results = {
+            variables: await context.client.query(
+                `select var_name, false as unidad_analisis, tipovar, orden:: integer
+                from casilleros c1, lateral casilleros_recursivo(operativo, id_casillero),
+                (select operativo, id_casillero from casilleros where operativo =$1 and unidad_analisis=$2 and tipoc='F') c0
+                where c1.operativo =c0.operativo and ultimo_ancestro = c0.id_casillero and c1.tipovar is not null
+                order by orden_total
+                `, sqlParams
+            ).fetchAll(),
+            unidadAnalisisHijas: await context.client.query(`
+                select unidad_analisis as var_name, true as unidad_analisis, null as tipovar, orden::integer
+                from unidad_analisis
+                where operativo = $1 and padre = $2
+                `, sqlParams
+            ).fetchAll()
+        };
+        return likeAr(results).map(result => result.rows);
+    }
+};
+
 var ProcedureTraerPreguntasOperativo={
     action: 'preguntas_operativo/traer',
     parameters: [
@@ -204,27 +232,35 @@ var ProcedureTraerPreguntasOperativo={
 };
 
 var ProcedureGenerateTableDef={
-    action: 'tableDef/generate',
+    action: 'generate/tabledef',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'}
     ],
     coreFunction: async function(context, parameters){
         try{
             var result = await context.client.query(`
-                select *, (select pk from unidad_analisis p where p.unidad_analisis=ua.padre) as pk_padre,
-                       (select jsonb_agg(to_jsonb(h.*)) from unidad_analisis h where ua.unidad_analisis=h.padre ) as details
+                select *, coalesce((
+                    with recursive uas(operativo, profundidad, padre, pk) as (
+                      select ua.operativo, 1 as profundidad, ua.padre, null as pk
+                    union all
+                      select uas.operativo, profundidad+1, p.padre, p.pk_agregada
+                        from uas left join unidad_analisis p on p.unidad_analisis = uas.padre and p.operativo = uas.operativo
+                        where p.unidad_analisis is not null
+                    ) select array_agg(pk order by profundidad desc) from uas where pk is not null
+                  ),array[]::text[]) as pk_padre,
+                  (select jsonb_agg(to_jsonb(h.*)) from unidad_analisis h where ua.unidad_analisis=h.padre ) as details
                   from unidad_analisis ua
                   where operativo = $1
                 `,[parameters.operativo]
             ).fetchAll();
             var UAs = result.rows;
             var varsByUA = await Promise.all(UAs.map(async function(ua){
-                var varsDef = await context.be.procedure['preguntas_ua/traer'].coreFunction(context, ua);
+                var uaDef = await context.be.procedure['variables_ua/obtener'].coreFunction(context, ua);
+                var varsDef = uaDef.variables;
+                ua.pk=ua.pk_padre.concat(ua.pk_agregada);
                 var tableDef={
                     name:ua.unidad_analisis,
-                    fields:varsDef.filter(function(varDef){
-                        return !varDef.unidad_analisis
-                    }).map(function(varDef){
+                    fields:varsDef.map(function(varDef){
                         return {
                             name:varDef.var_name,
                             typeName:formTypes[varDef.tipovar].typeName
@@ -246,7 +282,7 @@ module.exports = function(context){
     var admin=context.user.rol==='admin';
     return context.be.tableDefAdapt(${JSON.stringify(tableDef, null, 4)},context);
 }`;
-                await fs.writeFile('./server/table-'+ua.unidad_analisis+'.js',textFile,{encoding:'utf8'});
+                await fs.writeFile('./local-table-'+ua.unidad_analisis+'.js',textFile,{encoding:'utf8'});
             }));
             return 'OK';
         }catch(err){
@@ -264,6 +300,7 @@ ProceduresMetaEnc = [
     ProcedureNuevaEncuesta,
     ProcedureTraerPreguntasUnidadAnalisis,
     ProcedureTraerPreguntasOperativo,
+    ProcedureObtenerVariablesUnidadAnalisis, 
     ProcedureGenerateTableDef
 ];
 
