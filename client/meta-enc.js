@@ -16,7 +16,7 @@ function onclickUrl(event){
 }
 
 myOwn.wScreens.proc.result.goToEnc=function(result, div){
-    my.ajax.cargar.preguntas_operativo({operativo:result.operativo}).then(function(preguntas){
+    my.ajax.preguntas_operativo.traer({operativo:result.operativo}).then(function(preguntas){
         var idEnc_js=result.id_caso;
         var idOp_js=result.operativo;
         sessionStorage.setItem('surveyId', idEnc_js);
@@ -68,7 +68,7 @@ function guardar(){
     var surveyId = sessionStorage.getItem('surveyId');
     var operativo = sessionStorage.getItem('operativo');
     var datosCaso = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
-    return my.ajax.datos.guardar({operativo: operativo, id_caso: surveyId, datos_caso: datosCaso}) 
+    return my.ajax.caso.guardar({operativo: operativo, id_caso: surveyId, datos_caso: datosCaso}) 
     .then(function(result){
         document.getElementById('genericMsg').innerText='Encuesta guardada';
         return result;

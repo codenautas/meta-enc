@@ -42,8 +42,8 @@ var ProcedureFormularioEstructura={
     }        
 };
 
-var ProcedureDatosGuardar = {
-    action:'datos/guardar',
+var ProcedureCasoGuardar = {
+    action:'caso/guardar',
     parameters:[
         {name:'operativo'   , typeName:'text', references:'operativos'},
         {name:'id_caso'     , typeName:'text'      },
@@ -68,7 +68,7 @@ var ProcedureDatosGuardar = {
 };
 
 var ProcedureNuevaEncuesta={
-    action: 'nueva/enc',
+    action: 'caso/nuevo',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
@@ -87,7 +87,7 @@ var ProcedureNuevaEncuesta={
             return result.row;
         }).then(function(row){
             var be=context.be;
-            return be.procedure['cargar/preguntas_ua'].coreFunction(context, row).then(function(result){
+            return be.procedure['preguntas_ua/traer'].coreFunction(context, row).then(function(result){
                 var object = {};
                 result.forEach(function(question){
                     object[question.var_name] = question.unidad_analisis?[]:null;
@@ -96,15 +96,15 @@ var ProcedureNuevaEncuesta={
                     `insert into formularios_json values ($1,(select (coalesce(max(id_caso::integer),0) + 1)::text from formularios_json where operativo = $1),$2) returning *`,
                     [row.operativo, object]
                 ).fetchUniqueRow().then(function(result){
-                    return be.procedure['cargar/enc'].coreFunction(context, result.row);
+                    return be.procedure['caso/traer'].coreFunction(context, result.row);
                 });    
             });
         });
     }
 };
 
-var ProcedureCargarEncuesta={
-    action: 'cargar/enc',
+var ProcedureTraerCaso={
+    action: 'caso/traer',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'id_caso'       ,typeName:'text'},
@@ -128,8 +128,8 @@ var ProcedureCargarEncuesta={
     }
 };
 
-var ProcedureCargarPreguntasUnidadAnalisis={
-    action: 'cargar/preguntas_ua',
+var ProcedureTraerPreguntasUnidadAnalisis={
+    action: 'preguntas_ua/traer',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'unidad_analisis' ,typeName:'text' },
@@ -159,8 +159,8 @@ var ProcedureCargarPreguntasUnidadAnalisis={
     }
 };
 
-var ProcedureCargarPreguntasOperativo={
-    action: 'cargar/preguntas_operativo',
+var ProcedureTraerPreguntasOperativo={
+    action: 'preguntas_operativo/traer',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
@@ -204,7 +204,7 @@ var ProcedureCargarPreguntasOperativo={
 };
 
 var ProcedureGenerateTableDef={
-    action: 'generate/tableDef',
+    action: 'tableDef/generate',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'}
     ],
@@ -219,7 +219,7 @@ var ProcedureGenerateTableDef={
             ).fetchAll();
             var UAs = result.rows;
             var varsByUA = await Promise.all(UAs.map(async function(ua){
-                var varsDef = await context.be.procedure['cargar/preguntas_ua'].coreFunction(context, ua);
+                var varsDef = await context.be.procedure['preguntas_ua/traer'].coreFunction(context, ua);
                 var tableDef={
                     name:ua.unidad_analisis,
                     fields:varsDef.filter(function(varDef){
@@ -259,11 +259,11 @@ module.exports = function(context){
 ProceduresMetaEnc = [
     ProcedureCasillerosDesplegar,
     ProcedureFormularioEstructura,
-    ProcedureDatosGuardar,
-    ProcedureCargarEncuesta,
+    ProcedureCasoGuardar,
+    ProcedureTraerCaso,
     ProcedureNuevaEncuesta,
-    ProcedureCargarPreguntasUnidadAnalisis,
-    ProcedureCargarPreguntasOperativo,
+    ProcedureTraerPreguntasUnidadAnalisis,
+    ProcedureTraerPreguntasOperativo,
     ProcedureGenerateTableDef
 ];
 

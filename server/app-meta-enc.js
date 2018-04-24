@@ -27,8 +27,8 @@ class AppMetaEnc extends relenc.AppRelEnc{
                 {menuType:'table', name:'plano'           , table:'casilleros'},
             ]},
             {menuType:'menu', name:'Encuestas de prueba', menuContent:[
-                {menuType:'proc', name:'cargar_enc', proc:'cargar/enc', label:'Cargar Encuesta'  },
-                {menuType:'proc', name:'nueva_enc' , proc:'nueva/enc' , label:'Nueva Encuesta'   },
+                {menuType:'proc', name:'caso_traer', proc:'caso/traer', label:'Cargar Encuesta'  },
+                {menuType:'proc', name:'caso_nuevo' , proc:'caso/nuevo' , label:'Nueva Encuesta'   },
             ]},
             {menuType:'menu', name:'Configuración', menuContent:[
                 {menuType:'menu', name:'elementos', menuContent:[
