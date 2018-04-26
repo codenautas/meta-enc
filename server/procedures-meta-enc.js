@@ -237,17 +237,10 @@ var ProcedureGenerateTableDef={
         {name:'operativo'     ,references:'operativos',  typeName:'text'}
     ],
     coreFunction: async function(context, parameters){
+        var be=context.be;
         try{
             var result = await context.client.query(`
-                select *, coalesce((
-                    with recursive uas(operativo, profundidad, padre, pk) as (
-                      select ua.operativo, 1 as profundidad, ua.padre, null as pk
-                    union all
-                      select uas.operativo, profundidad+1, p.padre, p.pk_agregada
-                        from uas left join unidad_analisis p on p.unidad_analisis = uas.padre and p.operativo = uas.operativo
-                        where p.unidad_analisis is not null
-                    ) select array_agg(pk order by profundidad desc) from uas where pk is not null
-                  ),array[]::text[]) as pk_padre,
+                select *, ${be.sqls.exprFieldUaPkPadre} as pk_padre,
                   (select jsonb_agg(to_jsonb(h.*)) from unidad_analisis h where ua.unidad_analisis=h.padre ) as details
                   from unidad_analisis ua
                   where operativo = $1

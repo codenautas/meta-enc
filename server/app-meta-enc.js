@@ -8,6 +8,18 @@ var changing = require('best-globals').changing;
 var fs = require('fs-extra');
 
 class AppMetaEnc extends relenc.AppRelEnc{
+    sqls:{
+        exprFieldUaPkPadre: `
+        coalesce((
+                    with recursive uas(operativo, profundidad, padre, pk) as (
+                      select ua.operativo, 1 as profundidad, ua.padre, null as pk
+                    union all
+                      select uas.operativo, profundidad+1, p.padre, p.pk_agregada
+                        from uas left join unidad_analisis p on p.unidad_analisis = uas.padre and p.operativo = uas.operativo
+                        where p.unidad_analisis is not null
+                    ) select array_agg(pk order by profundidad desc) from uas where pk is not null
+                  ),array[]::text[])`
+    }
     constructor(){
         super();
     }
