@@ -63,10 +63,15 @@ class AppMetaEnc extends relenc.AppRelEnc{
         ]);
     }
     clientIncludes(req, hideBEPlusInclusions) {
+        
+        var metaEncMod = { type: 'js' ,  path: 'client', src: 'client/meta-enc.js', modPath:'../client'   };
+        if(!this.rootPath.endsWith("meta-enc")){
+            metaEncMod.module='meta-enc';
+        }
         return super.clientIncludes(req, hideBEPlusInclusions).concat(
             { type: 'js' , module:'rel-enc', path: 'lib/client', src: 'lib/client/form-structure.js', modPath:'../client', ts:'src/client'   },
             { type: 'js' , module:'rel-enc', path: 'lib/client', src: 'lib/client/form-types.js', modPath:'../client', ts:'src/client'   },
-            { type: 'js' , module:'meta-enc', path: 'client', src: 'client/meta-enc.js', modPath:'../client'   },
+            metaEncMod,
             { type: 'css', file: 'my-things2.css' }
         )
     }
