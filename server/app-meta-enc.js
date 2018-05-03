@@ -33,16 +33,16 @@ class AppMetaEnc extends relenc.AppRelEnc{
     }
     getMenu(context){
         return {menu:[
-            {menuType:'menu', name:'Metadatos', menuContent:[
+            {menuType:'menu', name:'metadatos', menuContent:[
                 {menuType:'table', name:'operativos'},
                 {menuType:'table', name:'normal'          , table:'casilleros-principales'},
                 {menuType:'table', name:'plano'           , table:'casilleros'},
             ]},
-            {menuType:'menu', name:'Encuestas de prueba', menuContent:[
-                {menuType:'proc', name:'caso_traer', proc:'caso/traer', label:'Cargar Encuesta'  },
-                {menuType:'proc', name:'caso_nuevo' , proc:'caso/nuevo' , label:'Nueva Encuesta'   },
+            {menuType:'menu', name:'encuestas de prueba', menuContent:[
+                {menuType:'proc', name:'caso_traer', proc:'caso/traer', label:'traer caso'  },
+                {menuType:'proc', name:'caso_nuevo' , proc:'caso/nuevo' , label:'nuevo caso'   },
             ]},
-            {menuType:'menu', name:'Configuración', menuContent:[
+            {menuType:'menu', name:'configuracion', menuContent:[
                 {menuType:'menu', name:'elementos', menuContent:[
                     {menuType:'table', name:'tipoc', label:'tipos de celdas', selectedByDefault:true},
                     {menuType:'table', name:'tipoc_tipoc', label:'inclusiones de celdas'},
