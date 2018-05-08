@@ -20,7 +20,7 @@ module.exports = function(context){
             {name:"aclaracion"            , typeName:'text'                      , editable:admin },
             {name:"salto"                 , typeName:'text'                      , editable:admin },
             {name:"unidad_analisis"       , typeName:'text'                      , editable:admin },
-            {name:"con_resumen"           , typeName:'boolean'                   , editable:admin },
+            {name:"cantidad_resumen"      , typeName:'integer'                   , editable:admin },
             {name:"irrepetible"           , typeName:'boolean'                   , editable:false },
             {name:"despliegue"            , typeName:'text'                      , editable:admin },
             {name:"ver_id"                , typeName:'text'                      , editable:admin },
