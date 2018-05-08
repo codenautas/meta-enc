@@ -13,6 +13,7 @@ module.exports = function(context){
             {name:"tipoc"                 , typeName:'text'                      , editable:admin },
             {name:"casillero"             , typeName:'text'                      , editable:admin },
             {name:"orden"                 , typeName:'bigint'                    , editable:admin },
+            {name:"ok"                    , typeName:'text'                      , editable:false },
             {name:"nombre"                , typeName:'text'                      , editable:admin },
             {name:"tipovar"               , typeName:'text'                      , editable:admin },
             {name:"longitud"              , typeName:'text'                      , editable:admin },
@@ -50,6 +51,18 @@ module.exports = function(context){
             {constraintType:'check' , name:"para poner 'no' en optativo dejar en blanco", expr:'optativo'   },
         ],
         sql:{
+            fields:{
+                ok:{ 
+                    expr:`case when casilleros.padre is not null then 
+                            coalesce((
+                              select '✓'::text
+                                from tipoc_tipoc tt 
+                                where tt.tipoc_padre=p.tipoc and tt.tipoc_hijo=casilleros.tipoc
+                            ), '⛔'::text)
+                          else null end
+                    `
+                }
+            },
             isTable:true,
             from:'(select * from casilleros, lateral casilleros_recursivo(operativo, id_casillero))',
             postCreateSqls:'create trigger irrepetible_trg before insert or update on casilleros for each row execute procedure irrepetible_trg();',
