@@ -54,13 +54,28 @@ module.exports = function(context){
         sql:{
             fields:{
                 ok:{ 
-                    expr:`case when casilleros.padre is not null then 
-                            coalesce((
-                              select '✓'::text
-                                from tipoc_tipoc tt 
-                                where tt.tipoc_padre=p.tipoc and tt.tipoc_hijo=casilleros.tipoc
-                            ), '⛔'::text)
-                          else null end
+                    expr:`coalesce(nullif(
+                            case when casilleros.padre is not null then 
+                              coalesce((
+                                select ''::text
+                                  from tipoc_tipoc tt 
+                                  where tt.tipoc_padre=p.tipoc and tt.tipoc_hijo=casilleros.tipoc
+                              ), '⛔'::text) -- El hijo no es válido
+                            else null end
+                            ||case when puede_ser_var is false and casilleros.tipovar is not null then '☒'
+                                   when puede_ser_var is true and casilleros.tipovar is null then '!☐'
+                            else '' end -- Sobra o falta el tipovar 
+                            ||(select case 
+                                        when string_agg(lower(nombre), ',' order by nombre)='no,sí' and casilleros.tipoc in ('P','OM') and casilleros.tipovar is distinct from 'si_no' then '!si_no'
+                                        when string_agg(lower(nombre), ',' order by nombre)='no,si' then '!Sí!'
+                                        when count(*)>0 and casilleros.tipoc in ('P','OM') and (casilleros.tipovar is null or casilleros.tipovar not in ('opciones','si_no')) then '!opciones'
+                                        when count(*)>0 and casilleros.tipoc not in ('P','OM') then '¬O'
+                                        when count(*)=0 and casilleros.tipoc in ('P','OM') and casilleros.tipovar in ('opciones','si_no') then '!O'
+                                        else '' end
+                                  from casilleros h 
+                                  where h.padre=casilleros.id_casillero and h.operativo=casilleros.operativo
+                                    and h.tipoc='O') -- faltan o sobran hijos opciones
+                         ,''),'✔')
                     `
                 }
             },
