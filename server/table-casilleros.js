@@ -38,6 +38,7 @@ module.exports = function(context){
         foreignKeys:[
             {references:'operativos', fields:['operativo']},
             {references:'tipoc'     , fields:['tipoc']},
+            {references:'tipovar'   , fields:['tipovar']},
             {references:'casilleros', fields:['operativo', {source:'padre', target:'id_casillero'}], alias:'p' ,consName:'casilleros padre REL'},
             {references:'casilleros', fields:['operativo', {source:'salto', target:'id_casillero'}], alias:'s' ,consName:'casilleros salto REL'}
         ],

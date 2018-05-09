@@ -55,6 +55,7 @@ class AppMetaEnc extends relenc.AppRelEnc{
         return super.getTables().concat([
             {path:__dirname, name:'tipoc'                 },
             {path:__dirname, name:'tipoc_tipoc'           },
+            {path:__dirname, name:'tipovar'               },
             {path:__dirname, name:'operativos'            },
             {path:__dirname, name:'unidad_analisis'       },
             {path:__dirname, name:'casilleros'            },
