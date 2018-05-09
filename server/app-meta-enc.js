@@ -46,6 +46,7 @@ class AppMetaEnc extends relenc.AppRelEnc{
                 {menuType:'menu', name:'elementos', menuContent:[
                     {menuType:'table', name:'tipoc', label:'tipos de celdas', selectedByDefault:true},
                     {menuType:'table', name:'tipoc_tipoc', label:'inclusiones de celdas'},
+                    {menuType:'table', name:'tipovar', label:'tipos de variables'},
                 ]},
                 {menuType:'table', name:'usuarios', selectedByDefault:true},
             ]},
