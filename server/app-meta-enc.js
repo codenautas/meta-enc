@@ -50,6 +50,7 @@ class AppMetaEnc extends relenc.AppRelEnc{
                 ]},
                 {menuType:'table', name:'usuarios', selectedByDefault:true},
             ]},
+            {menuType:'proc', name:'generate_tabledef', proc:'generate/tabledef', label:'generar tablas'  },
         ]}
     }
     getTables(){
