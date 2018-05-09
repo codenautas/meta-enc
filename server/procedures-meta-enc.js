@@ -5,7 +5,6 @@ var bestGlobals = require('best-globals');
 var datetime = bestGlobals.datetime;
 var fs = require('fs-extra');
 var likeAr = require('like-ar');
-var formTypes = require('rel-enc/lib/client/form-types').formTypes;
 
 var ProceduresMetaEnc = {};
 
@@ -247,6 +246,8 @@ var ProcedureGenerateTableDef={
                 `,[parameters.operativo]
             ).fetchAll();
             var UAs = result.rows;
+            var result = await context.client.query(`select * from tipovar`).fetchAll();
+            var tipovars = result.rows;
             var varsByUA = await Promise.all(UAs.map(async function(ua){
                 var uaDef = await context.be.procedure['variables_ua/obtener'].coreFunction(context, ua);
                 var varsDef = uaDef.variables;
@@ -256,7 +257,7 @@ var ProcedureGenerateTableDef={
                     fields:varsDef.map(function(varDef){
                         return {
                             name:varDef.var_name,
-                            typeName:formTypes[varDef.tipovar].typeName
+                            typeName:tipovars.find(function(tipovar){return tipovar.tipovar = varDef.tipovar}).type_name
                         }
                     }),    
                     primaryKey:ua.pk,

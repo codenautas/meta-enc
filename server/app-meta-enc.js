@@ -73,7 +73,6 @@ class AppMetaEnc extends relenc.AppRelEnc{
         }
         return super.clientIncludes(req, hideBEPlusInclusions).concat(
             { type: 'js' , module:'rel-enc', path: 'lib/client', src: 'lib/client/form-structure.js', modPath:'../client', ts:'src/client'   },
-            { type: 'js' , module:'rel-enc', path: 'lib/client', src: 'lib/client/form-types.js', modPath:'../client', ts:'src/client'   },
             metaEncMod,
             { type: 'css', file: 'my-things2.css' }
         )

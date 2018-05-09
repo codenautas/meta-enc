@@ -1,7 +1,7 @@
 {
   "name": "meta-enc",
   "description": "Metadatos de encuestas",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "main": "server/app-meta-enc.js",
@@ -13,7 +13,7 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.1.26"
+    "rel-enc": "~0.1.28"
   },
   "devDependencies": {
     "types.d.ts": "~0.1.16"
