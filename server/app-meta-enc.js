@@ -3,9 +3,7 @@
 var Path = require('path');
 var relenc = require("rel-enc");
 var MiniTools = require('mini-tools');
-
 var changing = require('best-globals').changing;
-var fs = require('fs-extra');
 
 class AppMetaEnc extends relenc.AppRelEnc{
     constructor(){
