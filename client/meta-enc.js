@@ -60,7 +60,7 @@ function devolver() {
         sessionStorage.setItem('operativo', '');
         sessionStorage.setItem('UAInfo', '');
         localStorage.setItem(operativo + '_survey_' + surveyId, '');
-        gotoInnerUrl('menu?i=cargar_enc');
+        gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
     });
 }
 
@@ -90,12 +90,18 @@ myOwn.wScreens.formulario=function(addrParams){
         ]).then(function(all){
             var structOperativo=all[0];
             var surveyData=all[1];
-            main_layout.innerHTML='';
-            my.wScreens.proc.result.desplegarFormulario(structOperativo,main_layout,surveyData,formulario); //MODIFICADO
+            if(surveyData.idCaso && surveyData.surveyContent){
+                main_layout.innerHTML='';
+                my.wScreens.proc.result.desplegarFormulario(structOperativo,main_layout,surveyData,formulario); //MODIFICADO
+            }else{
+                gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
+            }
         });
     }else{
-        gotoInnerUrl('menu?i=cargar_enc');
+        gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
     }
+    
+    
 };
 
 myOwn.wScreens.cambio_for=function(addrParams){
