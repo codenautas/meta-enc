@@ -135,18 +135,18 @@ var ProcedureTraerPreguntasUnidadAnalisis={
     ],
     coreFunction: function(context, parameters){
         return context.client.query(
-            `(select lower(c1.var_name) as var_name, false as unidad_analisis, tipovar, orden:: integer
+            `(select lower(c1.var_name) as var_name, false as unidad_analisis, tipovar, orden:: integer, orden_total
               from casilleros c1, lateral casilleros_recursivo(operativo, id_casillero),
               (select operativo, id_casillero from casilleros where operativo =$1 and unidad_analisis=$2 and tipoc='F') c0
               where c1.operativo =c0.operativo and ultimo_ancestro = c0.id_casillero and c1.tipovar is not null
             )
             union
             (
-            select unidad_analisis as var_name, true as unidad_analisis, null as tipovar, orden::integer
+            select unidad_analisis as var_name, true as unidad_analisis, null as tipovar, orden::integer, null as orden_total
               from unidad_analisis
               where operativo = $1 and padre = $2
             )
-                order by orden
+                order by orden_total
             `,
             [parameters.operativo, parameters.unidad_analisis]
         ).execute().then(function(result){
@@ -203,16 +203,16 @@ var ProcedureTraerPreguntasOperativo={
                     (select jsonb_agg(aux)
                         from (
                             (
-                                select lower(c1.var_name) as var_name, false as es_unidad_analisis, orden::integer
+                                select lower(c1.var_name) as var_name, false as es_unidad_analisis, orden::integer, orden_total
                                     from casilleros c1, lateral casilleros_recursivo(operativo, id_casillero),
                                     (select operativo, id_casillero from casilleros where operativo =$1 and unidad_analisis=ua.unidad_analisis and tipoc='F') c0
                                     where c1.operativo =c0.operativo and ultimo_ancestro = c0.id_casillero and c1.tipovar is not null
                                 union
-                                select unidad_analisis as var_name, true as es_unidad_analisis, orden::integer
+                                select unidad_analisis as var_name, true as es_unidad_analisis, orden::integer, null as orden_total
                                     from unidad_analisis
                                     where operativo = $1 and padre = ua.unidad_analisis
                             )
-                            order by orden
+                            order by orden_total
                         ) as aux
                     )
                 ,'[]'::jsonb) as preguntas
