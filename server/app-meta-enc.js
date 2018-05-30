@@ -33,7 +33,7 @@ class AppMetaEnc extends relenc.AppRelEnc{
         return {menu:[
             {menuType:'menu', name:'metadatos', menuContent:[
                 {menuType:'table', name:'operativos'},
-                {menuType:'table', name:'normal'          , table:'casilleros-principales'},
+                {menuType:'table', name:'normal'          , table:'casilleros_principales'},
                 {menuType:'table', name:'plano'           , table:'casilleros'},
             ]},
             {menuType:'menu', name:'encuestas de prueba', menuContent:[
