@@ -12,7 +12,7 @@ module.exports = function(context){
         ],
         primaryKey:['operativo'],
         detailTables:[
-            {table:'casilleros-principales', fields:['operativo'], abr:'C' , label:'casilleros principales'  },
+            {table:'casilleros_principales', fields:['operativo'], abr:'C' , label:'casilleros principales', refreshParent:true  },
             {table:'casilleros'            , fields:['operativo'], abr:'P' , label:'casilleros (forma plana)'},
             {table:'unidad_analisis'       , fields:['operativo'], abr:'UA', label:'unidades de análisis'    },
         ],

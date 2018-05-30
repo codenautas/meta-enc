@@ -59,7 +59,7 @@ class AppMetaEnc extends relenc.AppRelEnc{
             {path:__dirname, name:'operativos'            },
             {path:__dirname, name:'unidad_analisis'       },
             {path:__dirname, name:'casilleros'            },
-            {path:__dirname, name:'casilleros-principales'},
+            {path:__dirname, name:'casilleros_principales'},
             {path:__dirname, name:'formularios_json'      },
         ]);
     }
