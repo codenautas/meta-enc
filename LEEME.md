@@ -107,21 +107,21 @@ Los botones de formularios se utilizan para poder navegar de un formulario a otr
 
 Para definir un BF, es necesario:
 
-    1.ingresar en el campo casillero el id_casillero del formulario asociado.
+   1. ingresar en el campo casillero el id_casillero del formulario asociado.
 
-    2.El campo cantidad_resumen determina la cantidad de campos que se van a mostrar en la grilla resumen. Si no se especifica, no se incluye la grilla resumen y únicamente se muestran los botones de navegación entre formularios.
+   1. El campo cantidad_resumen determina la cantidad de campos que se van a mostrar en la grilla resumen. Si no se especifica, no se incluye la grilla resumen y únicamente se muestran los botones de navegación entre formularios.
 
-        2.1. Si se ingresa cantidad resumen y se setea la unidad_de analisis del formulario referenciado. La grilla muestra los botones correspondientes a las unidades análisis hijas de la seteada.
+      * Si se ingresa cantidad resumen y se setea la unidad_de analisis del formulario referenciado. La grilla muestra los botones correspondientes a las unidades análisis hijas de la seteada.
 
-        Ej: si tenemos las UA: ***viviendas(principal)->hogares->personas*** y definimos un BF de la siguiente forma:
+      Ej: si en la UA: ***viviendas(principal)->hogares->personas*** se define un BF de la siguiente forma:
 
-        [BF](./doc/img/bf.png)
+      ![BF](./doc/img/bf.png)
 
-        el resultado obtenido es el siguiente:
+      el resultado obtenido es el siguiente:
 
-        [grilla](./doc/img/grilla.png)
+      ![grilla](doc/img/grilla.png)
 
-        2.2. Si se ingresa cantidad resumen sin setear la unidad_de analisis del formulario referenciado. La grilla omite los botones correspondientes a las unidades de análisis hijas.
+      * Si se ingresa cantidad resumen sin setear la unidad_de analisis del formulario referenciado. La grilla omite los botones correspondientes a las unidades de análisis hijas.
 
 <!--lang:en--]
 
