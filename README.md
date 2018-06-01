@@ -9,8 +9,6 @@ also available in:
 
 see spanish
 
-see spanish
-
 ## License
 
 [MIT](LICENSE)

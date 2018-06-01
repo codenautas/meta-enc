@@ -128,8 +128,6 @@ Para definir un BF, es necesario:
 see spanish
 
 [!--lang:*-->
-see spanish
-
 ## License
 
 [MIT](LICENSE)
