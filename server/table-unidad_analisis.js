@@ -22,5 +22,8 @@ module.exports = function(context){
         detailTables:[
             {table:'casilleros_principales', fields:['operativo','unidad_analisis'], abr:'C', label:'casilleros'  },
         ],
+        sortColumns:[
+            {column:'orden'}
+        ]
     },context);
 }
