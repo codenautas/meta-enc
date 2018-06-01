@@ -1,9 +1,10 @@
 {
   "name": "meta-enc",
   "description": "Metadatos de encuestas",
-  "version": "0.1.40",
+  "version": "0.1.41",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
+  "repository": "codenautas/meta-enc",
   "main": "server/app-meta-enc.js",
   "types": "server/app-meta-enc.d.ts",
   "files": [
