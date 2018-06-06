@@ -63,6 +63,7 @@ $SQL$
       and p.id_casillero = p_id_casillero;
 $SQL$;
 
+drop function casilleros_jerarquizados(text,text);
 create or replace function casilleros_jerarquizados(p_operativo text, id_casillero text) returns jsonb
   language sql
 as
