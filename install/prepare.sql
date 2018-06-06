@@ -19,6 +19,7 @@ create or replace function irrepetible_trg() returns trigger
 $body$
 declare
   v_separador_id text:='/';
+  v_separador_tipoc text:=':';
   v_var_name_comun text;
   v_irrepetible boolean;
   v_puede_ser_var boolean;
@@ -44,12 +45,12 @@ begin
       raise 'no puede tener tipo de variable % de % en %',new.id_casillero,new.padre,new.operativo;
     end if;
     new.irrepetible := (select irrepetible from tipoc where tipoc = new.tipoc);
-    new.id_casillero := case when new.irrepetible then new.casillero else new.padre||v_separador_id||new.casillero end;
+    new.id_casillero := case when new.irrepetible then new.casillero else coalesce(new.padre||v_separador_id,new.tipoc||v_separador_tipoc)||new.casillero end;
     if new.tipovar is null then
       new.var_name := null;
       v_var_name_comun := null;
     else
-      v_var_name_comun := lower(replace(new.id_casillero,'/','_'));
+      v_var_name_comun := regexp_replace(regexp_replace(replace(translate(lower(new.id_casillero),'áéíóúàèìòùÁÉÍÓÚÀÈÌÒÙÜü','aeiouaeiouaeiouuu'),'ñ','nni'),'[^0-9a-z]','_'),'^[0-9]','varnum_\1');
       new.var_name := coalesce(new.var_name_especial, v_var_name_comun);
     end if;
   end if;

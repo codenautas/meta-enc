@@ -111,7 +111,7 @@ var ProcedureTraerCaso={
     resultOk: 'goToEnc',
     coreFunction: function(context, parameters){
         return context.client.query(
-            `select f.*, c.casillero as formulario 
+            `select f.*, c.id_casillero as formulario 
                from formularios_json f join casilleros c on  f.operativo = c.operativo
                where c.operativo = $1 and f.id_caso=$2 and c.formulario_principal
             `,
@@ -196,6 +196,7 @@ var ProcedureTraerPreguntasOperativo={
             `
             select 
                 ua.unidad_analisis,
+                c.id_casillero as id_casillero_formulario,
                 c.casillero as casillero_formulario,
                 coalesce(principal, false)::boolean as unidad_de_analisis_principal,
                 ua.padre as unidad_analisis_padre, 
@@ -218,7 +219,7 @@ var ProcedureTraerPreguntasOperativo={
                 ,'[]'::jsonb) as preguntas
                 from unidad_analisis ua inner join casilleros c on ua.unidad_analisis = c.unidad_analisis and tipoc = 'F' and c.operativo = $1
                 where ua.operativo = $1
-                group by ua.unidad_analisis, c,casillero, principal, ua.padre
+                group by ua.unidad_analisis, c.id_casillero, c.casillero, principal, ua.padre
             `,
             [parameters.operativo]
         ).execute().then(function(result){
