@@ -37,35 +37,35 @@ principal      |boolean|determina la unidad de análisis principal (completar ú
 ## Definición de Casilleros
 ### Tipos de casilleros
 
-tipoc	| denominacion	                |irrepetible|desp casillero|desp hijos	|es var
+tipoc	  | denominacion	                |irrepetible|desp casillero|desp hijos  |es var
 --------|-------------------------------|-----------|--------------|------------|--------------
-B	    | bloque	                    |sí			|              |            |no  
-BF	    | Botón para formulario	      	| 		    |              |            |si/no   
-CONS    | consistencia	                |sí			|              |            |no  
-CP	    | conjunto de preguntas	        |sí			|              |            |no  
-F	    | formulario	                |sí			|              |            |no  
-FILTRO	| filtro	                    |sí			|              |            |no  
-MATRIZ	| matriz (de varias preguntas)	|sí			|              |            |no  
-O	    | opción			            |           |              |nueva_fila	|no
-OM	    | opción múltiple			    |           |              |misma_fila	|sí
-P	    | pregunta	                    |sí		    |              |tabla	    |si/no
-PMATRIZ	| pregunta en forma de matriz	|sí		    |              |tabla_matriz|no
-TEXTO	| texto aclaratorio sin pregunta|			|	           |            |no
+B       | bloque	                      |sí	    |              |            |no  
+BF	  | Botón para formulario	    |sí 	    |              |            |si/no   
+CONS    | consistencia	                |sí	    |              |            |no  
+CP	  | conjunto de preguntas	    |sí	    |              |            |no  
+F	  | formulario	                | 	    |              |            |no  
+FILTRO  | filtro	                      |sí	    |              |            |no  
+MATRIZ  | matriz (de varias preguntas)  |sí	    |              |            |no  
+O	  | opción			          |           |              |nueva_fila  |no
+OM	  | opción múltiple		    |           |              |misma_fila  |sí
+P	  | pregunta	                |sí	    |              |tabla	  |si/no
+PMATRIZ | pregunta en forma de matriz   |sí	    |              |tabla_matriz|no
+TEXTO	  | texto aclaratorio sin pregunta|		    |	             |            |no
 
 Para los casilleros que tienen permiten tener asociada una variable, los tipos de variables permitidos se definen a continuación.
 
 #### Tipos de variables permitidos
 
-tipovar	 |descripcion
+tipovar  |descripcion
 ---------|-------------------------------------------------------
-decimal	 |número con decimales
-fecha	 |fecha con formato dd/mm/aaaa
-hora	 |hora con formato hh:mm:ss
-numero	 |numero entero
+decimal  |número con decimales
+fecha	   |fecha con formato dd/mm/aaaa
+hora	   |hora con formato hh:mm:ss
+numero   |numero entero
 opciones |categorías posibles de una variable
 si_no_nn |opciones acotadas a valores sí,no, no sabe/no contesta
-si_no	 |opciones acotadas a valores sí y no
-texto	 |texto
+si_no	   |opciones acotadas a valores sí y no
+texto	   |texto
 
 
 
