@@ -20,7 +20,7 @@ class AppMetaEnc extends relenc.AppRelEnc{
                         ) select array_agg(pk order by profundidad desc) from uas where pk is not null
                       ),array[]::text[])`
         }
-        }
+    }
     getProcedures(){
         var be = this;
         return super.getProcedures().then(function(procedures){
