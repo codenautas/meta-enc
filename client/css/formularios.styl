@@ -386,3 +386,44 @@ table.resumen
 table.resumen th, table.resumen td
   padding 5px;
   border 1px solid black;
+
+/*animacion resumen*/
+#main-form
+  -webkit-transform-style preserve-3d
+  transform-style preserve-3d
+  -webkit-transition -webkit-transform 0.5s ease
+  -webkit-transition transform 0.5s ease
+  transition transform 0.5s ease
+  margin 0 auto
+
+#main-form[summary=true]
+  -webkit-transform rotateY(180deg)
+  transform rotateY(180deg)
+
+#main-form[summary=true] .form-content
+  display none
+
+#main-form[summary=false] .form-content
+  display block
+
+#main-form[summary=false]
+  -webkit-transform none
+  transform none
+
+#main-form .form-content, #main-form #summary
+  -webkit-backface-visibility hidden
+  backface-visibility hidden
+
+#main_layout
+  -webkit-perspective 700px
+  perspective 700px
+
+#summary
+  -webkit-transform rotateY( 180deg )
+  transform rotateY( 180deg )
+
+#summary-button
+  width 100px
+
+#summary-img
+  width 1024px

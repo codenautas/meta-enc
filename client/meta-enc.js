@@ -1,5 +1,7 @@
 "use strict";
 
+var PANTALLA_RESUMEN = true;
+
 myOwn.SurveyManager = require('form-structure').SurveyManager;
 myOwn.FormManager = require('form-structure').FormManager;
 
@@ -38,6 +40,10 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
     guardarButton.onclick=guardar;
     var devolverButton = html.button({id:'devolver', class:'rel_button'}, "Devolver").create();
     devolverButton.onclick=devolver;
+    if(PANTALLA_RESUMEN){
+        var resumenButton = html.button({id:'summary-button'}, "Resumen").create();
+        resumenButton.onclick=verResumen;
+    }
     div.appendChild(html.div({class:'prueba-despliegue'},[
         html.link({href: 'css/formularios.css', rel: "stylesheet"}),
         html.link({href: 'css/estados.css'    , rel: "stylesheet"}),
@@ -47,9 +53,21 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
     .concat([
         html.p({id:'idCaso'},['N° Caso: ',surveyData.idCaso]),
     ])
+    .concat(PANTALLA_RESUMEN?resumenButton:null)
     .concat(my.displayForm(surveyStructure, surveyData, formId, []))
     ).create());
 }
+
+function verResumen() {
+    document.getElementById('main-form').setAttribute('summary',true);
+    document.getElementById('summary-button').onclick = quitarResumen;
+}
+
+function quitarResumen() {
+    document.getElementById('main-form').setAttribute('summary', false);
+    document.getElementById('summary-button').onclick = verResumen;
+}
+
 
 function devolver() {
     guardar().then(function(result){
@@ -139,7 +157,9 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
     var toDisplay = formManager.display();
     formManager.validateDepot();
     formManager.refreshState();
-    return [html.div({id: mainFormId}, toDisplay)]
+    var img = html.img({id:'summary-img', src:my.path.img + 'local-resumen.png', alt:'imagen resumen'}).create();
+    var pantallaResumen = html.div({id:'summary'}, img);
+    return [html.div({id: mainFormId}, [toDisplay, PANTALLA_RESUMEN?pantallaResumen:null])]
 }
 
 myOwn.surveyDataEmpty = function surveyDataEmpty(surveyId){
