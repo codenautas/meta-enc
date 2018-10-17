@@ -392,7 +392,7 @@ table.resumen th, table.resumen td
   border 1px solid black;
 
 /*animacion resumen*/
-#main-form
+#main-form-wrapper
   -webkit-transform-style preserve-3d
   transform-style preserve-3d
   -webkit-transition -webkit-transform 0.5s ease
@@ -400,21 +400,21 @@ table.resumen th, table.resumen td
   transition transform 0.5s ease
   margin 0 auto
 
-#main-form[summary=true]
+#main-form-wrapper[summary=true]
   -webkit-transform rotateY(180deg)
   transform rotateY(180deg)
 
-#main-form[summary=true] .form-content
+#main-form-wrapper[summary=true] #main-form
   display none
 
-#main-form[summary=false] .form-content
+#main-form-wrapper[summary=false] #main-form
   display block
 
-#main-form[summary=false]
+#main-form-wrapper[summary=false]
   -webkit-transform none
   transform none
 
-#main-form .form-content, #main-form #summary
+#main-form, #summary
   -webkit-backface-visibility hidden
   backface-visibility hidden
 

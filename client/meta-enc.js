@@ -59,12 +59,12 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
 }
 
 function verResumen() {
-    document.getElementById('main-form').setAttribute('summary',true);
+    document.getElementById('main-form-wrapper').setAttribute('summary',true);
     document.getElementById('summary-button').onclick = quitarResumen;
 }
 
 function quitarResumen() {
-    document.getElementById('main-form').setAttribute('summary', false);
+    document.getElementById('main-form-wrapper').setAttribute('summary', false);
     document.getElementById('summary-button').onclick = verResumen;
 }
 
@@ -159,7 +159,7 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
     formManager.refreshState();
     var img = html.img({id:'summary-img', src:my.path.img + 'local-resumen.png', alt:'imagen resumen'}).create();
     var pantallaResumen = html.div({id:'summary'}, img);
-    return [html.div({id: mainFormId}, [toDisplay, PANTALLA_RESUMEN?pantallaResumen:null])]
+    return html.div({id: 'main-form-wrapper'},[html.div({id: mainFormId}, [toDisplay]), PANTALLA_RESUMEN?pantallaResumen:null]);
 }
 
 myOwn.surveyDataEmpty = function surveyDataEmpty(surveyId){
