@@ -154,6 +154,7 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
     }
     var surveyManager = new this.SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
     var formManager = new this.FormManager(surveyManager, formId, surveyData.surveyContent, []);
+    formManager.setIrAlSiguienteAutomatico(false);
     var toDisplay = formManager.display();
     formManager.validateDepot();
     formManager.refreshState();

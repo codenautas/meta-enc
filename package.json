@@ -14,7 +14,7 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.1.56",
+    "rel-enc": "~0.1.57",
     "fs-extra": "~7.0.0"
   },
   "devDependencies": {
