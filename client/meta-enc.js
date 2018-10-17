@@ -27,7 +27,7 @@ myOwn.wScreens.proc.result.goToEnc=function(result, div){
         sessionStorage.setItem('formularioPrincipal', result.formulario);
         sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
         localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
-        div.innerText='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
+        div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
         div.style.backgroundColor='#5F5';
         setTimeout(function(){
             gotoInnerUrl('menu?w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
@@ -88,11 +88,11 @@ function guardar(){
     var datosCaso = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
     return my.ajax.caso.guardar({operativo: operativo, id_caso: surveyId, datos_caso: datosCaso}) 
     .then(function(result){
-        document.getElementById('genericMsg').innerText='Encuesta guardada';
+        document.getElementById('genericMsg').textContent='Encuesta guardada';
         return result;
     })
     .catch(function(error){ 
-        document.getElementById('genericMsg').innerText='Hubo un problema, intente nuevamente.';
+        document.getElementById('genericMsg').textContent='Hubo un problema, intente nuevamente.';
     })
 }
 
