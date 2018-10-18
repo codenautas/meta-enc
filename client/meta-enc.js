@@ -43,6 +43,7 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
     if(PANTALLA_RESUMEN){
         var resumenButton = html.button({id:'summary-button'}, "Resumen").create();
         resumenButton.onclick=verResumen;
+        document.getElementById('total-layout').appendChild(resumenButton);
     }
     div.appendChild(html.div({class:'prueba-despliegue'},[
         html.link({href: 'css/formularios.css', rel: "stylesheet"}),
@@ -53,7 +54,6 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
     .concat([
         html.p({id:'idCaso'},['N° Caso: ',surveyData.idCaso]),
     ])
-    .concat(PANTALLA_RESUMEN?resumenButton:null)
     .concat(my.displayForm(surveyStructure, surveyData, formId, []))
     ).create());
 }
