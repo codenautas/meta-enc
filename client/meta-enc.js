@@ -59,6 +59,10 @@ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, su
 }
 
 function verResumen() {
+    var summaryDiv = document.getElementById('summary');
+    summaryDiv.innerHTML= '';
+    var summary = my.displaySummary(sessionStorage.getItem('operativo'), sessionStorage.getItem('surveyId'));
+    summaryDiv.appendChild(summary);
     document.getElementById('main-form-wrapper').setAttribute('summary',true);
     document.getElementById('summary-button').onclick = quitarResumen;
 }
@@ -158,9 +162,111 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
     var toDisplay = formManager.display();
     formManager.validateDepot();
     formManager.refreshState();
-    var img = html.img({id:'summary-img', src:my.path.img + 'local-resumen.png', alt:'imagen resumen'}).create();
-    var pantallaResumen = html.div({id:'summary'}, img);
+    var pantallaResumen = html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso));
     return html.div({id: 'main-form-wrapper'},[html.div({id: mainFormId}, [toDisplay]), PANTALLA_RESUMEN?pantallaResumen:null]);
+}
+
+myOwn.displaySummary = function displaySummary(operativo, surveyId){
+    var mySurvey = JSON.parse(localStorage.getItem(operativo +'_survey_'+surveyId));
+    //return html.img({id:'summary-img', src:my.path.img + 'local-resumen.png', alt:'imagen resumen'}).create();
+    var table = html.table({id:'summary-table'},[
+        html.tr({},[
+            html.th({},'año'),
+            html.th({},'edad'),
+            html.th({},'lugar'),
+            html.th({colspan:6},'vivienda'),
+            html.th({colspan:3},'educ'),
+            html.th({colspan:6},'trabajo'),
+            html.th({colspan:4},'conv')
+        ])
+    ]).create();
+    if(mySurvey.personas[0]){
+        var persona = mySurvey.personas[0];
+        if(persona.p3a){
+            var fechaNac = persona.p3a;
+            var fechaNacArray = fechaNac.split('-');
+            var date = new Date();
+            var j=0;
+            for(var i=fechaNacArray[0];i<=date.getFullYear();i++){
+                var attrs = j%10==0?{'ten-years':true}:{}
+                table.appendChild(
+                    html.tr(attrs,[
+                        html.td({'is-first':true, 'is-last':true},i),
+                        html.td({'is-first':true, 'is-last':true},j),
+                    ].concat(my.completarLugares(persona, i, j))
+                    .concat(my.completarViviendas(persona, i, j))
+                    .concat(my.completarEducacion(persona, i, j))
+                    .concat(my.completarTrabajo(persona, i, j))
+                    .concat(my.completarConvivencia(persona, i, j))
+                    ).create()
+                );
+                j++;
+            }
+        }
+
+    }
+    return table;
+}
+
+myOwn.completarLugares = function completarLugares(persona, year, age){
+    if(age == 0){
+        return [html.td({},persona['2_1'])];
+    }else{
+        var result = persona['annios_personas'].find(function(annioPersona){
+            return annioPersona['2a'] == year || annioPersona['2b'] == age;
+        })
+        return [html.td({'is-first':true, 'is-last':true},result?result['2_3']:'')];
+    }
+}
+
+myOwn.completarViviendas = function completarViviendas(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['3a'] == year || annioPersona['3b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['3_2']:''),
+        html.td({},result?result['3_3']:''),
+        html.td({},result?result['3_4']:''),
+        html.td({},result?result['3_5']:''),
+        html.td({},result?result['3_6']:''),
+        html.td({'is-last':true},result?result['3_7']:'')
+    ]
+}
+myOwn.completarEducacion = function completarEducacion(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['4a'] == year || annioPersona['4b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['4_2']:''),
+        html.td({},result?result['4_3']:''),
+        html.td({'is-last':true},result?result['4_4']:'')
+    ]
+}
+
+myOwn.completarTrabajo = function completarTrabajo(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['6a'] == year || annioPersona['6b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['6_2a']:''),
+        html.td({},result?result['6_2b']:''),
+        html.td({},result?result['6_2c']:''),
+        html.td({},result?result['6_2d']:''),
+        html.td({},result?result['6_2e']:''),
+        html.td({'is-last':true},result?result['6_3']:'')
+    ]
+}
+
+myOwn.completarConvivencia = function completarConvivencia(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['7a'] == year || annioPersona['7b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['7_3']:''),
+        html.td({},result?result['7_4']:''),
+        html.td({},result?result['7_5']:''),
+        html.td({'is-last':true},result?result['7_6']:''),
+    ]
 }
 
 myOwn.surveyDataEmpty = function surveyDataEmpty(surveyId){

@@ -432,5 +432,28 @@ table.resumen th, table.resumen td
   top 50px
   left 925px
 
-#summary-img
-  width 1024px
+#summary-table
+  max-width 1024px
+  border-collapse collapse
+  border  2px solid black
+
+#summary-table th, , #summary-table td
+  border 1px solid #bbbbbb
+  padding 5px
+
+#summary-table th
+  border-left 2px solid black
+  border-right 2px solid black
+
+#summary-table td[is-first=true]
+  border-left 2px solid black
+
+#summary-table td[is-last=true]
+  border-right 2px solid black
+
+#summary-table tr[ten-years=true]
+  border-top  2px solid black
+
+#summary-table td
+  min-width 30px
+  height 30px
