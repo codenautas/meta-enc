@@ -8,7 +8,21 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\server\\server-meta-enc.js"
-        }
+            "preLaunchTask": "tsc-server",
+            "program": "${workspaceFolder}/server/server-meta-enc.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "dumpDb",
+            "preLaunchTask": "tsc-server",
+            "program": "${workspaceFolder}/server/server-meta-enc.js",
+            "args": [
+                "--dump-db"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        },
     ]
 }

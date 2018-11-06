@@ -57,7 +57,14 @@ typings/
 # dotenv environment variables file
 .env
 
+# next.js build output
+.next
+
 # Local configs
 local-*
 *-local.*
 package-lock.json
+
+#don't version generated files
+/server
+/client

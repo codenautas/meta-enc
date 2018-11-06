@@ -1,9 +1,0 @@
-tipovar|html_type|type_name|validar|radio
-si_no_nn|number|bigint|opciones|true
-si_no|number|bigint|opciones|true
-numero|number|bigint|numerico|false
-opciones|number|bigint|opciones|true
-texto|text|text|texto|false
-decimal|number|decimal|numerico|false
-fecha|text|date|texto|false
-hora|text|interval|texto|false

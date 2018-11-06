@@ -1,7 +1,7 @@
 {
   "name": "meta-enc",
   "description": "Metadatos de encuestas",
-  "version": "0.1.51",
+  "version": "0.1.52",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/meta-enc",
@@ -14,7 +14,7 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.1.57",
+    "rel-enc": "~0.1.59",
     "fs-extra": "~7.0.0"
   },
   "devDependencies": {
@@ -24,6 +24,8 @@
     "node": ">= 8.0.0"
   },
   "scripts": {
+    "prepublish": "npm run build",
+    "build": "(tsc -p tsconfig-client.json || echo \"continue w/error\") && (tsc -p tsconfig-server.json  || echo \"continue w/error\")",
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-nc": "mocha --reporter spec --bail --check-leaks --no-colors test/",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",

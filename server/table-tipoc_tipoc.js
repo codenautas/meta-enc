@@ -1,20 +1,20 @@
 "use strict";
-
-module.exports = function(context){
-    var admin=context.user.rol==='admin';
+module.exports = function (context) {
+    var admin = context.user.rol === 'admin';
     return context.be.tableDefAdapt({
-        name:'tipoc_tipoc',
-        title:'inclusiones válidas de casillero',
-        elementName:'validez',
-        editable:admin,
-        fields:[
-            {name:"tipoc_padre"       , typeName:'text'                   },
-            {name:"tipoc_hijo"        , typeName:'text'                   },
+        name: 'tipoc_tipoc',
+        title: 'inclusiones válidas de casillero',
+        elementName: 'validez',
+        editable: admin,
+        fields: [
+            { name: "tipoc_padre", typeName: 'text' },
+            { name: "tipoc_hijo", typeName: 'text' },
         ],
-        primaryKey:['tipoc_padre','tipoc_hijo'],
-        foreignKeys:[
-            {references:'tipoc', fields:[{source:'tipoc_padre', target:'tipoc'}], alias:'p', consName:'tipoc_tipoc padre REL'},
-            {references:'tipoc', fields:[{source:'tipoc_hijo' , target:'tipoc'}], alias:'h', consName:'tipoc_tipoc hijos REL'},
+        primaryKey: ['tipoc_padre', 'tipoc_hijo'],
+        foreignKeys: [
+            { references: 'tipoc', fields: [{ source: 'tipoc_padre', target: 'tipoc' }], alias: 'p', consName: 'tipoc_tipoc padre REL' },
+            { references: 'tipoc', fields: [{ source: 'tipoc_hijo', target: 'tipoc' }], alias: 'h', consName: 'tipoc_tipoc hijos REL' },
         ]
-    },context);
-}
+    }, context);
+};
+//# sourceMappingURL=table-tipoc_tipoc.js.map
