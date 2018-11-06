@@ -3,7 +3,8 @@
 import * as relEnc from "rel-enc";
 export * from "rel-enc";
 import {ProceduresMetaEnc} from "./procedures-meta-enc";
- 
+import {defConfig} from "./def-config"
+
 export type Constructor<T> = new(...args: any[]) => T;
 
 export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Base:T){
@@ -24,6 +25,10 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
                             ) select array_agg(pk order by profundidad desc) from uas where pk is not null
                         ),array[]::text[])`
             }
+        }
+        configStaticConfig(){
+            super.configStaticConfig();
+            this.setStaticConfig(defConfig);
         }
         getProcedures(){
             var be = this;
