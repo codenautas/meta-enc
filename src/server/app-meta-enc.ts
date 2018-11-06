@@ -100,4 +100,4 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
     }
 }
 export var AppMetaEnc = emergeAppMetaEnc(relEnc.emergeAppRelEnc(relEnc.AppOperativos));
-export type AppProcesamientoType = InstanceType<typeof AppMetaEnc>;
+export type AppMetaEncType = InstanceType<typeof AppMetaEnc>;
