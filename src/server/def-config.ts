@@ -15,7 +15,6 @@ install:
       owner: meta_owner
     scripts:
       post-adapt: 
-      - pg-partents.sql
       - casilleros_orden_total_fun.sql
       - casilleros_jerarquizados_fun.sql
     skip-content: true
