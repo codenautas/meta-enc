@@ -1,7 +1,4 @@
-﻿set search_path = meta;
-set role = meta_owner;
-
-create or replace view casilleros_ordenados as (
+﻿create or replace view casilleros_ordenados as (
   select * from casilleros, lateral casilleros_recursivo(operativo, id_casillero)
 );
 

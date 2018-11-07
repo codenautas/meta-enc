@@ -1,7 +1,4 @@
-﻿set role to "meta_owner";
-set search_path = "meta";
-
-drop type if exists casilleros_recursivo_type cascade;
+﻿drop type if exists casilleros_recursivo_type cascade;
 create type casilleros_recursivo_type as (
   --operativo text,
   orden_total bigint[],
