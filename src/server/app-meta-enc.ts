@@ -77,7 +77,7 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
                 ...this.getTableDefinition,
             }
             this.appendToTableDefinition('operativos', function(tableDef){
-                tableDef.detailTables.concat([
+                tableDef.detailTables = tableDef.detailTables.concat([
                     {table:'casilleros_principales', fields:['operativo'], abr:'C' , label:'casilleros principales', refreshParent:true  },
                     {table:'casilleros'            , fields:['operativo'], abr:'P' , label:'casilleros (forma plana)', refreshParent:true  },
                     {table:'unidad_analisis'       , fields:['operativo'], abr:'UA', label:'unidades de análisis', refreshParent:true  },
