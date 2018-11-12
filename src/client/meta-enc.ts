@@ -1,1 +1,264 @@
 "use strict";
+
+var PANTALLA_RESUMEN = false;
+ myOwn.SurveyManager = require('form-structure').SurveyManager;
+myOwn.FormManager = require('form-structure').FormManager;
+ function gotoInnerUrl(innerUrl){
+    history.pushState(null, null, innerUrl);
+    my.showPage();
+}
+ function onclickUrl(event){
+    if(!event.ctrlKey){
+        gotoInnerUrl(this.href);
+        event.preventDefault();
+    }
+}
+ myOwn.wScreens.proc.result.goToEnc=function(result, div){
+    my.ajax.preguntas_operativo.traer({operativo:result.operativo}).then(function(preguntas){
+        var idEnc_js=result.id_caso;
+        var idOp_js=result.operativo;
+        sessionStorage.setItem('surveyId', idEnc_js);
+        sessionStorage.setItem('operativo', idOp_js);
+        sessionStorage.setItem('innerPk' , JSON.stringify({}));
+        sessionStorage.setItem('formularioPrincipal', result.formulario);
+        sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
+        localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
+        div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
+        div.style.backgroundColor='#5F5';
+        setTimeout(function(){
+            gotoInnerUrl('menu?w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
+        },250);
+    });
+}
+ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, surveyData, formId){
+    var guardarButton = html.button({id:'guardar', class:'rel_button'}, "Grabar").create();
+    guardarButton.onclick=guardar;
+    var devolverButton = html.button({id:'devolver', class:'rel_button'}, "Devolver").create();
+    devolverButton.onclick=devolver;
+    if(PANTALLA_RESUMEN){
+        var resumenButton = html.button({id:'summary-button'}, "Resumen").create();
+        resumenButton.onclick=verResumen;
+        document.getElementById('total-layout').appendChild(resumenButton);
+    }
+    div.appendChild(html.div({class:'prueba-despliegue'},[
+        html.link({href: 'css/formularios.css', rel: "stylesheet"}),
+        html.link({href: 'css/estados.css'    , rel: "stylesheet"}),
+        html.p({id:'genericMsg'},['']),
+    ]
+    .concat([guardarButton, devolverButton])
+    .concat([
+        html.p({id:'idCaso'},['N° Caso: ',surveyData.idCaso]),
+    ])
+    .concat(my.displayForm(surveyStructure, surveyData, formId, []))
+    ).create());
+}
+ function verResumen() {
+    var summaryDiv = document.getElementById('summary');
+    summaryDiv.innerHTML= '';
+    var summary = my.displaySummary(sessionStorage.getItem('operativo'), sessionStorage.getItem('surveyId'));
+    summaryDiv.appendChild(summary);
+    document.getElementById('main-form-wrapper').setAttribute('summary',true);
+    document.getElementById('summary-button').onclick = quitarResumen;
+}
+ function quitarResumen() {
+    document.getElementById('main-form-wrapper').setAttribute('summary', false);
+    document.getElementById('summary-button').onclick = verResumen;
+}
+ function devolver() {
+    guardar().then(function(result){
+        var surveyId = sessionStorage.getItem('surveyId');
+        var operativo = sessionStorage.getItem('operativo');
+        sessionStorage.setItem('surveyId', '');
+        sessionStorage.setItem('innerPk', '');
+        sessionStorage.setItem('operativo', '');
+        sessionStorage.setItem('UAInfo', '');
+        localStorage.setItem(operativo + '_survey_' + surveyId, '');
+        gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
+    });
+}
+ function guardar(){
+    var surveyId = sessionStorage.getItem('surveyId');
+    var operativo = sessionStorage.getItem('operativo');
+    var datosCaso = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
+    return my.ajax.caso.guardar({operativo: operativo, id_caso: surveyId, datos_caso: datosCaso}) 
+    .then(function(result){
+        document.getElementById('genericMsg').textContent='Encuesta guardada';
+        return result;
+    })
+    .catch(function(error){ 
+        document.getElementById('genericMsg').textContent='Hubo un problema, intente nuevamente.';
+    })
+}
+ myOwn.wScreens.formulario=function(addrParams){
+    var my=this;
+    main_layout.textContent='cargando...';
+    var operativo = addrParams.operativo || sessionStorage.getItem('operativo') || null;
+    var formulario = addrParams.formulario || sessionStorage.getItem('formularioPrincipal') || null;
+    if(operativo && formulario){
+        Promise.all([
+            my.ajax.operativo.estructura({operativo:operativo}),
+            myOwn.getSurveyData(),
+        ]).then(function(all){
+            var structOperativo=all[0];
+            var surveyData=all[1];
+            if(surveyData.idCaso && surveyData.surveyContent){
+                main_layout.innerHTML='';
+                my.wScreens.proc.result.desplegarFormulario(structOperativo,main_layout,surveyData,formulario); //MODIFICADO
+            }else{
+                gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
+            }
+        });
+    }else{
+        gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
+    }
+    
+    
+};
+ myOwn.wScreens.cambio_for=function(addrParams){
+    var surveyId = sessionStorage.getItem('surveyId');
+    var innerPk = JSON.parse(sessionStorage.getItem('innerPk')||'{"persona": 0}');
+    var delta = Number(addrParams.delta);
+    var newFormId = Number(innerPk.persona) + delta;
+    if(addrParams.absoluta){
+        newFormId = addrParams.absoluta - 1 || 0;
+    }
+    if(newFormId<0){
+        newFormId = 0;
+    }
+    if(delta>0){
+        var surveyData = JSON.parse(localStorage.getItem(operativo + '_survey_'+ surveyId)); //REVISAR si se puede sacar todo
+        if(newFormId>surveyData.forms.F2.length){
+            newFormId=surveyData.forms.F2.length;
+        }
+    }
+    innerPk.persona=newFormId;
+    sessionStorage.setItem('innerPk', JSON.stringify(innerPk));
+    gotoInnerUrl('./menu?i=personas');
+}
+ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pilaDeRetroceso){
+    var mainFormId = 'main-form';
+    var surveyMetadata = {
+        operative: sessionStorage.getItem('operativo'),
+        structure: surveyStructure,
+        mainForm: formId,
+        analysisUnitStructure: JSON.parse(sessionStorage.getItem('UAInfo'))
+    }
+    var surveyManager = new this.SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
+    var formManager = new this.FormManager(surveyManager, formId, surveyData.surveyContent, []);
+    formManager.setIrAlSiguienteAutomatico(false);
+    var toDisplay = formManager.display();
+    formManager.validateDepot();
+    formManager.refreshState();
+    var pantallaResumen = PANTALLA_RESUMEN?html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso)):null;
+    return html.div({id: 'main-form-wrapper'},[html.div({id: mainFormId}, [toDisplay]), pantallaResumen]);
+}
+ myOwn.displaySummary = function displaySummary(operativo, surveyId){
+    var mySurvey = JSON.parse(localStorage.getItem(operativo +'_survey_'+surveyId));
+    //return html.img({id:'summary-img', src:my.path.img + 'local-resumen.png', alt:'imagen resumen'}).create();
+    var table = html.table({id:'summary-table'},[
+        html.tr({},[
+            html.th({},'año'),
+            html.th({},'edad'),
+            html.th({},'lugar'),
+            html.th({colspan:6},'vivienda'),
+            html.th({colspan:3},'educ'),
+            html.th({colspan:6},'trabajo'),
+            html.th({colspan:4},'conv')
+        ])
+    ]).create();
+    if(mySurvey.personas[0]){
+        var persona = mySurvey.personas[0];
+        if(persona.p3a){
+            var fechaNac = persona.p3a;
+            var fechaNacArray = fechaNac.split('-');
+            var date = new Date();
+            var j=0;
+            for(var i=fechaNacArray[0];i<=date.getFullYear();i++){
+                var attrs = j%10==0?{'ten-years':true}:{}
+                table.appendChild(
+                    html.tr(attrs,[
+                        html.td({'is-first':true, 'is-last':true},i),
+                        html.td({'is-first':true, 'is-last':true},j),
+                    ].concat(my.completarLugares(persona, i, j))
+                    .concat(my.completarViviendas(persona, i, j))
+                    .concat(my.completarEducacion(persona, i, j))
+                    .concat(my.completarTrabajo(persona, i, j))
+                    .concat(my.completarConvivencia(persona, i, j))
+                    ).create()
+                );
+                j++;
+            }
+        }
+     }
+    return table;
+}
+ myOwn.completarLugares = function completarLugares(persona, year, age){
+    if(age == 0){
+        return [html.td({},persona['2_1'])];
+    }else{
+        var result = persona['annios_personas'].find(function(annioPersona){
+            return annioPersona['2a'] == year || annioPersona['2b'] == age;
+        })
+        return [html.td({'is-first':true, 'is-last':true},result?result['2_3']:'')];
+    }
+}
+ myOwn.completarViviendas = function completarViviendas(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['3a'] == year || annioPersona['3b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['3_2']:''),
+        html.td({},result?result['3_3']:''),
+        html.td({},result?result['3_4']:''),
+        html.td({},result?result['3_5']:''),
+        html.td({},result?result['3_6']:''),
+        html.td({'is-last':true},result?result['3_7']:'')
+    ]
+}
+myOwn.completarEducacion = function completarEducacion(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['4a'] == year || annioPersona['4b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['4_2']:''),
+        html.td({},result?result['4_3']:''),
+        html.td({'is-last':true},result?result['4_4']:'')
+    ]
+}
+ myOwn.completarTrabajo = function completarTrabajo(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['6a'] == year || annioPersona['6b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['6_2a']:''),
+        html.td({},result?result['6_2b']:''),
+        html.td({},result?result['6_2c']:''),
+        html.td({},result?result['6_2d']:''),
+        html.td({},result?result['6_2e']:''),
+        html.td({'is-last':true},result?result['6_3']:'')
+    ]
+}
+ myOwn.completarConvivencia = function completarConvivencia(persona, year, age){
+    var result = persona['annios_personas'].find(function(annioPersona){
+        return annioPersona['7a'] == year || annioPersona['7b'] == age;
+    })
+    return [
+        html.td({'is-first':true},result?result['7_3']:''),
+        html.td({},result?result['7_4']:''),
+        html.td({},result?result['7_5']:''),
+        html.td({'is-last':true},result?result['7_6']:''),
+    ]
+}
+ myOwn.surveyDataEmpty = function surveyDataEmpty(surveyId){
+    return JSON.stringify({
+        idCaso:surveyId,
+        surveyContent:{}
+    })
+};
+ myOwn.getSurveyData = function getSurveyData(){
+    var my = this;
+    var surveyId = sessionStorage.getItem('surveyId');
+    var operativo = sessionStorage.getItem('operativo');
+    var surveyContent = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId)||my.surveyDataEmpty(surveyId));
+    return {idCaso:surveyId, /*innerPk:innerPk,*/ surveyContent:surveyContent};
+} 

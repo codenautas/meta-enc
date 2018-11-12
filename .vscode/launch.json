@@ -8,14 +8,14 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "preLaunchTask": "tsc-server",
+            "preLaunchTask": "build-all",
             "program": "${workspaceFolder}/server/server-meta-enc.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "dumpDb",
-            "preLaunchTask": "tsc-server",
+            "preLaunchTask": "build-all",
             "program": "${workspaceFolder}/server/server-meta-enc.js",
             "args": [
                 "--dump-db"
