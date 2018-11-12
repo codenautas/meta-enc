@@ -30,14 +30,6 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
             super.configStaticConfig();
             this.setStaticConfig(defConfig);
         }
-        getProcedures(){
-            var be = this;
-            return super.getProcedures().then(function(procedures){
-                return procedures.concat(
-                    ProceduresMetaEnc.map(be.procedureDefCompleter, be)
-                );
-            });
-        }
         getMenu(context){
             return {menu:[
                 {menuType:'menu', name:'metadatos', menuContent:[
