@@ -12,7 +12,7 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
         constructor(...args:any[]){ 
             super(args); 
             this.allProcedures = this.allProcedures.concat(ProceduresMetaEnc);
-            //this.allClientFileNames.push({type:'js', module: 'meta-enc', modPath: '../client', file: 'meta-enc.js', path: 'client_modules'})   
+            this.allClientFileNames.push({type:'js', module: 'meta-enc', modPath: '../client', file: 'meta-enc.js', path: 'client_modules', ts:'client'});
             this.sqls={
                 exprFieldUaPkPadre: `
                 coalesce((
