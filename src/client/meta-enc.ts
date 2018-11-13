@@ -73,7 +73,7 @@ myOwn.FormManager = require('form-structure').FormManager;
         sessionStorage.setItem('operativo', '');
         sessionStorage.setItem('UAInfo', '');
         localStorage.setItem(operativo + '_survey_' + surveyId, '');
-        gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
+        gotoInnerUrl('menu#w=ingresarFormulario');
     });
 }
  function guardar(){
@@ -105,11 +105,11 @@ myOwn.FormManager = require('form-structure').FormManager;
                 main_layout.innerHTML='';
                 my.wScreens.proc.result.desplegarFormulario(structOperativo,main_layout,surveyData,formulario); //MODIFICADO
             }else{
-                gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
+                gotoInnerUrl('menu#w=ingresarFormulario');
             }
         });
     }else{
-        gotoInnerUrl('menu?i=encuestas%20de%20prueba,caso_traer');
+        gotoInnerUrl('menu#w=ingresarFormulario');
     }
     
     
