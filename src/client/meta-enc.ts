@@ -35,16 +35,19 @@ myOwn.FormManager = require('form-structure').FormManager;
 }
  myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, surveyData, formId){
     var surveyOpts = JSON.parse(localStorage.getItem('survey_opts')) || {buttons:{guardar:true,devolver:true}};
-    
-    var guardarButton = surveyOpts.buttons.guardar?html.button({class:['rel_button', 'guardar']}, "Grabar").create():null;
-    var guardarBottomButton = surveyOpts.buttons.guardar?guardarButton.cloneNode(true):null;
-    var devolverButton = surveyOpts.buttons.devolver?html.button({class:['rel_button', 'guardar']}, "Devolver").create():null;
-    var devolverBottomButton = surveyOpts.buttons.devolver?devolverButton.cloneNode(true):null;
+    var guardarButton;
+    var guardarBottomButton;
+    var devolverButton;
+    var devolverBottomButton;
     if(surveyOpts.buttons.guardar){
+        guardarButton = html.button({id:'guardar-top-button', class:['rel_button', 'guardar']}, "Grabar").create();
+        guardarBottomButton = html.button({id:'guardar-bottom-button', class:['rel_button', 'guardar']}, "Grabar").create();
         guardarButton.onclick=guardar;    
         guardarBottomButton.onclick=guardar;
     }
     if(surveyOpts.buttons.devolver){
+        devolverButton = html.button({id:'devolver-top-button', class:['rel_button', 'devolver']}, "Devolver").create();
+        devolverBottomButton = html.button({id:'devolver-bottom-button', class:['rel_button', 'devolver']}, "Devolver").create();
         devolverButton.onclick=devolver;
         devolverBottomButton.onclick=devolver;
     }
