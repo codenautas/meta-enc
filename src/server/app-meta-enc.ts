@@ -86,7 +86,9 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
             return super.clientIncludes(req, hideBEPlusInclusions).concat(
                 { type: 'js' , module:'rel-enc', path: 'lib/client', src: 'lib/client/form-structure.js', modPath:'../client', ts:'src/client'   },
                 metaEncMod,
-                { type: 'css', file: 'my-things2.css' }
+                { type: 'css', file: 'my-things2.css' },
+                { type: 'css', file: 'formularios.css' },
+                { type: 'css', file: 'estados.css' }
             )
         }
     }

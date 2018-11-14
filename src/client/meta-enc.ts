@@ -1,3 +1,5 @@
+import { moveSync } from "fs-extra";
+
 "use strict";
 
 var PANTALLA_RESUMEN = false;
@@ -13,7 +15,7 @@ myOwn.FormManager = require('form-structure').FormManager;
         event.preventDefault();
     }
 }
- myOwn.wScreens.proc.result.goToEnc=function(result, div){
+ myOwn.wScreens.proc.result.goToEnc=function(result, div, opts){
     my.ajax.preguntas_operativo.traer({operativo:result.operativo}).then(function(preguntas){
         var idEnc_js=result.id_caso;
         var idOp_js=result.operativo;
@@ -22,6 +24,7 @@ myOwn.FormManager = require('form-structure').FormManager;
         sessionStorage.setItem('innerPk' , JSON.stringify({}));
         sessionStorage.setItem('formularioPrincipal', result.formulario);
         sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
+        localStorage.setItem('survey_opts', JSON.stringify(opts || {}));
         localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
         div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
         div.style.backgroundColor='#5F5';
@@ -31,26 +34,46 @@ myOwn.FormManager = require('form-structure').FormManager;
     });
 }
  myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, surveyData, formId){
-    var guardarButton = html.button({id:'guardar', class:'rel_button'}, "Grabar").create();
-    guardarButton.onclick=guardar;
-    var devolverButton = html.button({id:'devolver', class:'rel_button'}, "Devolver").create();
-    devolverButton.onclick=devolver;
+    var surveyOpts = JSON.parse(localStorage.getItem('survey_opts')) || {buttons:{guardar:true,devolver:true}};
+    
+    var guardarButton = surveyOpts.buttons.guardar?html.button({class:['rel_button', 'guardar']}, "Grabar").create():null;
+    var guardarBottomButton = surveyOpts.buttons.guardar?guardarButton.cloneNode(true):null;
+    var devolverButton = surveyOpts.buttons.devolver?html.button({class:['rel_button', 'guardar']}, "Devolver").create():null;
+    var devolverBottomButton = surveyOpts.buttons.devolver?devolverButton.cloneNode(true):null;
+    if(surveyOpts.buttons.guardar){
+        guardarButton.onclick=guardar;    
+        guardarBottomButton.onclick=guardar;
+    }
+    if(surveyOpts.buttons.devolver){
+        devolverButton.onclick=devolver;
+        devolverBottomButton.onclick=devolver;
+    }
     if(PANTALLA_RESUMEN){
         var resumenButton = html.button({id:'summary-button'}, "Resumen").create();
         resumenButton.onclick=verResumen;
         document.getElementById('total-layout').appendChild(resumenButton);
     }
+    var {formElementsToDisplay, formManager}=my.displayForm(surveyStructure, surveyData, formId, []);
     div.appendChild(html.div({class:'prueba-despliegue'},[
-        html.link({href: 'css/formularios.css', rel: "stylesheet"}),
-        html.link({href: 'css/estados.css'    , rel: "stylesheet"}),
         html.p({id:'genericMsg'},['']),
     ]
     .concat([guardarButton, devolverButton])
     .concat([
         html.p({id:'idCaso'},['N° Caso: ',surveyData.idCaso]),
+        formElementsToDisplay
     ])
-    .concat(my.displayForm(surveyStructure, surveyData, formId, []))
+    .concat([guardarBottomButton, devolverBottomButton])
     ).create());
+    var actual = formManager.state.actual;
+    var controles = formManager.controls;
+    var focusElement;
+    if(actual){
+        focusElement = controles[actual];
+    }else{
+        focusElement = devolverBottomButton;
+    }
+    focusElement.focus();
+    formManager.posicionarVentanaVerticalmente(focusElement,100);
 }
  function verResumen() {
     var summaryDiv = document.getElementById('summary');
@@ -149,7 +172,10 @@ myOwn.FormManager = require('form-structure').FormManager;
     formManager.validateDepot();
     formManager.refreshState();
     var pantallaResumen = PANTALLA_RESUMEN?html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso)):null;
-    return html.div({id: 'main-form-wrapper'},[html.div({id: mainFormId}, [toDisplay]), pantallaResumen]);
+    return {
+        formElementsToDisplay:html.div({id: 'main-form-wrapper'},[html.div({id: mainFormId}, [toDisplay]), pantallaResumen]),
+        formManager: formManager
+    }
 }
  myOwn.displaySummary = function displaySummary(operativo, surveyId){
     var mySurvey = JSON.parse(localStorage.getItem(operativo +'_survey_'+surveyId));
