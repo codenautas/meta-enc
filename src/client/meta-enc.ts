@@ -67,16 +67,7 @@ myOwn.FormManager = require('form-structure').FormManager;
     ])
     .concat([guardarBottomButton, devolverBottomButton])
     ).create());
-    var actual = formManager.state.actual;
-    var controles = formManager.controls;
-    var focusElement;
-    if(actual){
-        focusElement = controles[actual];
-    }else{
-        focusElement = devolverBottomButton;
-    }
-    focusElement.focus();
-    formManager.posicionarVentanaVerticalmente(focusElement,100);
+    formManager.irAlSiguienteDespliegue(formManager.state.primeraVacia,devolverBottomButton);
 }
  function verResumen() {
     var summaryDiv = document.getElementById('summary');
