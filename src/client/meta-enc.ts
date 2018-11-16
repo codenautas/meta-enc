@@ -85,12 +85,13 @@ myOwn.FormManager = require('form-structure').FormManager;
     guardar().then(function(result){
         var surveyId = sessionStorage.getItem('surveyId');
         var operativo = sessionStorage.getItem('operativo');
-        sessionStorage.setItem('surveyId', '');
+        //sessionStorage.setItem('surveyId', ''); /* lo comento para que recuerde el anterior*/
         sessionStorage.setItem('innerPk', '');
         sessionStorage.setItem('operativo', '');
         sessionStorage.setItem('UAInfo', '');
         localStorage.setItem(operativo + '_survey_' + surveyId, '');
-        gotoInnerUrl('menu#w=ingresarFormulario');
+        var idCaso = sessionStorage.getItem('surveyId');
+        gotoInnerUrl('menu#w=ingresarFormulario&consistir='+idCaso);
     });
 }
  function guardar(){
