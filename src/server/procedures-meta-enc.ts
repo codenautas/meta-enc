@@ -9,7 +9,7 @@ var likeAr = require('like-ar');
 //var ProceduresMetaEnc = {};
 
 var ProcedureCasillerosDesplegar={
-    action:'operativo/estructura',
+    action:'operativo_estructura',
     parameters:[
         {name:'operativo'            ,typeName:'text', references:'operativos'},
     ],
@@ -25,7 +25,7 @@ var ProcedureCasillerosDesplegar={
 };
 
 var ProcedureFormularioEstructura={
-    action:'formulario/estructura',
+    action:'formulario_estructura',
     method:'get',
     parameters:[
         {name:'operativo'            ,typeName:'text', references:'operativos'},
@@ -42,7 +42,7 @@ var ProcedureFormularioEstructura={
 };
 
 var ProcedureCasoGuardar = {
-    action:'caso/guardar',
+    action:'caso_guardar',
     parameters:[
         {name:'operativo'   , typeName:'text', references:'operativos'},
         {name:'id_caso'     , typeName:'text'      },
@@ -67,7 +67,7 @@ var ProcedureCasoGuardar = {
 };
 
 var ProcedureNuevaEncuesta={
-    action: 'caso/nuevo',
+    action: 'caso_nuevo',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
@@ -86,7 +86,7 @@ var ProcedureNuevaEncuesta={
             return result.row;
         }).then(function(row){
             var be=context.be;
-            return be.procedure['preguntas_ua/traer'].coreFunction(context, row).then(function(result){
+            return be.procedure['preguntas_ua_traer'].coreFunction(context, row).then(function(result){
                 var object = {};
                 result.forEach(function(question){
                     object[question.var_name] = question.unidad_analisis?[]:null;
@@ -95,7 +95,7 @@ var ProcedureNuevaEncuesta={
                     `insert into formularios_json values ($1,(select (coalesce(max(id_caso::integer),0) + 1)::text from formularios_json where operativo = $1),$2) returning *`,
                     [row.operativo, object]
                 ).fetchUniqueRow().then(function(result){
-                    return be.procedure['caso/traer'].coreFunction(context, result.row);
+                    return be.procedure['caso_traer'].coreFunction(context, result.row);
                 });    
             });
         });
@@ -103,7 +103,7 @@ var ProcedureNuevaEncuesta={
 };
 
 var ProcedureTraerCaso={
-    action: 'caso/traer',
+    action: 'caso_traer',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'id_caso'       ,typeName:'text'},
@@ -128,7 +128,7 @@ var ProcedureTraerCaso={
 };
 
 var ProcedureTraerPreguntasUnidadAnalisis={
-    action: 'preguntas_ua/traer',
+    action: 'preguntas_ua_traer',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'unidad_analisis' ,typeName:'text' },
@@ -159,7 +159,7 @@ var ProcedureTraerPreguntasUnidadAnalisis={
 };
 
 var ProcedureObtenerVariablesUnidadAnalisis={
-    action: 'variables_ua/obtener',
+    action: 'variables_ua_obtener',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'unidad_analisis' ,typeName:'text' },
@@ -187,7 +187,7 @@ var ProcedureObtenerVariablesUnidadAnalisis={
 };
 
 var ProcedureTraerPreguntasOperativo={
-    action: 'preguntas_operativo/traer',
+    action: 'preguntas_operativo_traer',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
@@ -305,7 +305,7 @@ var ProcedureGenerateTableDef={
             var result = await context.client.query(`select * from tipovar`).fetchAll();
             var tipovars = result.rows;
             var varsByUA = await Promise.all(UAs.map(async function(ua){
-                var uaDef = await context.be.procedure['variables_ua/obtener'].coreFunction(context, ua);
+                var uaDef = await context.be.procedure['variables_ua_obtener'].coreFunction(context, ua);
                 var varsDef = uaDef.variables;
                 ua.pk=ua.pk_padre.concat(ua.pk_agregada);
                 var tableDef={

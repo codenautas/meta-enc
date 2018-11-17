@@ -16,7 +16,7 @@ myOwn.FormManager = require('form-structure').FormManager;
     }
 }
  myOwn.wScreens.proc.result.goToEnc=function(result, div, opts){
-    my.ajax.preguntas_operativo.traer({operativo:result.operativo}).then(function(preguntas){
+    my.ajax.preguntas_operativo_traer({operativo:result.operativo}).then(function(preguntas){
         var idEnc_js=result.id_caso;
         var idOp_js=result.operativo;
         sessionStorage.setItem('surveyId', idEnc_js);
@@ -98,7 +98,7 @@ myOwn.FormManager = require('form-structure').FormManager;
     var surveyId = sessionStorage.getItem('surveyId');
     var operativo = sessionStorage.getItem('operativo');
     var datosCaso = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
-    return my.ajax.caso.guardar({operativo: operativo, id_caso: surveyId, datos_caso: datosCaso}) 
+    return my.ajax.caso_guardar({operativo: operativo, id_caso: surveyId, datos_caso: datosCaso}) 
     .then(function(result){
         document.getElementById('genericMsg').textContent='Encuesta guardada';
         return result;
@@ -114,7 +114,7 @@ myOwn.FormManager = require('form-structure').FormManager;
     var formulario = addrParams.formulario || sessionStorage.getItem('formularioPrincipal') || null;
     if(operativo && formulario){
         Promise.all([
-            my.ajax.operativo.estructura({operativo:operativo}),
+            my.ajax.operativo_estructura({operativo:operativo}),
             myOwn.getSurveyData(),
         ]).then(function(all){
             var structOperativo=all[0];
