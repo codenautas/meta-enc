@@ -133,8 +133,15 @@ myOwn.FormManager = require('form-structure').FormManager;
     
 };
  myOwn.wScreens.cambio_for=function(addrParams){
+    // ******************* ANTES QUE NADA ************************
+    // ***** revisar si esta función se sigue usando *************
+    // ***********************************************************
     var surveyId = sessionStorage.getItem('surveyId');
-    var innerPk = JSON.parse(sessionStorage.getItem('innerPk')||'{"persona": 0}');
+    //TODO: s.especial https://github.com/codenautas/meta-enc/issues/1 
+    // acá habría que parametriza el módulo poniendo cuál es la innerPK default y que '{"persona": 0}' vaya a ese parámetro
+    var innerPk = JSON.parse(sessionStorage.getItem('innerPk')||'{"persona": 0}'); 
+    //TODO: s.especial https://github.com/codenautas/meta-enc/issues/1 
+    // acá habría que ver si nombre del atributo "persona" no se puede parametrizar
     var delta = Number(addrParams.delta);
     var newFormId = Number(innerPk.persona) + delta;
     if(addrParams.absoluta){
@@ -153,7 +160,7 @@ myOwn.FormManager = require('form-structure').FormManager;
     sessionStorage.setItem('innerPk', JSON.stringify(innerPk));
     gotoInnerUrl('./menu?i=personas');
 }
- myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pilaDeRetroceso){
+myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pilaDeRetroceso){
     var mainFormId = 'main-form';
     var surveyMetadata = {
         operative: sessionStorage.getItem('operativo'),
@@ -188,7 +195,7 @@ myOwn.FormManager = require('form-structure').FormManager;
     ]).create();
     if(mySurvey.personas[0]){
         var persona = mySurvey.personas[0];
-        if(persona.p3a){
+        if(persona.p3a){ //TODO: s.especial https://github.com/codenautas/meta-enc/issues/1
             var fechaNac = persona.p3a;
             var fechaNacArray = fechaNac.split('-');
             var date = new Date();
@@ -212,7 +219,8 @@ myOwn.FormManager = require('form-structure').FormManager;
      }
     return table;
 }
- myOwn.completarLugares = function completarLugares(persona, year, age){
+//TODO: s.especial https://github.com/codenautas/meta-enc/issues/1 Esta función debería estar afuera
+myOwn.completarLugares = function completarLugares(persona, year, age){
     if(age == 0){
         return [html.td({},persona['2_1'])];
     }else{
@@ -222,7 +230,8 @@ myOwn.FormManager = require('form-structure').FormManager;
         return [html.td({'is-first':true, 'is-last':true},result?result['2_3']:'')];
     }
 }
- myOwn.completarViviendas = function completarViviendas(persona, year, age){
+//TODO: s.especial https://github.com/codenautas/meta-enc/issues/1 Estas funciones "completar" deberían estar afuera
+myOwn.completarViviendas = function completarViviendas(persona, year, age){
     var result = persona['annios_personas'].find(function(annioPersona){
         return annioPersona['3a'] == year || annioPersona['3b'] == age;
     })
@@ -245,7 +254,7 @@ myOwn.completarEducacion = function completarEducacion(persona, year, age){
         html.td({'is-last':true},result?result['4_4']:'')
     ]
 }
- myOwn.completarTrabajo = function completarTrabajo(persona, year, age){
+myOwn.completarTrabajo = function completarTrabajo(persona, year, age){
     var result = persona['annios_personas'].find(function(annioPersona){
         return annioPersona['6a'] == year || annioPersona['6b'] == age;
     })
@@ -258,7 +267,7 @@ myOwn.completarEducacion = function completarEducacion(persona, year, age){
         html.td({'is-last':true},result?result['6_3']:'')
     ]
 }
- myOwn.completarConvivencia = function completarConvivencia(persona, year, age){
+myOwn.completarConvivencia = function completarConvivencia(persona, year, age){
     var result = persona['annios_personas'].find(function(annioPersona){
         return annioPersona['7a'] == year || annioPersona['7b'] == age;
     })
@@ -269,13 +278,13 @@ myOwn.completarEducacion = function completarEducacion(persona, year, age){
         html.td({'is-last':true},result?result['7_6']:''),
     ]
 }
- myOwn.surveyDataEmpty = function surveyDataEmpty(surveyId){
+myOwn.surveyDataEmpty = function surveyDataEmpty(surveyId){
     return JSON.stringify({
         idCaso:surveyId,
         surveyContent:{}
     })
 };
- myOwn.getSurveyData = function getSurveyData(){
+myOwn.getSurveyData = function getSurveyData(){
     var my = this;
     var surveyId = sessionStorage.getItem('surveyId');
     var operativo = sessionStorage.getItem('operativo');

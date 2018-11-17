@@ -238,7 +238,6 @@ var ProcedureGenerateVariablesRelevadas={
         { name: 'operativo', typeName: 'text', references: 'operativos', }
     ],
     coreFunction: async function (context, parameters) {
-        parameters.operativo = 'REPSIC';
         var be = context.be;
         var db = be.db;
         await context.client.query(
@@ -273,7 +272,7 @@ var ProcedureGenerateVariablesRelevadas={
             with pre as (
                 select c1.operativo, var_name, c0.unidad_analisis, tipovar, orden_total, c1.id_casillero
                     from casilleros c1, lateral casilleros_recursivo(operativo, id_casillero),
-                        (select operativo, id_casillero,unidad_analisis from casilleros where operativo ='REPSIC' and tipoc='F') c0
+                        (select operativo, id_casillero,unidad_analisis from casilleros where operativo = $1 and tipoc='F') c0
                     where c1.operativo =c0.operativo and ultimo_ancestro = c0.id_casillero and c1.tipovar is not null
                     order by orden_total
             )
@@ -281,7 +280,6 @@ var ProcedureGenerateVariablesRelevadas={
                     operativo, variable, opcion, nombre, orden)
                 select op.operativo, pre.var_name, casillero::integer,op.nombre, orden
                 from  pre join casilleros op on pre.operativo=op.operativo and pre.id_casillero=op.padre 
-                where pre.operativo=$1
                 order by orden_total, orden`
             , [parameters.operativo]
         ).execute();
