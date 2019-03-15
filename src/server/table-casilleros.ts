@@ -82,6 +82,7 @@ module.exports = function(context){
             isTable:true,
             from:'(select * from casilleros, lateral casilleros_recursivo(operativo, id_casillero))',
             postCreateSqls:'create trigger irrepetible_trg before insert or update on casilleros for each row execute procedure irrepetible_trg();',
+            constraintsDeferred:true,
         }
     },context);
 }
