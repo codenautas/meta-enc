@@ -50,7 +50,8 @@ begin
       new.var_name := null;
       v_var_name_comun := null;
     else
-      v_var_name_comun := regexp_replace(regexp_replace(replace(translate(lower(new.id_casillero),'áéíóúàèìòùÁÉÍÓÚÀÈÌÒÙÜü','aeiouaeiouaeiouuu'),'ñ','nni'),'[^0-9a-z]','_'),'^[0-9]','varnum_\1');
+      v_var_name_comun := regexp_replace(regexp_replace(replace(translate(lower(new.id_casillero),'áéíóúàèìòùÁÉÍÓÚÀÈÌÒÙÜü','aeiouaeiouaeiouuu'),'ñ','nni'),'[^0-9a-z]','_'),'^([0-9])',
+        regexp_replace(lower(new.operativo),'[^a-z]','')||'\1');
       new.var_name := coalesce(new.var_name_especial, v_var_name_comun);
     end if;
   end if;
