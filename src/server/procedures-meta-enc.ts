@@ -289,7 +289,7 @@ var ProcedureGenerateVariablesRelevadas={
 var ProcedureGenerateTableDef={
     action: 'generate/tabledef',
     parameters: [
-        {name:'operativo'     ,references:'operativos',  typeName:'text'}
+        {name:'operativo'            ,references:'operativos',  typeName:'text'}
     ],
     coreFunction: async function(context, parameters){
         var be=context.be;
@@ -326,13 +326,28 @@ var ProcedureGenerateTableDef={
                         {references: ua.padre, fields:ua.pk_padre}
                     ];
                 }
-                var textFile=`"use strict";
+                if(ua.principal){
+                    tableDef.fields.unshift({
+                        name:ua.pk_agregada,
+                        typeName:'text',
+                        nullable: false
+                    })
+                }
+                var jsTextFile=`"use strict";
 
 module.exports = function(context){
     var admin=context.user.rol==='admin';
     return context.be.tableDefAdapt(${JSON.stringify(tableDef, null, 4)},context);
 }`;
-                await fs.writeFile('./local-table-'+ua.unidad_analisis+'.js',textFile,{encoding:'utf8'});
+                var tsTextFile=`"use strict";
+                
+import {TableDefinition, TableContext} from "backend-plus";
+export function ${tableDef.name}(context:TableContext):TableDefinition {
+    var admin=context.user.rol==='admin';
+    return ${JSON.stringify(tableDef, null, 4)};
+}`;
+                await fs.writeFile('./local-table-'+ua.unidad_analisis+'.js',jsTextFile,{encoding:'utf8'});
+                await fs.writeFile('./local-table-'+ua.unidad_analisis+'.ts',tsTextFile,{encoding:'utf8'});
             }));
             return 'OK';
         }catch(err){
