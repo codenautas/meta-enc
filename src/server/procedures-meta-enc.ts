@@ -326,9 +326,9 @@ var ProcedureGenerateTableDef={
                         {references: ua.padre, fields:ua.pk_padre}
                     ];
                 }
-                if(ua.principal){
+                for(var i=ua.pk_padre.length;  i>0; i--){
                     tableDef.fields.unshift({
-                        name:ua.pk_agregada,
+                        name:ua.pk_padre[i-1],
                         typeName:'text',
                         nullable: false
                     })
