@@ -313,7 +313,8 @@ var ProcedureGenerateTableDef={
                     fields:varsDef.map(function(varDef){
                         return {
                             name:varDef.var_name,
-                            typeName:tipovars.find(function(tipovar){return tipovar.tipovar = varDef.tipovar}).type_name
+                            typeName:tipovars.find(function(tipovar){return tipovar.tipovar = varDef.tipovar}).type_name,
+                            nullable: varDef.var_name!=ua.pk_agregada
                         }
                     }),    
                     primaryKey:ua.pk,
@@ -326,12 +327,20 @@ var ProcedureGenerateTableDef={
                         {references: ua.padre, fields:ua.pk_padre}
                     ];
                 }
-                for(var i=ua.pk_padre.length;  i>0; i--){
+                if(ua.principal){
                     tableDef.fields.unshift({
-                        name:ua.pk_padre[i-1],
+                        name:ua.pk_agregada,
                         typeName:'text',
                         nullable: false
                     })
+                }else{
+                    for(var i=ua.pk_padre.length;  i>0; i--){
+                        tableDef.fields.unshift({
+                            name:ua.pk_padre[i-1],
+                            typeName:'text',
+                            nullable: false
+                        })
+                    }
                 }
                 var jsTextFile=`"use strict";
 
