@@ -302,6 +302,13 @@ var ProcedureGenerateTableDef={
                 `,[parameters.operativo]
             ).fetchAll();
             var UAs = result.rows;
+            var result2 = await context.client.query(`
+                select *
+                  from casilleros
+                  where operativo = $1 and var_name is not null
+                `,[parameters.operativo]
+            ).fetchAll();
+            var casillerosConVarname = result2.rows;
             var result = await context.client.query(`select * from tipovar`).fetchAll();
             var tipovars = result.rows;
             var varsByUA = await Promise.all(UAs.map(async function(ua){
@@ -335,9 +342,12 @@ var ProcedureGenerateTableDef={
                     })
                 }else{
                     for(var i=ua.pk_padre.length;  i>0; i--){
+                        var casileroEncontrado = casillerosConVarname.find(function(casillero){
+                            return casillero.var_name == ua.pk_padre[i-1];
+                        });
                         tableDef.fields.unshift({
                             name:ua.pk_padre[i-1],
-                            typeName:'text',
+                            typeName:casileroEncontrado?(tipovars.find(function(tipovar){return tipovar.tipovar = casileroEncontrado.tipovar}).type_name):'text',
                             nullable: false
                         })
                     }
