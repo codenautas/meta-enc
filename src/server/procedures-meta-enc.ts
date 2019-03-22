@@ -314,6 +314,7 @@ var ProcedureGenerateTableDef={
             var varsByUA = await Promise.all(UAs.map(async function(ua){
                 var uaDef = await context.be.procedure['variables_ua_obtener'].coreFunction(context, ua);
                 var varsDef = uaDef.variables;
+                ua.pk_padre.unshift('operativo');
                 ua.pk=ua.pk_padre.concat(ua.pk_agregada);
                 var tableDef={
                     name:ua.unidad_analisis,
@@ -338,6 +339,12 @@ var ProcedureGenerateTableDef={
                     tableDef.fields.unshift({
                         name:ua.pk_agregada,
                         typeName:'text',
+                        nullable: false
+                    })
+                    tableDef.fields.unshift({
+                        name:'operativo',
+                        typeName:'text',
+                        visible: false,
                         nullable: false
                     })
                 }else{
