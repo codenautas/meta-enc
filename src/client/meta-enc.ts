@@ -24,7 +24,7 @@ myOwn.FormManager = require('form-structure').FormManager;
         sessionStorage.setItem('innerPk' , JSON.stringify({}));
         sessionStorage.setItem('formularioPrincipal', result.formulario);
         sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
-        localStorage.setItem('survey_opts', JSON.stringify(opts || {}));
+        localStorage.setItem('survey_opts', JSON.stringify(opts || {buttons:{guardar:true,devolver:true}}));
         localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
         div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
         div.style.backgroundColor='#5F5';

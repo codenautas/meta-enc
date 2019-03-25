@@ -3,6 +3,8 @@
         "declaration": true,
         "outDir": "this-dir-must-not-be-created",
         "sourceMap": true,
+        "inlineSourceMap": true,
+        "inlineSources": true,
         "moduleResolution": "node",
         "lib":["es2015"],
         "target": "es2017",
