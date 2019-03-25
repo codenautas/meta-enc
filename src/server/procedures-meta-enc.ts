@@ -149,7 +149,7 @@ var ProcedureTraerPreguntasUnidadAnalisis={
                 order by orden_total
             `,
             [parameters.operativo, parameters.unidad_analisis]
-        ).execute().then(function(result){
+        ).fetchAll().then(function(result){
             return result.rows;
         }).catch(function(err){
             console.log('ERROR',err.message);
