@@ -222,7 +222,7 @@ var ProcedureTraerPreguntasOperativo={
                 group by ua.unidad_analisis, c.id_casillero, c.casillero, principal, ua.padre
             `,
             [parameters.operativo]
-        ).execute().then(function(result){
+        ).fetchAll().then(function(result){
             return result.rows;
         }).catch(function(err){
             console.log('ERROR',err.message);
