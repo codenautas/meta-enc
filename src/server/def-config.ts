@@ -17,6 +17,10 @@ install:
       post-adapt: 
       - casilleros_orden_total_fun.sql
       - casilleros_jerarquizados_fun.sql
+      - ../node_modules/pg-triggers/lib/recreate-his.sql
+      - ../node_modules/pg-triggers/lib/table-changes.sql
+      - ../node_modules/pg-triggers/lib/function-changes-trg.sql
+      - ../node_modules/pg-triggers/lib/enance.sql
     skip-content: true
 login:
   table: usuarios

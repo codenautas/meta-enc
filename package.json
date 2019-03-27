@@ -5,25 +5,26 @@
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/meta-enc",
-  "main": "server/app-meta-enc.js",
-  "types": "server/app-meta-enc.d.ts",
+  "main": "server/dist/app-meta-enc.js",
+  "types": "server/dist/app-meta-enc.d.ts",
   "files": [
-    "client",
+    "dist",
     "install",
-    "server",
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.5.0",
+    "rel-enc": "~0.5.10",
     "fs-extra": "~7.0.1"
   },
   "devDependencies": {
-    "types.d.ts": "~0.4.0"
+    "types.d.ts": "~0.4.0",
+    "cpy-cli": "~2.0.0"
   },
   "engines": {
     "node": ">= 10.0.0"
   },
   "scripts": {
+    "cp": "cpy src/client dist/client --parents",
     "prepublish": "npm run build",
     "build": "(tsc -p tsconfig-client.json || echo \"continue w/error\") && (tsc -p tsconfig-server.json  || echo \"continue w/error\")",
     "test": "mocha --reporter spec --bail --check-leaks test/",
@@ -34,7 +35,7 @@
     "test-cli-h": "node server/karma-server.js --karma karma.conf.js",
     "test-cli-ff": "npm run test-cli -- --browsers Firefox",
     "test-cli-saf": "npm run test-cli -- --browsers Safari",
-    "start": "node server/server-meta-enc.js",
+    "start": "node dist/server/server-meta-enc.js",
     "report": "istanbul report",
     "all": "npm test && npm run test-cov && npm run report && qa-control . -v"
   },

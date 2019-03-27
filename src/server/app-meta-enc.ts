@@ -1,7 +1,8 @@
 "use strict";
 
 import * as relEnc from "rel-enc";
-export * from "rel-enc";
+export * from "./types-meta-enc";
+import {MenuDefinition, Request} from "./types-meta-enc";
 import {ProceduresMetaEnc} from "./procedures-meta-enc";
 import {defConfig} from "./def-config"
 
@@ -11,8 +12,6 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
     return class AppMetaEnc extends Base{
         constructor(...args:any[]){ 
             super(args); 
-            this.allProcedures = this.allProcedures.concat(ProceduresMetaEnc);
-            this.allClientFileNames.push({type:'js', module: 'meta-enc', modPath: '../client', file: 'meta-enc.js', path: 'client_modules', ts:'client'});
             this.sqls={
                 exprFieldUaPkPadre: `
                 coalesce((
@@ -30,27 +29,29 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
             super.configStaticConfig();
             this.setStaticConfig(defConfig);
         }
-        getMenu(context){
-            return {menu:[
-                {menuType:'menu', name:'metadatos', menuContent:[
-                    {menuType:'table', name:'operativos'},
-                    {menuType:'table', name:'normal'          , table:'casilleros_principales'},
-                    {menuType:'table', name:'plano'           , table:'casilleros'},
-                ]},
-                {menuType:'menu', name:'encuestas de prueba', menuContent:[
-                    {menuType:'proc', name:'caso_traer', proc:'caso_traer', label:'traer caso'  },
-                    {menuType:'proc', name:'caso_nuevo' , proc:'caso_nuevo' , label:'nuevo caso'   },
-                ]},
-                {menuType:'menu', name:'configuracion', menuContent:[
-                    {menuType:'menu', name:'elementos', menuContent:[
-                        {menuType:'table', name:'tipoc', label:'tipos de celdas', selectedByDefault:true},
-                        {menuType:'table', name:'tipoc_tipoc', label:'inclusiones de celdas'},
-                        {menuType:'table', name:'tipovar', label:'tipos de variables'},
+        getMenu(): MenuDefinition {
+            let menu: MenuDefinition =
+                {menu:[
+                    {menuType:'menu', name:'metadatos', menuContent:[
+                        {menuType:'table', name:'operativos'},
+                        {menuType:'table', name:'normal'          , table:'casilleros_principales'},
+                        {menuType:'table', name:'plano'           , table:'casilleros'},
                     ]},
-                    {menuType:'table', name:'usuarios', selectedByDefault:true},
-                ]},
-                {menuType:'proc', name:'generate_tabledef', proc:'generate/tabledef', label:'generar tablas'  },
-            ]}
+                    {menuType:'menu', name:'encuestas_de_prueba', menuContent:[
+                        {menuType:'proc', name:'caso_traer', proc:'caso_traer', label:'traer caso'  },
+                        {menuType:'proc', name:'caso_nuevo' , proc:'caso_nuevo' , label:'nuevo caso'   },
+                    ]},
+                    {menuType:'menu', name:'configuracion', menuContent:[
+                        {menuType:'menu', name:'elementos', menuContent:[
+                            {menuType:'table', name:'tipoc', label:'tipos de celdas', selectedByDefault:true},
+                            {menuType:'table', name:'tipoc_tipoc', label:'inclusiones de celdas'},
+                            {menuType:'table', name:'tipovar', label:'tipos de variables'},
+                        ]},
+                        {menuType:'table', name:'usuarios', selectedByDefault:true},
+                    ]},
+                    {menuType:'proc', name:'generate_tabledef', proc:'tabledef_generate', label:'generar tablas'  },
+                ]};
+            return menu;
         }
         getTables(){
             return super.getTables().concat([
@@ -62,7 +63,14 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
                 {path:__dirname, name:'formularios_json'      },
             ]);
         }
-
+        getProcedures(){
+            var be = this;
+            return super.getProcedures().then(function(procedures){
+                return procedures.concat(
+                    ProceduresMetaEnc.map(be.procedureDefCompleter, be)
+                )
+            });
+        }
         prepareGetTables(){
             super.prepareGetTables();
             this.getTableDefinition={
@@ -77,19 +85,17 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
             });
         }
 
-        clientIncludes(req, hideBEPlusInclusions) {
-            
-            var metaEncMod:any = { type: 'js' ,  path: 'client', src: 'client/meta-enc.js', modPath:'../client'   };
+        clientIncludes(req:Request, hideBEPlusInclusions:boolean){
+            var metaEncMod:any = { type: 'js' ,  path: '../client', src: 'client/meta-enc.js', modPath:'client_modules'   };
             if(!this.rootPath.endsWith("meta-enc")){
                 metaEncMod.module='meta-enc';
             }
-            return super.clientIncludes(req, hideBEPlusInclusions).concat(
-                { type: 'js' , module:'rel-enc', path: 'lib/client', src: 'lib/client/form-structure.js', modPath:'../client', ts:'src/client'   },
+            return super.clientIncludes(req, hideBEPlusInclusions).concat([
                 metaEncMod,
                 { type: 'css', file: 'my-things2.css' },
                 { type: 'css', file: 'formularios.css' },
                 { type: 'css', file: 'estados.css' }
-            )
+            ])
         }
     }
 }

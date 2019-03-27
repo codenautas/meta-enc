@@ -68,3 +68,6 @@ package-lock.json
 #don't version generated files
 /server
 /client
+
+#don't version generated files
+/dist

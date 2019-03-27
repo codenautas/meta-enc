@@ -287,7 +287,7 @@ var ProcedureGenerateVariablesRelevadas={
 };
 
 var ProcedureGenerateTableDef={
-    action: 'generate/tabledef',
+    action: 'tabledef_generate',
     parameters: [
         {name:'operativo'            ,references:'operativos',  typeName:'text'}
     ],

@@ -288,6 +288,6 @@ myOwn.getSurveyData = function getSurveyData(){
     var my = this;
     var surveyId = sessionStorage.getItem('surveyId');
     var operativo = sessionStorage.getItem('operativo');
-    var surveyContent = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId)||my.surveyDataEmpty(surveyId));
+    var surveyContent = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
     return {idCaso:surveyId, /*innerPk:innerPk,*/ surveyContent:surveyContent};
 } 

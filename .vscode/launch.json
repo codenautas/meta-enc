@@ -9,14 +9,14 @@
             "request": "launch",
             "name": "Launch Program",
             "preLaunchTask": "build-all",
-            "program": "${workspaceFolder}/server/server-meta-enc.js"
+            "program": "${workspaceFolder}/dist/server/server-meta-enc.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "dumpDb",
             "preLaunchTask": "build-all",
-            "program": "${workspaceFolder}/server/server-meta-enc.js",
+            "program": "${workspaceFolder}/dist/server/server-meta-enc.js",
             "args": [
                 "--dump-db"
             ],
