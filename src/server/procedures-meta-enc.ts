@@ -321,7 +321,7 @@ var ProcedureGenerateTableDef={
                     fields:varsDef.map(function(varDef){
                         return {
                             name:varDef.var_name,
-                            typeName:tipovars.find(function(tipovar){return tipovar.tipovar = varDef.tipovar}).type_name,
+                            typeName:tipovars.find(function(tipovar){return tipovar.tipovar == varDef.tipovar}).type_name,
                             nullable: varDef.var_name!=ua.pk_agregada
                         }
                     }),    
