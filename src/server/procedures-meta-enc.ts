@@ -354,7 +354,7 @@ var ProcedureGenerateTableDef={
                         });
                         tableDef.fields.unshift({
                             name:ua.pk_padre[i-1],
-                            typeName:casileroEncontrado?(tipovars.find(function(tipovar){return tipovar.tipovar = casileroEncontrado.tipovar}).type_name):'text',
+                            typeName:casileroEncontrado?(tipovars.find(function(tipovar){return tipovar.tipovar == casileroEncontrado.tipovar}).type_name):'text',
                             nullable: false
                         })
                     }
