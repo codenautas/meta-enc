@@ -29,7 +29,7 @@ myOwn.FormManager = require('form-structure').FormManager;
         div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
         div.style.backgroundColor='#5F5';
         setTimeout(function(){
-            gotoInnerUrl('menu?w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
+            gotoInnerUrl('menu#w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
         },250);
     });
 }
