@@ -1,11 +1,11 @@
-import { moveSync } from "fs-extra";
-
 "use strict";
 
 var PANTALLA_RESUMEN = false;
- myOwn.SurveyManager = require('form-structure').SurveyManager;
-myOwn.FormManager = require('form-structure').FormManager;
- function gotoInnerUrl(innerUrl){
+import * as formStructure from "rel-enc/dist/client/form-structure";
+var SurveyManager = formStructure.SurveyManager;
+var FormManager = formStructure.FormManager;
+
+function gotoInnerUrl(innerUrl){
     history.pushState(null, null, innerUrl);
     my.showPage();
 }
@@ -168,8 +168,8 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
         mainForm: formId,
         analysisUnitStructure: JSON.parse(sessionStorage.getItem('UAInfo'))
     }
-    var surveyManager = new this.SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
-    var formManager = new this.FormManager(surveyManager, formId, surveyData.surveyContent, []);
+    var surveyManager = new SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
+    var formManager = new FormManager(surveyManager, formId, surveyData.surveyContent, []);
     var toDisplay = formManager.display();
     formManager.validateDepot();
     formManager.refreshState();
