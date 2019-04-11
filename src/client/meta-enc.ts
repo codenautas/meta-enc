@@ -5,7 +5,7 @@ import * as formStructure from "rel-enc/dist/client/form-structure";
 var SurveyManager = formStructure.SurveyManager;
 var FormManager = formStructure.FormManager;
 
-function gotoInnerUrl(innerUrl){
+function gotoInnerUrl(innerUrl:string){
     history.pushState(null, null, innerUrl);
     my.showPage();
 }
@@ -33,7 +33,7 @@ function gotoInnerUrl(innerUrl){
         },250);
     });
 }
- myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure, div, surveyData, formId){
+ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string){
     var surveyOpts = JSON.parse(localStorage.getItem('survey_opts')) || {buttons:{guardar:true,devolver:true}};
     var guardarButton;
     var guardarBottomButton;
@@ -179,7 +179,7 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
         formManager: formManager
     }
 }
- myOwn.displaySummary = function displaySummary(operativo, surveyId){
+ myOwn.displaySummary = function displaySummary(operativo:string, surveyId:string){
     var mySurvey = JSON.parse(localStorage.getItem(operativo +'_survey_'+surveyId));
     //return html.img({id:'summary-img', src:my.path.img + 'local-resumen.png', alt:'imagen resumen'}).create();
     var table = html.table({id:'summary-table'},[
