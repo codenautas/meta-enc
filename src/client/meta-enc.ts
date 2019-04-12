@@ -1,6 +1,7 @@
 "use strict";
 
 var PANTALLA_RESUMEN = false;
+const MAIN_FORM_ID = 'main-form';
 import * as formStructure from "rel-enc/dist/client/form-structure";
 var SurveyManager = formStructure.SurveyManager;
 var FormManager = formStructure.FormManager;
@@ -68,6 +69,7 @@ function gotoInnerUrl(innerUrl:string){
     .concat([guardarBottomButton, devolverBottomButton])
     ).create());
     formManager.irAlSiguienteDespliegue(formManager.state.primeraVacia,devolverBottomButton);
+    SurveyManager.performCustomActionForLoadedFormManager(formManager);
 }
  function verResumen() {
     var summaryDiv = document.getElementById('summary');
@@ -161,7 +163,6 @@ function gotoInnerUrl(innerUrl:string){
     gotoInnerUrl('./menu?i=personas');
 }
 myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pilaDeRetroceso){
-    var mainFormId = 'main-form';
     var surveyMetadata = {
         operative: sessionStorage.getItem('operativo'),
         structure: surveyStructure,
@@ -175,7 +176,7 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
     formManager.refreshState();
     var pantallaResumen = PANTALLA_RESUMEN?html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso)):null;
     return {
-        formElementsToDisplay:html.div({id: 'main-form-wrapper'},[html.div({id: mainFormId}, [toDisplay]), pantallaResumen]),
+        formElementsToDisplay:html.div({id: 'main-form-wrapper'},[html.div({id: MAIN_FORM_ID}, [toDisplay]), pantallaResumen]),
         formManager: formManager
     }
 }
@@ -290,4 +291,4 @@ myOwn.getSurveyData = function getSurveyData(){
     var operativo = sessionStorage.getItem('operativo');
     var surveyContent = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
     return {idCaso:surveyId, /*innerPk:innerPk,*/ surveyContent:surveyContent};
-} 
+}
