@@ -3,6 +3,7 @@
 var PANTALLA_RESUMEN = false;
 const MAIN_FORM_ID = 'main-form';
 import * as formStructure from "rel-enc/dist/client/form-structure";
+import { changing } from "best-globals";
 var SurveyManager = formStructure.SurveyManager;
 var FormManager = formStructure.FormManager;
 
@@ -329,5 +330,5 @@ myOwn.wScreens.loadForm=async function(addrParams){
     //FALTA REVISAR STACK, POSIBLEMENTE SE PUEDA METER EN SESSION STORAGE
     var myForm = new FormManager(surveyManager, formId, formData, []);
     var formElementsToDisplay = myForm.display()
-    my.wScreens.proc.result.desplegarFormulario(surveyStructure,main_layout,formData,formId, myForm, formElementsToDisplay); //MODIFICADO
+    my.wScreens.proc.result.desplegarFormulario(surveyStructure,main_layout,changing(surveyData,{surveyContent: formData}),formId, myForm, formElementsToDisplay); //MODIFICADO
 };
