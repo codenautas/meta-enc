@@ -34,7 +34,7 @@ function gotoInnerUrl(innerUrl:string){
         },250);
     });
 }
- myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string){
+ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string, formManager?:formStructure.FormManager, formElementsToDisplay?:HTMLElement){
     var surveyOpts = JSON.parse(localStorage.getItem('survey_opts')) || {buttons:{guardar:true,devolver:true}};
     var guardarButton;
     var guardarBottomButton;
@@ -57,7 +57,9 @@ function gotoInnerUrl(innerUrl:string){
         resumenButton.onclick=verResumen;
         document.getElementById('total-layout').appendChild(resumenButton);
     }
-    var {formElementsToDisplay, formManager}=my.displayForm(surveyStructure, surveyData, formId, []);
+    if(!formElementsToDisplay && !formManager){
+        var {formElementsToDisplay, formManager}=my.displayForm(surveyStructure, surveyData, formId, []);
+    }
     div.appendChild(html.div({class:'prueba-despliegue'},[
         html.p({id:'genericMsg'},['']),
     ]
@@ -292,3 +294,40 @@ myOwn.getSurveyData = function getSurveyData(){
     var surveyContent = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
     return {idCaso:surveyId, /*innerPk:innerPk,*/ surveyContent:surveyContent};
 }
+myOwn.wScreens.loadForm=async function(addrParams){
+    var idCaso = addrParams.idCaso;
+    var formId = addrParams.formId;
+    var formData = JSON.parse(addrParams.formData);
+    var operativo = addrParams.operativo;
+    var surveyStructure:formStructure.SurveyStructure = JSON.parse(localStorage.getItem('estructura-'+operativo));
+    var datosCaso:any = JSON.parse(localStorage.getItem(operativo+'_survey_'+idCaso));
+    if(!datosCaso){
+        var result:any = await my.ajax.caso_traer({operativo:operativo, id_caso: idCaso});
+        var preguntas:any = await my.ajax.preguntas_operativo_traer({operativo:result.operativo});
+        var idEnc_js=result.id_caso;
+        var idOp_js=result.operativo;
+        sessionStorage.setItem('surveyId', idEnc_js);
+        sessionStorage.setItem('operativo', idOp_js);
+        sessionStorage.setItem('innerPk' , JSON.stringify({}));
+        sessionStorage.setItem('formularioPrincipal', result.formulario);
+        sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
+        localStorage.setItem('survey_opts', JSON.stringify({buttons:{guardar:true,devolver:true}}));
+        localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
+    }
+    var surveyData:formStructure.SurveyData = myOwn.getSurveyData();
+    if(!surveyStructure){
+        surveyStructure = await my.ajax.operativo_estructura({operativo:operativo});
+        localStorage.setItem('estructura-'+operativo, JSON.stringify(surveyStructure));
+    }
+    var surveyMetadata:formStructure.SurveyMetadata = {
+        operative: operativo,
+        structure: surveyStructure,
+        mainForm: sessionStorage.getItem('formularioPrincipal'),
+        analysisUnitStructure: JSON.parse(sessionStorage.getItem('UAInfo'))
+    }
+    var surveyManager = new SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
+    //FALTA REVISAR STACK, POSIBLEMENTE SE PUEDA METER EN SESSION STORAGE
+    var myForm = new FormManager(surveyManager, formId, formData, []);
+    var formElementsToDisplay = myForm.display()
+    my.wScreens.proc.result.desplegarFormulario(surveyStructure,main_layout,formData,formId, myForm, formElementsToDisplay); //MODIFICADO
+};
