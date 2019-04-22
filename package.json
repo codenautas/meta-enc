@@ -13,20 +13,18 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.5.20",
+    "rel-enc": "~0.5.23",
     "fs-extra": "~7.0.1"
   },
   "devDependencies": {
-    "types.d.ts": "~0.4.0",
-    "cpy-cli": "~2.0.0"
+    "types.d.ts": "~0.4.0"
   },
   "engines": {
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "cp": "cpy **/**/*.* ../dist --cwd=src --parents",
     "prepublish": "npm run build",
-    "build": "(tsc -p tsconfig-client.json || echo \"continue w/error\") && (tsc -p tsconfig-server.json  || echo \"continue w/error\") && npm run cp",
+    "build": "(tsc -p tsconfig-client.json || echo \"continue w/error\") && (tsc -p tsconfig-server.json  || echo \"continue w/error\")",
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-nc": "mocha --reporter spec --bail --check-leaks --no-colors test/",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
