@@ -35,7 +35,7 @@ function gotoInnerUrl(innerUrl:string){
         },250);
     });
 }
- myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string, formManager?:formStructure.FormManager, formElementsToDisplay?:HTMLElement){
+ myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string, formManager?:formStructure.FormManager, toDisplay?:HTMLElement){
     var surveyOpts = JSON.parse(localStorage.getItem('survey_opts')) || {buttons:{guardar:true,devolver:true}};
     var guardarButton;
     var guardarBottomButton;
@@ -58,9 +58,12 @@ function gotoInnerUrl(innerUrl:string){
         resumenButton.onclick=verResumen;
         document.getElementById('total-layout').appendChild(resumenButton);
     }
-    if(!formElementsToDisplay && !formManager){
-        var {formElementsToDisplay, formManager}=my.displayForm(surveyStructure, surveyData, formId, []);
+    if(!toDisplay && !formManager){
+        var {toDisplay, formManager}=my.displayForm(surveyStructure, surveyData, formId, []);
     }
+
+    var pantallaResumen = PANTALLA_RESUMEN?html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso)):null;
+    var formElementsToDisplay = html.div({id: 'main-form-wrapper'},[html.div({id: MAIN_FORM_ID}, [toDisplay]), pantallaResumen]);
     div.appendChild(html.div({class:'prueba-despliegue'},[
         html.p({id:'genericMsg'},['']),
     ]
@@ -177,9 +180,9 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
     var toDisplay = formManager.display();
     formManager.validateDepot();
     formManager.refreshState();
-    var pantallaResumen = PANTALLA_RESUMEN?html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso)):null;
+    //var pantallaResumen = PANTALLA_RESUMEN?html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso)):null;
     return {
-        formElementsToDisplay:html.div({id: 'main-form-wrapper'},[html.div({id: MAIN_FORM_ID}, [toDisplay]), pantallaResumen]),
+        toDisplay:toDisplay,
         formManager: formManager
     }
 }
@@ -298,11 +301,13 @@ myOwn.getSurveyData = function getSurveyData(){
 myOwn.wScreens.loadForm=async function(addrParams){
     var idCaso = addrParams.idCaso;
     var formId = addrParams.formId;
-    var formData = JSON.parse(addrParams.formData);
+    var navigationStack: formStructure.NavigationStack[] = JSON.parse(addrParams.navigationStack);
     var operativo = addrParams.operativo;
+    var unidadAnalisis = addrParams.unidadAnalisis;
+    var iPosition = addrParams.iPosition;
     var surveyStructure:formStructure.SurveyStructure = JSON.parse(localStorage.getItem('estructura-'+operativo));
-    var datosCaso:any = JSON.parse(localStorage.getItem(operativo+'_survey_'+idCaso));
-    if(!datosCaso){
+    //var datosCaso:any = JSON.parse(localStorage.getItem(operativo+'_survey_'+idCaso));
+    //if(!datosCaso){
         var result:any = await my.ajax.caso_traer({operativo:operativo, id_caso: idCaso});
         var preguntas:any = await my.ajax.preguntas_operativo_traer({operativo:result.operativo});
         var idEnc_js=result.id_caso;
@@ -314,8 +319,17 @@ myOwn.wScreens.loadForm=async function(addrParams){
         sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
         localStorage.setItem('survey_opts', JSON.stringify({buttons:{guardar:true,devolver:true}}));
         localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
-    }
+    //}
     var surveyData:formStructure.SurveyData = myOwn.getSurveyData();
+    var formData:any = surveyData.surveyContent;
+    navigationStack.forEach(function(navigationStackElement){
+        if(navigationStackElement.formId != result.formulario){
+            formData = formData[navigationStackElement.analysisUnit][navigationStackElement.iPosition];
+        }
+    })
+    if(navigationStack.length){
+        formData = formData[unidadAnalisis][iPosition-1];
+    }
     if(!surveyStructure){
         surveyStructure = await my.ajax.operativo_estructura({operativo:operativo});
         localStorage.setItem('estructura-'+operativo, JSON.stringify(surveyStructure));
@@ -327,8 +341,9 @@ myOwn.wScreens.loadForm=async function(addrParams){
         analysisUnitStructure: JSON.parse(sessionStorage.getItem('UAInfo'))
     }
     var surveyManager = new SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
-    //FALTA REVISAR STACK, POSIBLEMENTE SE PUEDA METER EN SESSION STORAGE
-    var myForm = new FormManager(surveyManager, formId, formData, []);
+    var myForm = new FormManager(surveyManager, formId, formData, navigationStack);
     var formElementsToDisplay = myForm.display()
-    my.wScreens.proc.result.desplegarFormulario(surveyStructure,main_layout,changing(surveyData,{surveyContent: formData}),formId, myForm, formElementsToDisplay); //MODIFICADO
+    myForm.validateDepot();
+    myForm.refreshState();
+    my.wScreens.proc.result.desplegarFormulario(surveyStructure,main_layout,surveyData,formId, myForm, formElementsToDisplay); //MODIFICADO
 };
