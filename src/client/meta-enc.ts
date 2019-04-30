@@ -301,7 +301,7 @@ myOwn.getSurveyData = function getSurveyData(){
 myOwn.wScreens.loadForm=async function(addrParams){
     var idCaso = addrParams.idCaso;
     var formId = addrParams.formId;
-    var navigationStack: formStructure.NavigationStack[] = JSON.parse(addrParams.navigationStack);
+    var urlNavigationStack: formStructure.URLNavigationStack[] = JSON.parse(addrParams.navigationStack);
     var operativo = addrParams.operativo;
     var unidadAnalisis = addrParams.unidadAnalisis;
     var iPosition = addrParams.iPosition;
@@ -322,12 +322,14 @@ myOwn.wScreens.loadForm=async function(addrParams){
     //}
     var surveyData:formStructure.SurveyData = myOwn.getSurveyData();
     var formData:any = surveyData.surveyContent;
-    navigationStack.forEach(function(navigationStackElement){
-        if(navigationStackElement.formId != result.formulario){
-            formData = formData[navigationStackElement.analysisUnit][navigationStackElement.iPosition];
-        }
-    })
-    if(navigationStack.length){
+    var navigationStack:formStructure.NavigationStack[] = []
+    for(var i=urlNavigationStack.length-1;  i>=0; i--){
+        if(urlNavigationStack[i].formId != result.formulario){
+            formData = formData[urlNavigationStack[i].analysisUnit][urlNavigationStack[i].iPosition-1];
+        }urlNavigationStack
+        navigationStack.unshift(changing(urlNavigationStack[i],{formData: formData, callerElement:null}))
+    }
+    if(urlNavigationStack.length){
         formData = formData[unidadAnalisis][iPosition-1];
     }
     if(!surveyStructure){
