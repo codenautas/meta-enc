@@ -317,6 +317,7 @@ myOwn.wScreens.loadForm=async function(addrParams){
     sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
     localStorage.setItem('survey_opts', JSON.stringify({buttons:{guardar:true,devolver:true}}));
     localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
+    sessionStorage.removeItem('ultimo-formulario-cargado');
     var surveyData:formStructure.SurveyData = myOwn.getSurveyData();
     var surveyMetadata:formStructure.SurveyMetadata = {
         operative: operativo,
