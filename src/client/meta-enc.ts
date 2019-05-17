@@ -338,7 +338,7 @@ myOwn.wScreens.loadForm=async function(addrParams){
         navigationStack.unshift(stackElement);
     }
     if(urlNavigationStack.length){
-        formData = formData[unidadAnalisis][iPosition-1];
+        formData = formData[unidadAnalisis]?formData[unidadAnalisis][iPosition-1]:formData;
     }
     if(!surveyStructure){
         surveyStructure = await my.ajax.operativo_estructura({operativo:operativo});
