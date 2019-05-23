@@ -330,7 +330,7 @@ myOwn.wScreens.loadForm=async function(addrParams){
     var navigationStack:formStructure.NavigationStack[] = []
     for(var i=urlNavigationStack.length-1;  i>=0; i--){
         if(urlNavigationStack[i].formId != result.formulario){
-            formData = formData[urlNavigationStack[i].analysisUnit][urlNavigationStack[i+1].iPosition-1];
+            formData = formData[unidadAnalisis]?formData[urlNavigationStack[i].analysisUnit][urlNavigationStack[i+1].iPosition-1]:formData;
         }
         var stackElement: formStructure.NavigationStack = urlNavigationStack[i];
         stackElement.formData = formData;
