@@ -39,11 +39,12 @@ module.exports = function(context){
         sortColumns:[{column:'orden_total'}],
         primaryKey:['operativo','id_casillero'],
         foreignKeys:[
-            {references:'operativos', fields:['operativo']},
-            {references:'tipoc'     , fields:['tipoc']},
-            {references:'tipovar'   , fields:['tipovar']},
-            {references:'casilleros', fields:['operativo', {source:'padre', target:'id_casillero'}], alias:'p' ,consName:'casilleros padre REL', forceDeferrable:true},
-            {references:'casilleros', fields:['operativo', {source:'salto', target:'id_casillero'}], alias:'s' ,consName:'casilleros salto REL', forceDeferrable:true}
+            {references:'operativos'        , fields:['operativo']},
+            {references:'tipoc'             , fields:['tipoc']},
+            {references:'tipovar'           , fields:['tipovar']},
+            {references:'unidad_analisis'   , fields:['operativo', 'unidad_analisis']},
+            {references:'casilleros'        , fields:['operativo', {source:'padre', target:'id_casillero'}], alias:'p' ,consName:'casilleros padre REL', forceDeferrable:true},
+            {references:'casilleros'        , fields:['operativo', {source:'salto', target:'id_casillero'}], alias:'s' ,consName:'casilleros salto REL', forceDeferrable:true}
         ],
         detailTables:[
             {table:'casilleros', fields:['operativo',{source:'id_casillero', target:'padre'}], abr:'c', label:'contenido' }
