@@ -191,6 +191,7 @@ var ProcedureTraerPreguntasOperativo={
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
+    cacheable:true,
     coreFunction: function(context, parameters){
         return context.client.query(
             `
