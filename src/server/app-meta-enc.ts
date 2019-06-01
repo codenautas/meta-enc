@@ -38,8 +38,9 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
                         {menuType:'table', name:'plano'           , table:'casilleros'},
                     ]},
                     {menuType:'menu', name:'encuestas_de_prueba', menuContent:[
-                        {menuType:'proc', name:'caso_traer', proc:'caso_traer', label:'traer caso'  },
                         {menuType:'proc', name:'caso_nuevo' , proc:'caso_nuevo' , label:'nuevo caso'   },
+                        {menuType:'proc', name:'caso_traer', proc:'caso_traer', label:'traer caso'  },
+                        {menuType:'proc', name:'caso_traer_o_crear' , proc:'caso_traer_o_crear' , label:'traer o crear caso'   },
                     ]},
                     {menuType:'menu', name:'configuracion', menuContent:[
                         {menuType:'menu', name:'elementos', menuContent:[

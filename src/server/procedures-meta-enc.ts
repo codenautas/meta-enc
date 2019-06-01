@@ -66,8 +66,8 @@ var ProcedureCasoGuardar = {
     }
 };
 
-var ProcedureNuevaEncuesta={
-    action: 'caso_nuevo',
+var ProcedurePrepararParaNuevaEncuesta={
+    action: 'caso_preparar',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
@@ -91,14 +91,26 @@ var ProcedureNuevaEncuesta={
                 result.forEach(function(question){
                     object[question.var_name] = question.unidad_analisis?[]:null;
                 });
-                return context.client.query(
-                    `insert into formularios_json values ($1,(select (coalesce(max(id_caso::integer),0) + 1)::text from formularios_json where operativo = $1),$2) returning *`,
-                    [row.operativo, object]
-                ).fetchUniqueRow().then(function(result){
-                    return be.procedure['caso_traer'].coreFunction(context, result.row);
-                });    
+                return object;  
             });
         });
+    }
+};
+
+var ProcedureNuevaEncuesta={
+    action: 'caso_nuevo',
+    parameters: [
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
+    ],
+    resultOk: 'goToEnc',
+    coreFunction: async function(context, parameters){
+        var be = context.be;
+        var json = await be.procedure['caso_preparar'].coreFunction(context, parameters);
+        var result = await context.client.query(
+            `insert into formularios_json values ($1,(select (coalesce(max(id_caso::integer),0) + 1)::text from formularios_json where operativo = $1),$2) returning *`,
+            [parameters.operativo, json]
+        ).fetchUniqueRow()
+        return be.procedure['caso_traer'].coreFunction(context, result.row);
     }
 };
 
@@ -124,6 +136,30 @@ var ProcedureTraerCaso={
             }
             return result.row;
         });
+    }
+};
+
+var ProcedureTraerOCrearCaso={
+    action: 'caso_traer_o_crear',
+    parameters: [
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
+        {name:'id_caso'       ,typeName:'text'},
+    ],
+    resultOk: 'goToEnc',
+    coreFunction: async function(context, parameters){
+        var be = context.be;
+        try{
+            var result = await be.procedure['caso_traer'].coreFunction(context, parameters);
+            return result
+        }catch(err){
+            var json = await be.procedure['caso_preparar'].coreFunction(context, parameters);
+            return context.client.query(
+                `insert into formularios_json values ($1,$2,$3) returning *`,
+                [parameters.operativo, parameters.id_caso, json]
+            ).fetchUniqueRow().then(function(result){
+                return be.procedure['caso_traer'].coreFunction(context, result.row);
+            });    
+        }
     }
 };
 
@@ -389,7 +425,9 @@ var ProceduresMetaEnc = [
     ProcedureFormularioEstructura,
     ProcedureCasoGuardar,
     ProcedureTraerCaso,
+    ProcedureTraerOCrearCaso,
     ProcedureNuevaEncuesta,
+    ProcedurePrepararParaNuevaEncuesta,
     ProcedureTraerPreguntasUnidadAnalisis,
     ProcedureTraerPreguntasOperativo,
     ProcedureObtenerVariablesUnidadAnalisis, 
