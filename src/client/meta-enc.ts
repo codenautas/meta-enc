@@ -306,17 +306,23 @@ myOwn.wScreens.loadForm=async function(addrParams){
     var unidadAnalisis = addrParams.unidadAnalisis;
     var iPosition = addrParams.iPosition;
     var surveyStructure:formStructure.SurveyStructure = JSON.parse(localStorage.getItem('estructura-'+operativo));
-    var result:any = await my.ajax.caso_traer({operativo:operativo, id_caso: idCaso});
-    var preguntas:any = await my.ajax.preguntas_operativo_traer({operativo:result.operativo});
-    var idEnc_js=result.id_caso;
-    var idOp_js=result.operativo;
-    sessionStorage.setItem('surveyId', idEnc_js);
-    sessionStorage.setItem('operativo', idOp_js);
+    var formPrincipal=sessionStorage.getItem('formularioPrincipal');
+    var uaInfo=JSON.parse(sessionStorage.getItem('UAInfo'));
+    var datosCaso:any;
+    if(!formPrincipal && !uaInfo){
+        var result:any = await my.ajax.caso_traer({operativo:operativo, id_caso: idCaso});
+        datosCaso = result.datos_caso;
+        var preguntas:any = await my.ajax.preguntas_operativo_traer({operativo:result.operativo});
+        sessionStorage.setItem('formularioPrincipal', result.formulario);
+        sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
+    }else{
+        datosCaso=JSON.parse(localStorage.getItem(operativo+'_survey_'+idCaso));
+    }
+    sessionStorage.setItem('surveyId', idCaso);
+    sessionStorage.setItem('operativo', operativo);
     sessionStorage.setItem('innerPk' , JSON.stringify({}));
-    sessionStorage.setItem('formularioPrincipal', result.formulario);
-    sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
     localStorage.setItem('survey_opts', JSON.stringify({buttons:{guardar:true,devolver:true}}));
-    localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
+    localStorage.setItem(operativo + '_survey_' + idCaso, JSON.stringify(datosCaso));
     sessionStorage.removeItem('ultimo-formulario-cargado');
     var surveyData:formStructure.SurveyData = myOwn.getSurveyData();
     var surveyMetadata:formStructure.SurveyMetadata = {
@@ -329,7 +335,7 @@ myOwn.wScreens.loadForm=async function(addrParams){
     var formData:any = surveyManager.surveyData;
     var navigationStack:formStructure.NavigationStack[] = []
     for(var i=urlNavigationStack.length-1;  i>=0; i--){
-        if(urlNavigationStack[i].formId != result.formulario){
+        if(urlNavigationStack[i].formId != formPrincipal){
             formData = formData[urlNavigationStack[i].analysisUnit]?formData[urlNavigationStack[i].analysisUnit][urlNavigationStack[i].iPosition-1]:formData;
         }
         var stackElement: formStructure.NavigationStack = urlNavigationStack[i];
