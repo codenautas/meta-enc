@@ -321,7 +321,10 @@ myOwn.wScreens.loadForm=async function(addrParams){
     sessionStorage.setItem('surveyId', idCaso);
     sessionStorage.setItem('operativo', operativo);
     sessionStorage.setItem('innerPk' , JSON.stringify({}));
-    localStorage.setItem('survey_opts', JSON.stringify({buttons:{guardar:true,devolver:true}}));
+    var surveyOpts = JSON.parse(localStorage.getItem('survey_opts'));
+    if(!surveyOpts){
+        localStorage.setItem('survey_opts', JSON.stringify({buttons:{guardar:true,devolver:true}}));
+    }
     localStorage.setItem(operativo + '_survey_' + idCaso, JSON.stringify(datosCaso));
     sessionStorage.removeItem('ultimo-formulario-cargado');
     var surveyData:formStructure.SurveyData = myOwn.getSurveyData();
