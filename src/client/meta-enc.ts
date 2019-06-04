@@ -17,23 +17,25 @@ function gotoInnerUrl(innerUrl:string){
         event.preventDefault();
     }
 }
- myOwn.wScreens.proc.result.goToEnc=function(result, div, opts){
-    my.ajax.preguntas_operativo_traer({operativo:result.operativo}).then(function(preguntas){
-        var idEnc_js=result.id_caso;
-        var idOp_js=result.operativo;
-        sessionStorage.setItem('surveyId', idEnc_js);
-        sessionStorage.setItem('operativo', idOp_js);
-        sessionStorage.setItem('innerPk' , JSON.stringify({}));
-        sessionStorage.setItem('formularioPrincipal', result.formulario);
-        sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
-        localStorage.setItem('survey_opts', JSON.stringify(opts || {buttons:{guardar:true,devolver:true}}));
-        localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
-        div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
-        div.style.backgroundColor='#5F5';
-        setTimeout(function(){
-            gotoInnerUrl('menu#w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
-        },250);
-    });
+ myOwn.wScreens.proc.result.goToEnc=async function(result, div, opts){
+    var preguntas = JSON.parse(sessionStorage.getItem('UAInfo'));
+    if(!preguntas){
+        preguntas = await my.ajax.preguntas_operativo_traer({operativo:result.operativo});
+    }
+    var idEnc_js=result.id_caso;
+    var idOp_js=result.operativo;
+    sessionStorage.setItem('surveyId', idEnc_js);
+    sessionStorage.setItem('operativo', idOp_js);
+    sessionStorage.setItem('innerPk' , JSON.stringify({}));
+    sessionStorage.setItem('formularioPrincipal', result.formulario);
+    sessionStorage.setItem('UAInfo', JSON.stringify(preguntas));
+    localStorage.setItem('survey_opts', JSON.stringify(opts || {buttons:{guardar:true,devolver:true}}));
+    localStorage.setItem(idOp_js + '_survey_' + idEnc_js, JSON.stringify(result.datos_caso));
+    div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
+    div.style.backgroundColor='#5F5';
+    setTimeout(function(){
+        gotoInnerUrl('menu#w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
+    },250);
 }
  myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string, formManager?:formStructure.FormManager, toDisplay?:HTMLElement){
     var surveyOpts = JSON.parse(localStorage.getItem('survey_opts')) || {buttons:{guardar:true,devolver:true}};
@@ -121,8 +123,9 @@ function gotoInnerUrl(innerUrl:string){
     var operativo = addrParams.operativo || sessionStorage.getItem('operativo') || null;
     var formulario = addrParams.formulario || sessionStorage.getItem('formularioPrincipal') || null;
     if(operativo && formulario){
+        var surveyStructure:formStructure.SurveyStructure = JSON.parse(localStorage.getItem('estructura-'+operativo));
         Promise.all([
-            my.ajax.operativo_estructura({operativo:operativo}),
+            surveyStructure || my.ajax.operativo_estructura({operativo:operativo}),
             myOwn.getSurveyData(),
         ]).then(function(all){
             var structOperativo=all[0];
