@@ -34,7 +34,7 @@ function gotoInnerUrl(innerUrl:string){
     div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
     div.style.backgroundColor='#5F5';
     setTimeout(function(){
-        gotoInnerUrl('menu#w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
+        gotoInnerUrl(my.menup+'w=formulario&operativo='+result.operativo + '&formulario='+ result.formulario)
     },250);
 }
  myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string, formManager?:formStructure.FormManager, toDisplay?:HTMLElement){
@@ -101,7 +101,7 @@ function gotoInnerUrl(innerUrl:string){
         sessionStorage.setItem('UAInfo', '');
         localStorage.setItem(operativo + '_survey_' + surveyId, '');
         var idCaso = sessionStorage.getItem('surveyId');
-        gotoInnerUrl('menu#w=ingresarFormulario&consistir='+idCaso);
+        gotoInnerUrl(my.menup+'w=ingresarFormulario&consistir='+idCaso);
     });
 }
  function guardar(){
@@ -134,11 +134,11 @@ function gotoInnerUrl(innerUrl:string){
                 main_layout.innerHTML='';
                 my.wScreens.proc.result.desplegarFormulario(structOperativo,main_layout,surveyData,formulario); //MODIFICADO
             }else{
-                gotoInnerUrl('menu#w=ingresarFormulario');
+                gotoInnerUrl(my.menup+'w=ingresarFormulario');
             }
         });
     }else{
-        gotoInnerUrl('menu#w=ingresarFormulario');
+        gotoInnerUrl(my.menup+'w=ingresarFormulario');
     }
     
     
