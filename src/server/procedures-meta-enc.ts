@@ -41,8 +41,8 @@ var ProcedureFormularioEstructura={
     }        
 };
 
-var ProcedureCasoGuardar = {
-    action:'caso_guardar',
+var ProcedureCasoGuardarJSON = {
+    action:'caso_guardar_json',
     parameters:[
         {name:'operativo'   , typeName:'text', references:'operativos'},
         {name:'id_caso'     , typeName:'text'      },
@@ -63,6 +63,19 @@ var ProcedureCasoGuardar = {
         }).then(function(result){
             return result.row;
         });
+    }
+};
+
+var ProcedureCasoGuardar = {
+    action:'caso_guardar',
+    parameters:[
+        {name:'operativo'   , typeName:'text', references:'operativos'},
+        {name:'id_caso'     , typeName:'text'      },
+        {name:'datos_caso'  , typeName:'jsonb'     },
+    ],
+    coreFunction:async function(context, parameters){
+        var be = context.be;
+        return await be.procedure['caso_guardar_json'].coreFunction(context, parameters);
     }
 };
 
@@ -114,8 +127,8 @@ var ProcedureNuevaEncuesta={
     }
 };
 
-var ProcedureTraerCaso={
-    action: 'caso_traer',
+var ProcedureTraerCasoJSON={
+    action: 'caso_traer_json',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'id_caso'       ,typeName:'text'},
@@ -139,6 +152,42 @@ var ProcedureTraerCaso={
     }
 };
 
+var ProcedureTraerOCrearCasoJSON={
+    action: 'caso_traer_o_crear_json',
+    parameters: [
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
+        {name:'id_caso'       ,typeName:'text'},
+    ],
+    resultOk: 'goToEnc',
+    coreFunction: async function(context, parameters){
+        var be = context.be;
+        try{
+            var result = await be.procedure['caso_traer_json'].coreFunction(context, parameters);
+            return result
+        }catch(err){
+            var json = await be.procedure['caso_preparar'].coreFunction(context, parameters);
+            return context.client.query(
+                `insert into formularios_json values ($1,$2,$3) returning *`,
+                [parameters.operativo, parameters.id_caso, json]
+            ).fetchUniqueRow().then(function(result){
+                return be.procedure['caso_traer_json'].coreFunction(context, result.row);
+            });    
+        }
+    }
+};
+var ProcedureTraerCaso={
+    action: 'caso_traer',
+    parameters: [
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
+        {name:'id_caso'       ,typeName:'text'},
+    ],
+    resultOk: 'goToEnc',
+    coreFunction: async function(context, parameters){
+        var be = context.be;
+        return await be.procedure['caso_traer_json'].coreFunction(context, parameters);
+    }
+};
+
 var ProcedureTraerOCrearCaso={
     action: 'caso_traer_o_crear',
     parameters: [
@@ -148,18 +197,7 @@ var ProcedureTraerOCrearCaso={
     resultOk: 'goToEnc',
     coreFunction: async function(context, parameters){
         var be = context.be;
-        try{
-            var result = await be.procedure['caso_traer'].coreFunction(context, parameters);
-            return result
-        }catch(err){
-            var json = await be.procedure['caso_preparar'].coreFunction(context, parameters);
-            return context.client.query(
-                `insert into formularios_json values ($1,$2,$3) returning *`,
-                [parameters.operativo, parameters.id_caso, json]
-            ).fetchUniqueRow().then(function(result){
-                return be.procedure['caso_traer'].coreFunction(context, result.row);
-            });    
-        }
+        return await be.procedure['caso_traer_o_crear_json'].coreFunction(context, parameters);
     }
 };
 
@@ -423,7 +461,10 @@ export function ${tableDef.name}(context:TableContext):TableDefinition {
 var ProceduresMetaEnc = [
     ProcedureCasillerosDesplegar,
     ProcedureFormularioEstructura,
+    ProcedureCasoGuardarJSON,
     ProcedureCasoGuardar,
+    ProcedureTraerCasoJSON,
+    ProcedureTraerOCrearCasoJSON,
     ProcedureTraerCaso,
     ProcedureTraerOCrearCaso,
     ProcedureNuevaEncuesta,
