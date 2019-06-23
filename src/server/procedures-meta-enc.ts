@@ -111,7 +111,7 @@ var ProcedurePrepararParaNuevaEncuesta={
 };
 
 var ProcedureNuevaEncuesta={
-    action: 'caso_nuevo',
+    action: 'caso_nuevo_json',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
@@ -124,6 +124,17 @@ var ProcedureNuevaEncuesta={
             [parameters.operativo, json]
         ).fetchUniqueRow()
         return be.procedure['caso_traer'].coreFunction(context, result.row);
+    }
+};
+
+var ProcedureNuevaEncuesta={
+    action: 'caso_nuevo',
+    parameters: [
+        {name:'operativo'     ,references:'operativos',  typeName:'text'},
+    ],
+    resultOk: 'goToEnc',
+    coreFunction: async function(context, parameters){
+        context.be.procedure['caso_nuevo_json'].coreFunction(context, parameters);
     }
 };
 
