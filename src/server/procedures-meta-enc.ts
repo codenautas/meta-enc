@@ -110,7 +110,7 @@ var ProcedurePrepararParaNuevaEncuesta={
     }
 };
 
-var ProcedureNuevaEncuesta={
+var ProcedureNuevaEncuestaJSON={
     action: 'caso_nuevo_json',
     parameters: [
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
@@ -479,6 +479,7 @@ var ProceduresMetaEnc = [
     ProcedureTraerCaso,
     ProcedureTraerOCrearCaso,
     ProcedureNuevaEncuesta,
+    ProcedureNuevaEncuestaJSON,
     ProcedurePrepararParaNuevaEncuesta,
     ProcedureTraerPreguntasUnidadAnalisis,
     ProcedureTraerPreguntasOperativo,
