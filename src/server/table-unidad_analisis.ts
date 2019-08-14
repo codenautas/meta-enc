@@ -1,5 +1,7 @@
 "use strict";
 
+//TODO: solucionar redundancia en el manejo de Tablas de datos/relaciones/unidad de analisis/array en server-app.ts
+// una opción es generar tabla_datos y relaciones a partir de UAs
 module.exports = function(context){
     var admin=context.user.rol==='admin';
     return context.be.tableDefAdapt({
