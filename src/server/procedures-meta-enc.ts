@@ -1,5 +1,7 @@
 "use strict";
 
+import { TableDefinition } from "rel-enc";
+
 var changing = require('best-globals').changing;
 var bestGlobals = require('best-globals');
 var datetime = bestGlobals.datetime;
@@ -402,7 +404,7 @@ var ProcedureGenerateTableDef={
                 var varsDef = uaDef.variables;
                 ua.pk_padre.unshift('operativo');
                 ua.pk=ua.pk_padre.concat(ua.pk_agregada);
-                var tableDef={
+                var tableDef:TableDefinition={
                     name:ua.unidad_analisis,
                     fields:varsDef.map(function(varDef){
                         return {
@@ -410,7 +412,8 @@ var ProcedureGenerateTableDef={
                             typeName:tipovars.find(function(tipovar){return tipovar.tipovar == varDef.tipovar}).type_name,
                             nullable: varDef.var_name!=ua.pk_agregada
                         }
-                    }),    
+                    }),
+                    sql:{isReferable:true},
                     primaryKey:ua.pk,
                     detailTables:(ua.details||[]).map(function(detailDef){
                         return {table: detailDef.unidad_analisis, fields:ua.pk, abr:detailDef.unidad_analisis.substr(0,1)}
