@@ -1,5 +1,5 @@
-set search_path = eder;
-set role to eder2019_owner;
+set search_path = appSchema;
+set role to appOnwer;
 
 -- actualiza el campo nombre desde la grilla de casilleros
 
