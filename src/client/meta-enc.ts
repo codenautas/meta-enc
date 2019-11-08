@@ -19,10 +19,9 @@ function gotoInnerUrl(innerUrl:string){
 }
  myOwn.wScreens.proc.result.goToEnc=async function(result, div, opts){
     var operativo=result.operativo;
-    var preguntas = JSON.parse(localStorage.getItem('UAInfo_'+ operativo));
-    if(!preguntas){
-        preguntas = await my.ajax.preguntas_operativo_traer({operativo:operativo});
-    }
+    let UAInfo = localStorage.getItem('UAInfo_'+ operativo);
+    var preguntas = UAInfo? JSON.parse(UAInfo): await my.ajax.preguntas_operativo_traer({operativo:operativo});
+
     var idCaso=result.id_caso;
     sessionStorage.setItem('surveyId', idCaso);
     sessionStorage.setItem('operativo', operativo);
