@@ -13,7 +13,7 @@ module.exports = function(context){
             {name:"tipoc"                 , typeName:'text'                      , editable:admin },
             {name:"casillero"             , typeName:'text'                      , editable:admin },
             {name:"orden"                 , typeName:'bigint'                    , editable:admin },
-            {name:"ok"                    , typeName:'text'                      , editable:false },
+            {name:"ok"                    , typeName:'text'                      , editable:false , inTable:false},
             {name:"nombre"                , typeName:'text'                      , editable:admin },
             {name:"tipovar"               , typeName:'text'                      , editable:admin },
             {name:"longitud"              , typeName:'text'                      , editable:admin },
