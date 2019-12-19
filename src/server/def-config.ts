@@ -14,6 +14,8 @@ install:
     db:
       owner: meta_owner
     scripts:
+      prepare: 
+      - ../node_modules/operativos/install/rel_tabla_relacionada.sql
       post-adapt: 
       - casilleros_orden_total_fun.sql
       - casilleros_jerarquizados_fun.sql

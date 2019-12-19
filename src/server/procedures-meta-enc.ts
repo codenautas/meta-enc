@@ -136,7 +136,7 @@ var ProcedureNuevaEncuesta={
     ],
     resultOk: 'goToEnc',
     coreFunction: async function(context, parameters){
-        context.be.procedure['caso_nuevo_json'].coreFunction(context, parameters);
+        return context.be.procedure['caso_nuevo_json'].coreFunction(context, parameters);
     }
 };
 

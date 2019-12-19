@@ -13,10 +13,10 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.7.18"
+    "rel-enc": "~0.7.19"
   },
   "devDependencies": {
-    "types.d.ts": "~0.4.9"
+    "types.d.ts": "~0.4.10"
   },
   "engines": {
     "node": ">= 10.0.0"
