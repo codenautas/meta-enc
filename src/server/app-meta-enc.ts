@@ -86,7 +86,7 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
             });
         }
 
-        clientIncludes(req:Request, hideBEPlusInclusions:boolean){
+        clientIncludes(req:Request, hideBEPlusInclusions:OptsClientPage){
             return super.clientIncludes(req, hideBEPlusInclusions).concat([
                 { type: 'js',  module:'meta-enc',  modPath: '../client', file: 'meta-enc.js', path:'client_modules' }
             ])
