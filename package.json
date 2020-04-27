@@ -1,7 +1,7 @@
 {
   "name": "meta-enc",
   "description": "Metadatos de encuestas",
-  "version": "0.7.21",
+  "version": "1.0.0",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/meta-enc",
@@ -13,7 +13,7 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "~0.7.20"
+    "rel-enc": "^1.0.0"
   },
   "devDependencies": {
     "types.d.ts": "~0.4.15"

@@ -1,10 +1,7 @@
 "use strict";
 
-import { TableDefinition } from "rel-enc";
+import { TableDefinition, ProcedureContext, CoreFunctionParameters } from "rel-enc";
 
-var changing = require('best-globals').changing;
-var bestGlobals = require('best-globals');
-var datetime = bestGlobals.datetime;
 var fs = require('fs-extra');
 var likeAr = require('like-ar');
 
@@ -16,7 +13,7 @@ var ProcedureCasillerosDesplegar={
         {name:'operativo'            ,typeName:'text', references:'operativos'},
     ],
     resultOk:'desplegarFormulario',
-    coreFunction:function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         return context.client.query(
             "select casilleros_jerarquizados($1)",
             [parameters.operativo]
@@ -33,7 +30,7 @@ var ProcedureFormularioEstructura={
         {name:'operativo'            ,typeName:'text', references:'operativos'},
         {name:'formulario'           ,typeName:'text',                        },
     ],
-    coreFunction:function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         return context.client.query(
             "select casilleros_jerarquizados($1, $2)",
             [parameters.operativo, parameters.formulario]
@@ -50,7 +47,7 @@ var ProcedureCasoGuardarJSON = {
         {name:'id_caso'     , typeName:'text'      },
         {name:'datos_caso'  , typeName:'jsonb'     },
     ],
-    coreFunction:function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var client=context.client;
         var be=context.be;
         return Promise.resolve().then(function(){
@@ -75,7 +72,7 @@ var ProcedureCasoGuardar = {
         {name:'id_caso'     , typeName:'text'      },
         {name:'datos_caso'  , typeName:'jsonb'     },
     ],
-    coreFunction:async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var be = context.be;
         return await be.procedure['caso_guardar_json'].coreFunction(context, parameters);
     }
@@ -87,7 +84,7 @@ var ProcedurePrepararParaNuevaEncuesta={
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
     resultOk: 'goToEnc',
-    coreFunction: function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         return context.client.query(
             `select *
                from unidad_analisis
@@ -118,7 +115,7 @@ var ProcedureNuevaEncuestaJSON={
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
     resultOk: 'goToEnc',
-    coreFunction: async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var be = context.be;
         var json = await be.procedure['caso_preparar'].coreFunction(context, parameters);
         var result = await context.client.query(
@@ -135,7 +132,7 @@ var ProcedureNuevaEncuesta={
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
     resultOk: 'goToEnc',
-    coreFunction: async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         return context.be.procedure['caso_nuevo_json'].coreFunction(context, parameters);
     }
 };
@@ -147,7 +144,7 @@ var ProcedureTraerCasoJSON={
         {name:'id_caso'       ,typeName:'text'},
     ],
     resultOk: 'goToEnc',
-    coreFunction: function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         return context.client.query(
             `select f.*, c.id_casillero as formulario 
                from formularios_json f join casilleros c on  f.operativo = c.operativo
@@ -172,7 +169,7 @@ var ProcedureTraerOCrearCasoJSON={
         {name:'id_caso'       ,typeName:'text'},
     ],
     resultOk: 'goToEnc',
-    coreFunction: async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var be = context.be;
         try{
             var result = await be.procedure['caso_traer_json'].coreFunction(context, parameters);
@@ -195,7 +192,7 @@ var ProcedureTraerCaso={
         {name:'id_caso'       ,typeName:'text'},
     ],
     resultOk: 'goToEnc',
-    coreFunction: async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var be = context.be;
         return await be.procedure['caso_traer_json'].coreFunction(context, parameters);
     }
@@ -208,7 +205,7 @@ var ProcedureTraerOCrearCaso={
         {name:'id_caso'       ,typeName:'text'},
     ],
     resultOk: 'goToEnc',
-    coreFunction: async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var be = context.be;
         return await be.procedure['caso_traer_o_crear_json'].coreFunction(context, parameters);
     }
@@ -220,7 +217,7 @@ var ProcedureTraerPreguntasUnidadAnalisis={
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'unidad_analisis' ,typeName:'text' },
     ],
-    coreFunction: function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         return context.client.query(
             `(select lower(c1.var_name) as var_name, false as unidad_analisis, tipovar, orden:: integer, orden_total
               from casilleros c1, lateral casilleros_recursivo(operativo, id_casillero),
@@ -251,7 +248,7 @@ var ProcedureObtenerVariablesUnidadAnalisis={
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
         {name:'unidad_analisis' ,typeName:'text' },
     ],
-    coreFunction: async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var sqlParams=[parameters.operativo, parameters.unidad_analisis];
         var results = {
             variables: await context.client.query(
@@ -279,7 +276,7 @@ var ProcedureTraerPreguntasOperativo={
         {name:'operativo'     ,references:'operativos',  typeName:'text'},
     ],
     cacheable:true,
-    coreFunction: function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         return context.client.query(
             `
             select 
@@ -325,7 +322,7 @@ var ProcedureGenerateVariablesRelevadas={
     parameters: [
         { name: 'operativo', typeName: 'text', references: 'operativos', }
     ],
-    coreFunction: async function (context, parameters) {
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var be = context.be;
         var db = be.db;
         await context.client.query(
@@ -379,7 +376,7 @@ var ProcedureGenerateTableDef={
     parameters: [
         {name:'operativo'            ,references:'operativos',  typeName:'text'}
     ],
-    coreFunction: async function(context, parameters){
+    coreFunction:async function(context:ProcedureContext, parameters:CoreFunctionParameters){
         var be=context.be;
         try{
             var result = await context.client.query(`

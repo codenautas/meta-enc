@@ -2,7 +2,7 @@
 
 import * as relEnc from "rel-enc";
 export * from "./types-meta-enc";
-import {MenuDefinition, Request} from "./types-meta-enc";
+import {MenuDefinition, Request, OptsClientPage} from "./types-meta-enc";
 import {ProceduresMetaEnc} from "./procedures-meta-enc";
 import {defConfig} from "./def-config"
 
@@ -78,14 +78,13 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
                 ...this.getTableDefinition,
             }
             this.appendToTableDefinition('operativos', function(tableDef){
-                tableDef.detailTables = tableDef.detailTables.concat([
+                tableDef.detailTables = (tableDef.detailTables||[]).concat([
                     {table:'unidad_analisis'       , fields:['operativo'], abr:'UA', label:'unidades de análisis', refreshParent:true  },
                     {table:'casilleros_principales', fields:['operativo'], abr:'C' , label:'casilleros principales', refreshParent:true  },
                     {table:'casilleros'            , fields:['operativo'], abr:'P' , label:'casilleros (forma plana)', refreshParent:true  },
                 ]);
             });
         }
-
         clientIncludes(req:Request, hideBEPlusInclusions:OptsClientPage){
             return super.clientIncludes(req, hideBEPlusInclusions).concat([
                 { type: 'js',  module:'meta-enc',  modPath: '../client', file: 'meta-enc.js', path:'client_modules' }
