@@ -100,7 +100,7 @@ function gotoInnerUrl(innerUrl:string){
         localStorage.setItem('UAInfo_'+ operativo, '');
         localStorage.setItem(operativo + '_survey_' + surveyId, '');
         var idCaso = sessionStorage.getItem('surveyId');
-        gotoInnerUrl(my.menup+'w=ingresarFormulario&consistir='+idCaso);
+        gotoInnerUrl(my.menup+'w=ingresarFormulario&operativo='+JSON.stringify(operativo)+'&consistir='+idCaso);
     });
 }
  function guardar(){
