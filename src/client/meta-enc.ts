@@ -77,6 +77,7 @@ function gotoInnerUrl(innerUrl:string){
     ).create());
     formManager.irAlSiguienteDespliegue(formManager.state.primeraVacia,devolverBottomButton);
     SurveyManager.performCustomActionForLoadedFormManager(formManager);
+    formManager.refreshGlobalState();
 }
  function verResumen() {
     var summaryDiv = document.getElementById('summary');
@@ -184,15 +185,19 @@ myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pi
         analysisUnitStructure: JSON.parse(localStorage.getItem('UAInfo_'+ operativo))
     }
     var surveyManager = new SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
-    var formManager = new FormManager(surveyManager, formId, surveyData.surveyContent, []);
-    var toDisplay = formManager.display();
-    formManager.validateDepot();
-    formManager.refreshState();
+    var {toDisplay, formManager} = myOwn.displayFormCommonPart(surveyManager, formId, surveyData.surveyContent, []);
     //var pantallaResumen = PANTALLA_RESUMEN?html.div({id:'summary'}, my.displaySummary(surveyMetadata.operative, surveyData.idCaso)):null;
     return {
         toDisplay:toDisplay,
         formManager: formManager
     }
+}
+myOwn.displayFormCommonPart = function displayFormCommonPart(surveyManager, formId, formData, navigationStack){
+    var formManager = new FormManager(surveyManager, formId, formData, navigationStack);
+    var toDisplay = formManager.display();
+    formManager.validateDepot();
+    formManager.refreshState();
+    return {toDisplay, formManager};
 }
  myOwn.displaySummary = function displaySummary(operativo:string, surveyId:string){
     var mySurvey = JSON.parse(localStorage.getItem(operativo +'_survey_'+surveyId));
@@ -360,9 +365,6 @@ myOwn.wScreens.loadForm=async function(addrParams){
         localStorage.setItem('estructura-'+operativo, JSON.stringify(surveyStructure));
     }
     
-    var myForm = new FormManager(surveyManager, formId, formData, navigationStack);
-    var formElementsToDisplay = myForm.display()
-    myForm.validateDepot();
-    myForm.refreshState();
-    my.wScreens.proc.result.desplegarFormulario(surveyStructure,main_layout,surveyData,formId, myForm, formElementsToDisplay); //MODIFICADO
+    var {toDisplay} = myOwn.displayFormCommonPart(surveyManager, formId, formData, navigationStack);
+    my.wScreens.proc.result.desplegarFormulario(surveyStructure,main_layout,surveyData,formId, myForm, toDisplay); //MODIFICADO
 };
