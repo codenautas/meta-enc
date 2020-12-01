@@ -13,17 +13,21 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "^1.2.0"
+    "rel-enc": "^1.2.3"
   },
   "devDependencies": {
-    "types.d.ts": "~0.5.0"
+    "types.d.ts": "~0.5.0",
+    "mixin-patch": "~0.3.3"
   },
   "engines": {
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "prepublish": "npm run build",
-    "build": "(tsc -p tsconfig-client.json || echo \"continue w/error\") && (tsc -p tsconfig-server.json  || echo \"continue w/error\")",
+    "//prebuild:force": "(tsc -p src/client & tsc -p src/server || echo \"continue w/error\")",
+    "//build:force": "npm run //prebuild:force && mixin-patch",
+    "prepare": "npm run build",
+    "prebuild": "tsc -b src/server src/client",
+    "build": "npm run prebuild && mixin-patch",
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-nc": "mocha --reporter spec --bail --check-leaks --no-colors test/",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
@@ -34,7 +38,9 @@
     "test-cli-saf": "npm run test-cli -- --browsers Safari",
     "start": "node dist/server/server-meta-enc.js",
     "report": "istanbul report",
-    "all": "npm test && npm run test-cov && npm run report && qa-control . -v"
+    "all": "npm test && npm run test-cov && npm run report && qa-control . -v",
+    "git-commit": "git add package.json && (git commit -m \"upgrading stack dependencies\" || true)",
+    "push-publish": "npm version patch && ncu -u && npm run git-commit && npm publish && git push"
   },
   "qa-control": {
     "package-version": "0.3.0",

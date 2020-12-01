@@ -1,16 +1,15 @@
 {
     "compilerOptions": {
-        "declaration": true,
-        "outDir": "this-dir-must-not-be-created",
-        "sourceMap": true,
+        "outDir": "x:\\this-dir-must-not-be-created",
         "inlineSourceMap": true,
         "inlineSources": true,
         "moduleResolution": "node",
         "lib":["es2015"],
-        "target": "es2017",
+        "target": "es5",
+        "strict": true,
+        "skipLibCheck": true, //para que no haga chequeo de tipos en los declaration files dentro de node-modules(pg-promise-strict, express, node)
         "module": "umd",
-        "typeRoots": ["node_modules/@types"],
-        "skipLibCheck": true,
+        "typeRoots" : ["../node_modules/@types", "../node_modules/types.d.ts/modules"],
         "noImplicitAny": true,
         "alwaysStrict": true,
         "noUnusedLocals": true,
@@ -18,8 +17,4 @@
         "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
         "noFallthroughCasesInSwitch": true
     },
-    "include": [
-        "src",
-        "test"
-    ]
 }
