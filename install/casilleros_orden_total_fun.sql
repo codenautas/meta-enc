@@ -26,6 +26,7 @@ $sql$
                casilleros as casillero_ancestro
           WHERE casillero_ancestro.operativo = co.operativo
             AND casillero_ancestro.id_casillero = co.ancestro 
+		    AND ARRAY_LENGTH(co.orden_total, 1) < 10
     )
     SELECT /*operativo, */orden_total, id_casillero as ultimo_ancestro --, unidad_analisis
       FROM casilleros_ordenados 
