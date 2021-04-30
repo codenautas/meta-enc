@@ -19,17 +19,17 @@ function gotoInnerUrl(innerUrl:string){
 }
  myOwn.wScreens.proc.result.goToEnc=async function(result, div, opts){
     var operativo=result.operativo;
-    let UAInfo = localStorage.getItem('UAInfo_'+ operativo);
-    var preguntas = UAInfo? JSON.parse(UAInfo): await my.ajax.preguntas_operativo_traer({operativo:operativo});
+    let UAInfo = my.getLocalVar('UAInfo_'+ operativo);
+    var preguntas = UAInfo? UAInfo: await my.ajax.preguntas_operativo_traer({operativo:operativo});
 
     var idCaso=result.id_caso;
-    sessionStorage.setItem('surveyId', idCaso);
-    sessionStorage.setItem('operativo', operativo);
-    sessionStorage.setItem('innerPk' , JSON.stringify({}));
-    localStorage.setItem('formularioPrincipal_' + operativo, result.formulario);
-    localStorage.setItem('UAInfo_'+ operativo, JSON.stringify(preguntas));
-    localStorage.setItem('survey_opts', JSON.stringify(opts || {buttons:{guardar:true,devolver:true}}));
-    localStorage.setItem(operativo + '_survey_' + idCaso, JSON.stringify(result.datos_caso));
+    my.setSessionVar('surveyId', idCaso);
+    my.setSessionVar('operativo', operativo);
+    my.setSessionVar('innerPk' , {});
+    my.setLocalVar('formularioPrincipal_' + operativo, result.formulario);
+    my.setLocalVar('UAInfo_'+ operativo, preguntas);
+    my.setLocalVar('survey_opts', opts || {buttons:{guardar:true,devolver:true}});
+    my.setLocalVar(operativo + '_survey_' + idCaso, result.datos_caso);
     div.textContent='Se cargará el caso ' + result.id_caso + '. Redirigiendo...';
     div.style.backgroundColor='#5F5';
     setTimeout(function(){
@@ -37,7 +37,7 @@ function gotoInnerUrl(innerUrl:string){
     },250);
 }
  myOwn.wScreens.proc.result.desplegarFormulario=function(surveyStructure:formStructure.SurveyStructure, div:HTMLDivElement, surveyData:any, formId:string, formManager?:formStructure.FormManager, toDisplay?:HTMLElement){
-    var surveyOpts = JSON.parse(localStorage.getItem('survey_opts')) || {buttons:{guardar:true,devolver:true}};
+    var surveyOpts = my.getLocalVar('survey_opts') || {buttons:{guardar:true,devolver:true}};
     var guardarButton;
     var guardarBottomButton;
     var devolverButton;
@@ -82,7 +82,7 @@ function gotoInnerUrl(innerUrl:string){
  function verResumen() {
     var summaryDiv = document.getElementById('summary');
     summaryDiv.innerHTML= '';
-    var summary = my.displaySummary(sessionStorage.getItem('operativo'), sessionStorage.getItem('surveyId'));
+    var summary = my.displaySummary(my.getSessionVar('operativo'), my.getSessionVar('surveyId'));
     summaryDiv.appendChild(summary);
     document.getElementById('main-form-wrapper').setAttribute('summary',true);
     document.getElementById('summary-button').onclick = quitarResumen;
@@ -93,21 +93,21 @@ function gotoInnerUrl(innerUrl:string){
 }
  function devolver() {
     guardar().then(function(result){
-        var surveyId = sessionStorage.getItem('surveyId');
-        var operativo = sessionStorage.getItem('operativo');
-        //sessionStorage.setItem('surveyId', ''); /* lo comento para que recuerde el anterior*/
-        sessionStorage.setItem('innerPk', '');
-        sessionStorage.setItem('operativo', '');
-        localStorage.setItem('UAInfo_'+ operativo, '');
-        localStorage.setItem(operativo + '_survey_' + surveyId, '');
-        var idCaso = sessionStorage.getItem('surveyId');
+        var surveyId = my.getSessionVar('surveyId');
+        var operativo = my.getSessionVar('operativo');
+        //my.setSessionVar('surveyId', ''); /* lo comento para que recuerde el anterior*/
+        my.setSessionVar('innerPk', '');
+        my.setSessionVar('operativo', '');
+        my.setLocalVar('UAInfo_'+ operativo, '');
+        my.setLocalVar(operativo + '_survey_' + surveyId, '');
+        var idCaso = my.getSessionVar('surveyId');
         gotoInnerUrl(my.menup+'w=ingresarFormulario&operativo='+JSON.stringify(operativo)+'&consistir='+idCaso);
     });
 }
  function guardar(){
-    var surveyId = sessionStorage.getItem('surveyId');
-    var operativo = sessionStorage.getItem('operativo');
-    var datosCaso = JSON.parse(localStorage.getItem(operativo + '_survey_' + surveyId));
+    var surveyId = my.getSessionVar('surveyId');
+    var operativo = my.getSessionVar('operativo');
+    var datosCaso = my.getLocalVar(operativo + '_survey_' + surveyId));
     return my.ajax.caso_guardar({operativo: operativo, id_caso: surveyId, datos_caso: datosCaso}) 
     .then(function(result){
         document.getElementById('genericMsg').textContent='Encuesta guardada';
@@ -121,12 +121,12 @@ function gotoInnerUrl(innerUrl:string){
     var my=this;
     main_layout.textContent='cargando...';
     var idCaso = addrParams.id_caso;
-    var operativo = addrParams.operativo || sessionStorage.getItem('operativo') || null;
-    sessionStorage.setItem('operativo',operativo);
-    sessionStorage.setItem('id_caso',idCaso);
-    var formulario = addrParams.formulario || localStorage.getItem('formularioPrincipal_' + operativo) || null;
+    var operativo = addrParams.operativo || my.getSessionVar('operativo') || null;
+    my.setSessionVar('operativo',operativo);
+    my.setSessionVar('id_caso',idCaso);
+    var formulario = addrParams.formulario || my.getLocalVar('formularioPrincipal_' + operativo) || null;
     if(operativo && formulario){
-        var surveyStructure:formStructure.SurveyStructure = JSON.parse(localStorage.getItem('estructura-'+operativo));
+        var surveyStructure:formStructure.SurveyStructure = my.getLocalVar('estructura-'+operativo));
         var surveyData = myOwn.getSurveyData(operativo, idCaso);
         Promise.all([
             surveyStructure || my.ajax.operativo_estructura({operativo:operativo}),
@@ -152,10 +152,10 @@ function gotoInnerUrl(innerUrl:string){
     // ******************* ANTES QUE NADA ************************
     // ***** revisar si esta función se sigue usando *************
     // ***********************************************************
-    var surveyId = sessionStorage.getItem('surveyId');
+    var surveyId = my.getSessionVar('surveyId');
     //TODO: s.especial https://github.com/codenautas/meta-enc/issues/1 
     // acá habría que parametriza el módulo poniendo cuál es la innerPK default y que '{"persona": 0}' vaya a ese parámetro
-    var innerPk = JSON.parse(sessionStorage.getItem('innerPk')||'{"persona": 0}'); 
+    var innerPk = my.getSessionVar('innerPk')||{"persona": 0}; 
     //TODO: s.especial https://github.com/codenautas/meta-enc/issues/1 
     // acá habría que ver si nombre del atributo "persona" no se puede parametrizar
     var delta = Number(addrParams.delta);
@@ -167,22 +167,22 @@ function gotoInnerUrl(innerUrl:string){
         newFormId = 0;
     }
     if(delta>0){
-        var surveyData = JSON.parse(localStorage.getItem(operativo + '_survey_'+ surveyId)); //REVISAR si se puede sacar todo
+        var surveyData = my.getLocalVar(operativo + '_survey_'+ surveyId)); //REVISAR si se puede sacar todo
         if(newFormId>surveyData.forms.F2.length){
             newFormId=surveyData.forms.F2.length;
         }
     }
     innerPk.persona=newFormId;
-    sessionStorage.setItem('innerPk', JSON.stringify(innerPk));
+    my.setSessionVar('innerPk', innerPk);
     gotoInnerUrl('./menu?i=personas');
 }
 myOwn.displayForm = function displayForm(surveyStructure, surveyData, formId, pilaDeRetroceso){
-    var operativo = sessionStorage.getItem('operativo');
+    var operativo = my.getSessionVar('operativo');
     var surveyMetadata = {
         operative: operativo,
         structure: surveyStructure,
         mainForm: formId,
-        analysisUnitStructure: JSON.parse(localStorage.getItem('UAInfo_'+ operativo))
+        analysisUnitStructure: my.getLocalVar('UAInfo_'+ operativo))
     }
     var surveyManager = new SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
     var {toDisplay, formManager} = myOwn.displayFormCommonPart(surveyManager, formId, surveyData.surveyContent, []);
@@ -200,7 +200,7 @@ myOwn.displayFormCommonPart = function displayFormCommonPart(surveyManager, form
     return {toDisplay, formManager};
 }
  myOwn.displaySummary = function displaySummary(operativo:string, surveyId:string){
-    var mySurvey = JSON.parse(localStorage.getItem(operativo +'_survey_'+surveyId));
+    var mySurvey = my.getLocalVar(operativo +'_survey_'+surveyId));
     //return html.img({id:'summary-img', src:my.path.img + 'local-resumen.png', alt:'imagen resumen'}).create();
     var table = html.table({id:'summary-table'},[
         html.tr({},[
@@ -305,7 +305,7 @@ myOwn.surveyDataEmpty = function surveyDataEmpty(surveyId){
     })
 };
 myOwn.getSurveyData = function getSurveyData(operativo:string,idCaso:string):formStructure.SurveyData{
-    var surveyContent = JSON.parse(localStorage.getItem(operativo + '_survey_' + idCaso));
+    var surveyContent = my.getLocalVar(operativo + '_survey_' + idCaso));
     var surveyData = {idCaso:idCaso, surveyContent:surveyContent}
     return surveyData;
 }
@@ -316,34 +316,34 @@ myOwn.wScreens.loadForm=async function(addrParams){
     var operativo = addrParams.operativo;
     var unidadAnalisis = addrParams.unidadAnalisis;
     var iPosition = addrParams.iPosition;
-    var surveyStructure:formStructure.SurveyStructure = JSON.parse(localStorage.getItem('estructura-'+operativo));
-    var formPrincipal=localStorage.getItem('formularioPrincipal_' + operativo);
-    var uaInfo=JSON.parse(localStorage.getItem('UAInfo_'+ operativo));
+    var surveyStructure:formStructure.SurveyStructure = my.getLocalVar('estructura-'+operativo));
+    var formPrincipal=my.getLocalVar('formularioPrincipal_' + operativo);
+    var uaInfo=my.getLocalVar('UAInfo_'+ operativo));
     var datosCaso:any;
     if(!formPrincipal && !uaInfo){
         var result:any = await my.ajax.caso_traer({operativo:operativo, id_caso: idCaso});
         datosCaso = result.datos_caso;
         var preguntas:any = await my.ajax.preguntas_operativo_traer({operativo:result.operativo});
-        localStorage.setItem('formularioPrincipal_' + operativo, result.formulario);
-        localStorage.setItem('UAInfo_'+ operativo, JSON.stringify(preguntas));
+        my.setLocalVar('formularioPrincipal_' + operativo, result.formulario);
+        my.setLocalVar('UAInfo_'+ operativo, preguntas);
     }else{
-        datosCaso=JSON.parse(localStorage.getItem(operativo+'_survey_'+idCaso));
+        datosCaso=my.getLocalVar(operativo+'_survey_'+idCaso));
     }
-    sessionStorage.setItem('surveyId', idCaso);
-    sessionStorage.setItem('operativo', operativo);
-    sessionStorage.setItem('innerPk' , JSON.stringify({}));
-    var surveyOpts = JSON.parse(localStorage.getItem('survey_opts'));
+    my.setSessionVar('surveyId', idCaso);
+    my.setSessionVar('operativo', operativo);
+    my.setSessionVar('innerPk' , {});
+    var surveyOpts = my.getLocalVar('survey_opts'));
     if(!surveyOpts){
-        localStorage.setItem('survey_opts', JSON.stringify({buttons:{guardar:true,devolver:true}}));
+        my.setLocalVar('survey_opts', {buttons:{guardar:true,devolver:true}});
     }
-    localStorage.setItem(operativo + '_survey_' + idCaso, JSON.stringify(datosCaso));
-    sessionStorage.removeItem('ultimo-formulario-cargado');
+    my.setLocalVar(operativo + '_survey_' + idCaso, datosCaso);
+    my.removeSessionVar('ultimo-formulario-cargado');
     var surveyData:formStructure.SurveyData = myOwn.getSurveyData(operativo,idCaso);
     var surveyMetadata:formStructure.SurveyMetadata = {
         operative: operativo,
         structure: surveyStructure,
-        mainForm: localStorage.getItem('formularioPrincipal_' + operativo),
-        analysisUnitStructure: JSON.parse(localStorage.getItem('UAInfo_'+ operativo))
+        mainForm: my.getLocalVar('formularioPrincipal_' + operativo),
+        analysisUnitStructure: my.getLocalVar('UAInfo_'+ operativo))
     }
     var surveyManager = new SurveyManager(surveyMetadata, surveyData.idCaso, surveyData.surveyContent);
     var formData:any = surveyManager.surveyData;
@@ -362,7 +362,7 @@ myOwn.wScreens.loadForm=async function(addrParams){
     }
     if(!surveyStructure){
         surveyStructure = await my.ajax.operativo_estructura({operativo:operativo});
-        localStorage.setItem('estructura-'+operativo, JSON.stringify(surveyStructure));
+        my.setLocalVar('estructura-'+operativo, surveyStructure);
     }
     
     var {toDisplay} = myOwn.displayFormCommonPart(surveyManager, formId, formData, navigationStack);
