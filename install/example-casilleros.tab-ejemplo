@@ -1,0 +1,26 @@
+operativo|id_casillero|padre|tipoc|casillero|orden|nombre|tipovar|longitud|tipoe|aclaracion|salto|unidad_analisis|cantidad_resumen|irrepetible|despliegue|ver_id|optativo|formulario_principal|var_name|var_name_especial
+EJEMPLO|F:F1||F|F1|10|||||||vivienda||||||true||
+EJEMPLO|DV|F:F1|B|DV|5|Datos vivienda||||||||true||||||
+EJEMPLO|V33|DV|P|V33|||numero|||||||true|||||n4dk|n4dk
+EJEMPLO|V1|DV|P|V1|10|pregunta 1 vivienda|texto|medio||||||true|||||v1|
+EJEMPLO|V2|DV|P|V2|20|pregunta 2 vivienda|numero|2||||||true|||||v2|
+EJEMPLO|F2|F:F1|BF|F2|10|Hogares||||||hogares|4|true||||||
+EJEMPLO|F:F2||F|F2|20|||||||hogares||||||||
+EJEMPLO|DH|F:F2|B|DH|10|Datos hogar||||||||true||||||
+EJEMPLO|h1|DH|P|h1|1|Pregunta 1 del hogar|opciones|||||||true|||||h1|
+EJEMPLO|h1/1|h1|O|1|1|opción 1 h||||||||||||||
+EJEMPLO|h1/2|h1|O|2|2|opción 2 h||||||||||||||
+EJEMPLO|h1/3|h1|O|3|3|opción 3 h||||||||||||||
+EJEMPLO|h2|DH|P|h2|2|Pregunta 2 del hogar|texto|||||||true|||||h2|
+EJEMPLO|h3|DH|P|h3|3|Pregunta 3 del hogar|||O-M|||||true||||||
+EJEMPLO|h3/omh31|h3|OM|omh31|1|opción multiple 1|si_no||||||||||||h3_omh31|
+EJEMPLO|h3/omh31/1|h3/omh31|O|1|1|Sí||||||||||||||
+EJEMPLO|h3/omh31/2|h3/omh31|O|2|2|No||||||||||||||
+EJEMPLO|h3/omh32|h3|OM|omh32|2|opcion multiple 2|si_no||||||||||||h3_omh32|
+EJEMPLO|h3/omh32/1|h3/omh32|O|1|1|Sí||||||||||||||
+EJEMPLO|h3/omh32/2|h3/omh32|O|2|2|No||||||||||||||
+EJEMPLO|F3|F:F2|BF|F3|20|Personas||||||personas||true||||||
+EJEMPLO|F:F3||F|F3|30|||||||personas||||||||
+EJEMPLO|DP|F:F3|B|DP|5|Datos persona||||||||true||||||
+EJEMPLO|P1|F:F3|P|P1|10|nombre|texto|||||||true|||||p1|
+EJEMPLO|P2|F:F3|P|P2|20|edad|numero|||||||true|||||p2|
