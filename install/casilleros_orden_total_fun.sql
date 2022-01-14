@@ -38,6 +38,7 @@ $sql$;
 select casilleros_recursivo(operativo, id_casillero) as orden_total, *
   from casilleros
   where tipoc='P' 
-  order by operativo, casilleros_recursivo(operativo, id_casillero);
+  order by operativo, casilleros_recursivo(operativo, id_casillero)
+  limit 10;
 -- */
   

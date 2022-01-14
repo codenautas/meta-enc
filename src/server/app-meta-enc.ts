@@ -24,6 +24,7 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
                             ) select array_agg(pk order by profundidad desc) from uas where pk is not null
                         ),array[]::text[])`
             }
+            this.metaEncIncluirCasillerosSaltoREL = true;
         }
         configStaticConfig(){
             super.configStaticConfig();

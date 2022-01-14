@@ -1,6 +1,7 @@
 "use strict";
 
 module.exports = function(context){
+    var be = context.be;
     var admin=context.user.rol==='admin';
     return context.be.tableDefAdapt({
         name:'casilleros',
@@ -49,7 +50,7 @@ module.exports = function(context){
             {references:'tipovar'           , fields:['tipovar']},
             {references:'unidad_analisis'   , fields:['operativo', 'unidad_analisis']},
             {references:'casilleros'        , fields:['operativo', {source:'padre', target:'id_casillero'}], alias:'p' ,consName:'casilleros padre REL', forceDeferrable:true},
-            {references:'casilleros'        , fields:['operativo', {source:'salto', target:'id_casillero'}], alias:'s' ,consName:'casilleros salto REL', forceDeferrable:true}
+            ...(be.metaEncIncluirCasillerosSaltoREL?[{references:'casilleros'        , fields:['operativo', {source:'salto', target:'id_casillero'}], alias:'s' ,consName:'casilleros salto REL', forceDeferrable:true}]:[])
         ],
         detailTables:[
             {table:'casilleros', fields:['operativo',{source:'id_casillero', target:'padre'}], abr:'c', label:'contenido' }
