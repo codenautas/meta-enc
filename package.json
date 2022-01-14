@@ -13,14 +13,15 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "^1.3.0"
+    "rel-enc": "^1.3.2"
   },
   "devDependencies": {
-    "types.d.ts": "~0.6.1",
-    "mixin-patch": "~0.3.4"
+    "types.d.ts": "^0.6.6",
+    "typescript": "^4.5.4",
+    "mixin-patch": "^0.4.0"
   },
   "engines": {
-    "node": ">= 10.0.0"
+    "node": ">= 14.0.0"
   },
   "scripts": {
     "prepare": "npm run build",

@@ -1,9 +1,11 @@
 "use strict";
 
-var tableCasilleros = require('./table-casilleros.js')
+import {TableDefinition, TableContext} from "./types-meta-enc";
 
-module.exports = function(context){
-    var def = tableCasilleros(context);
+var { casilleros } = require('./table-casilleros.js')
+
+export function formularios_json(context:TableContext):TableDefinition{
+    var def = casilleros(context);
     def.filterColumns = [{column:'padre', operator:'\u2205', value:null}];
     def.sql.isTable=false;
     return def;

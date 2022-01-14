@@ -10,6 +10,7 @@ export type Constructor<T> = new(...args: any[]) => T;
 
 export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Base:T){
     return class AppMetaEnc extends Base{
+        metaEncIncluirCasillerosSaltoREL:boolean
         constructor(...args:any[]){ 
             super(args); 
             this.sqls={

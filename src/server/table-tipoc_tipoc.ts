@@ -1,6 +1,8 @@
 "use strict";
 
-module.exports = function(context){
+import {TableDefinition, TableContext} from "./types-meta-enc";
+
+export function tipoc_tipoc(context:TableContext):TableDefinition{
     var admin=context.user.rol==='admin';
     return context.be.tableDefAdapt({
         name:'tipoc_tipoc',

@@ -1,7 +1,10 @@
 "use strict";
 
-module.exports = function(context){
-    var be = context.be;
+import { AppMetaEncType } from "./app-meta-enc";
+import {TableDefinition, TableContext} from "./types-meta-enc";
+
+export function casilleros(context:TableContext):TableDefinition{
+    var be = context.be as AppMetaEncType;
     var admin=context.user.rol==='admin';
     return context.be.tableDefAdapt({
         name:'casilleros',
@@ -59,7 +62,7 @@ module.exports = function(context){
             {constraintType:'unique', fields:['operativo','casillero','irrepetible']},
             // {constraintType:'unique', fields:['operativo','var_name']},
             {constraintType:'check' , expr:'irrepetible is not false'   },
-            {constraintType:'check' , name:"para poner 'no' en optativo dejar en blanco", expr:'optativo'   },
+            {constraintType:'check' , consName:"para poner 'no' en optativo dejar en blanco", expr:'optativo'   },
         ],
         sql:{
             fields:{
