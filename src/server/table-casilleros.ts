@@ -38,6 +38,7 @@ module.exports = function(context){
             {name:"calculada"             , typeName:'boolean'                   , editable:admin },
             {name:"libre"                 , typeName:'boolean'                   , editable:admin },
             {name:"especial"              , typeName:'jsonb'                     , editable:admin },
+            {name:"es_activo"             , typeName:'boolean'   ,nullable:false , editable:admin , defaultValue:true},
         ],
         hiddenColumns:['id_casillero', 'irrepetible'],
         sortColumns:[{column:'orden_total'}],
