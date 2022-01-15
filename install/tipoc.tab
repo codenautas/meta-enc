@@ -11,3 +11,4 @@ OM|opción múltiple|||misma_fila|
 P|pregunta|true||tabla|
 PMATRIZ|pregunta en forma de matriz|true||tabla_matriz|false
 TEXTO|texto aclaratorio sin pregunta||||false
+FIN|fin|true|||false

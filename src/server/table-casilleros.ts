@@ -17,6 +17,7 @@ export function casilleros(context:TableContext):TableDefinition{
             {name:"tipoc"                 , typeName:'text'                      , editable:admin },
             {name:"casillero"             , typeName:'text'                      , editable:admin },
             {name:"orden"                 , typeName:'bigint'                    , editable:admin },
+            {name:"es_activo"             , typeName:'boolean'   ,nullable:false , editable:admin , defaultValue:true},
             {name:"ok"                    , typeName:'text'                      , editable:false , inTable:false},
             {name:"nombre"                , typeName:'text'                      , editable:admin },
             {name:"tipovar"               , typeName:'text'                      , editable:admin },
@@ -42,7 +43,6 @@ export function casilleros(context:TableContext):TableDefinition{
             {name:"calculada"             , typeName:'boolean'                   , editable:admin },
             {name:"libre"                 , typeName:'boolean'                   , editable:admin },
             {name:"especial"              , typeName:'jsonb'                     , editable:admin },
-            {name:"es_activo"             , typeName:'boolean'   ,nullable:false , editable:admin , defaultValue:true},
         ],
         hiddenColumns:['id_casillero', 'irrepetible'],
         sortColumns:[{column:'orden_total'}],
@@ -56,7 +56,8 @@ export function casilleros(context:TableContext):TableDefinition{
             ...(be.metaEncIncluirCasillerosSaltoREL?[{references:'casilleros'        , fields:['operativo', {source:'salto', target:'id_casillero'}], alias:'s' ,consName:'casilleros salto REL', forceDeferrable:true}]:[])
         ],
         detailTables:[
-            {table:'casilleros', fields:['operativo',{source:'id_casillero', target:'padre'}], abr:'c', label:'contenido' }
+            {table:'casilleros', fields:['operativo',{source:'id_casillero', target:'padre'}], abr:'c', label:'contenido' },
+            {table:'subcasilleros', fields:['operativo','id_casillero'], abr:'p', label:'plano'}
         ],
         constraints:[
             {constraintType:'unique', fields:['operativo','casillero','irrepetible']},

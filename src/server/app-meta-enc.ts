@@ -62,6 +62,7 @@ export function emergeAppMetaEnc<T extends Constructor<relEnc.AppRelEncType>>(Ba
                 {path:__dirname, name:'tipoc_tipoc'           },
                 {path:__dirname, name:'unidad_analisis'       },
                 {path:__dirname, name:'casilleros'            },
+                {path:__dirname, name:'subcasilleros'         },
                 {path:__dirname, name:'casilleros_principales'},
                 {path:__dirname, name:'formularios_json'      },
             ]);
