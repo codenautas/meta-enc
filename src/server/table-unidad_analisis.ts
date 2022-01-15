@@ -6,7 +6,7 @@ import {TableDefinition, TableContext} from "./types-meta-enc";
 
 export function unidad_analisis(context:TableContext):TableDefinition{
     var admin=context.user.rol==='admin';
-    return context.be.tableDefAdapt({
+    return {
         name:'unidad_analisis',
         elementName:'unidad de análisis',
         editable:admin,
@@ -29,5 +29,5 @@ export function unidad_analisis(context:TableContext):TableDefinition{
         sortColumns:[
             {column:'orden'}
         ]
-    },context);
+    };
 }

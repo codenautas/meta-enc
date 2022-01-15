@@ -449,7 +449,7 @@ var ProcedureGenerateTableDef={
 
 module.exports = function(context){
     var admin=context.user.rol==='admin';
-    return context.be.tableDefAdapt(${JSON.stringify(tableDef, null, 4)},context);
+    return ${JSON.stringify(tableDef, null, 4)};
 }`;
                 var tsTextFile=`"use strict";
                 

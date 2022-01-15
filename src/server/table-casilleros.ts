@@ -6,7 +6,7 @@ import {TableDefinition, TableContext} from "./types-meta-enc";
 export function casilleros(context:TableContext):TableDefinition{
     var be = context.be as AppMetaEncType;
     var admin=context.user.rol==='admin';
-    return context.be.tableDefAdapt({
+    return {
         name:'casilleros',
         elementName:'casillero',
         editable:admin,
@@ -97,5 +97,5 @@ export function casilleros(context:TableContext):TableDefinition{
             postCreateSqls:'create trigger irrepetible_trg before insert or update on casilleros for each row execute procedure irrepetible_trg();',
             constraintsDeferred:true,
         }
-    },context);
+    };
 }

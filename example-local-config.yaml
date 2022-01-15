@@ -1,0 +1,6 @@
+db:
+  database: metaenc_db
+  port: 54313
+  password: 929393939asfasf
+devel:
+  delay: 500

@@ -4,7 +4,7 @@ import {TableDefinition, TableContext} from "./types-meta-enc";
 
 export function tipoc(context:TableContext):TableDefinition{
     var admin=context.user.rol==='admin';
-    return context.be.tableDefAdapt({
+    return {
         name:'tipoc',
         title:'tipos de casillero',
         elementName:'tipo de casillero',
@@ -23,5 +23,5 @@ export function tipoc(context:TableContext):TableDefinition{
             {table:'tipoc_tipoc', fields:[{source:'tipoc', target:'tipoc_padre'}], abr:'h', label:'hijos  posibles' },
             {table:'casilleros' , fields:['tipoc'], abr:'c', label:'casilleros' }
         ]
-    },context);
+    };
 }

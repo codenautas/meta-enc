@@ -4,7 +4,7 @@ import {TableDefinition, TableContext} from "./types-meta-enc";
 
 export function formularios_json(context:TableContext):TableDefinition{
     var admin=context.user.rol==='admin';
-    return context.be.tableDefAdapt({
+    return {
         name:'formularios_json',
         editable:admin,
         fields:[
@@ -13,5 +13,5 @@ export function formularios_json(context:TableContext):TableDefinition{
             {name:"datos_caso"        , typeName:'jsonb'   },
         ],
         primaryKey:['operativo','id_caso'],
-    },context);
+    };
 }

@@ -4,7 +4,7 @@ import {TableDefinition, TableContext} from "./types-meta-enc";
 
 export function tipoc_tipoc(context:TableContext):TableDefinition{
     var admin=context.user.rol==='admin';
-    return context.be.tableDefAdapt({
+    return {
         name:'tipoc_tipoc',
         title:'inclusiones válidas de casillero',
         elementName:'validez',
@@ -18,5 +18,5 @@ export function tipoc_tipoc(context:TableContext):TableDefinition{
             {references:'tipoc', fields:[{source:'tipoc_padre', target:'tipoc'}], alias:'p', consName:'tipoc_tipoc padre REL'},
             {references:'tipoc', fields:[{source:'tipoc_hijo' , target:'tipoc'}], alias:'h', consName:'tipoc_tipoc hijos REL'},
         ]
-    },context);
+    };
 }
