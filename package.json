@@ -13,8 +13,7 @@
     "unlogged"
   ],
   "dependencies": {
-    "rel-enc": "^1.3.7",
-    "backend-plus": "^1.16.10"
+    "rel-enc": "^1.3.7"
   },
   "devDependencies": {
     "types.d.ts": "^0.6.7",
