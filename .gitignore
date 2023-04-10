@@ -70,3 +70,6 @@ local-*
 
 #don't version generated files
 /dist
+
+#notepad++ backups
+*.bak
