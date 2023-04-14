@@ -1,7 +1,7 @@
 {
   "name": "meta-enc",
   "description": "Metadatos de encuestas",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/meta-enc",
