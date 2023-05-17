@@ -6,6 +6,9 @@ import {TableDefinition, TableContext} from "./types-meta-enc";
 export function casilleros(context:TableContext):TableDefinition{
     var be = context.be as AppMetaEncType;
     var admin=context.user.rol==='admin';
+    if(be.caches?.metaEncIncluirCasillerosSaltoREL !== undefined){
+        be.metaEncIncluirCasillerosSaltoREL = be.caches.metaEncIncluirCasillerosSaltoREL
+    }
     return {
         name:'casilleros',
         elementName:'casillero',
