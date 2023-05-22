@@ -434,12 +434,12 @@ var ProcedureGenerateTableDef={
                         nullable: false
                     })
                 }else{
-                    for(var i=ua.pk_padre.length;  i>0; i--){
+                    for(var i=ua.pk.length;  i>0; i--){
                         var casileroEncontrado = casillerosConVarname.find(function(casillero){
-                            return casillero.var_name == ua.pk_padre[i-1];
+                            return casillero.var_name == ua.pk[i-1];
                         });
                         tableDef.fields.unshift({
-                            name:ua.pk_padre[i-1],
+                            name:ua.pk[i-1],
                             typeName:casileroEncontrado?(tipovars.find(function(tipovar){return tipovar.tipovar == casileroEncontrado.tipovar}).type_name):'text',
                             nullable: false
                         })
