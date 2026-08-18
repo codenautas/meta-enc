@@ -28,6 +28,7 @@ export function casilleros(context:TableContext):TableDefinition{
             {name:"tipoe"                 , typeName:'text'                      , editable:admin },
             {name:"aclaracion"            , typeName:'text'                      , editable:admin },
             {name:"salto"                 , typeName:'text'                      , editable:admin },
+            {name:"salto_ns_nc"           , typeName:'text'                      , editable:admin },
             {name:"unidad_analisis"       , typeName:'text'                      , editable:admin },
             {name:"cantidad_resumen"      , typeName:'integer'                   , editable:admin },
             {name:"irrepetible"           , typeName:'boolean'                   , editable:false },
