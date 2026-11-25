@@ -73,3 +73,4 @@ local-*
 
 #notepad++ backups
 *.bak
+compile-for-test/
